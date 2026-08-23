@@ -83,6 +83,34 @@
     icon: '🔎',
     perm: 'inst.saved.queries',
     render: function (host, ctx) {
+      /* gap G2: Run / Edit / Duplicate / Export / Delete on saved queries */
+      var FIELDS = ['Totem', 'Province', 'Language', 'Status', 'Village book'];
+      var peopleAllowed = access_ok();
+      function access_ok() {
+        return !!(ctx.access && typeof ctx.access.datasetAllowed === 'function' && ctx.access.datasetAllowed('PEOPLE'));
+      }
+      function fieldHay(p, field) {
+        var k = p.kinship || {}, a = p.admin || {}, e = p.ethnicity || {};
+        if (field === 'Totem') return String(k.mutupo || '');
+        if (field === 'Province') return String(a.province || '');
+        if (field === 'Language') return String(e.languageCluster || '');
+        if (field === 'Status') return String(p.lifecycleState || 'ALIVE');
+        if (field === 'Village book') return String(a.villageBookId || '');
+        return '';
+      }
+      function queryMatches(q) {
+        if (!peopleAllowed) return [];
+        var base = (window.PEOPLE || []).filter(ctx.access.inGeography);
+        return base.filter(function (p) {
+          return (q.filters || []).every(function (f) {
+            var v = String(f.value || '').trim().toLowerCase();
+            return !v || fieldHay(p, f.field).toLowerCase().indexOf(v) !== -1;
+          });
+        });
+      }
+      function byId(id) {
+        return Store.get('SAVED').filter(function (x) { return x.id === id; })[0];
+      }
       function draw() {
         var list = Store.get('SAVED');
         var reports = list.filter(function (q) { return q.kind === 'report'; });
@@ -100,9 +128,16 @@
             }).join('') + '</div>';
           }
           if (queries.length) {
-            html += '<div class="ws-panel">' + queries.map(function (q) {
-              return '<div class="ws-row static"><b>' + esc(q.name) + '</b><br><small><code>' + esc(q.summary || '') + '</code></small>' +
-                '<span class="when">' + esc(ctx.fmtDate(q.at)) + '</span></div>';
+            html += '<div class="ws-panel"><h4>Saved queries</h4>' + queries.map(function (q) {
+              return '<div class="ws-row static" id="qrow-' + esc(q.id) + '"><b>' + esc(q.name) + '</b><br><small><code>' + esc(q.summary || '') + '</code></small>' +
+                '<span class="when">' + esc(ctx.fmtDate(q.at)) + '</span>' +
+                '<span class="row-actions">' +
+                '<button class="ws-btn ghost sm" data-qrun="' + esc(q.id) + '">RUN</button>' +
+                '<button class="ws-btn ghost sm" data-qedit="' + esc(q.id) + '">EDIT</button>' +
+                '<button class="ws-btn ghost sm" data-qdup="' + esc(q.id) + '">DUPLICATE</button>' +
+                '<button class="ws-btn ghost sm" data-qexp="' + esc(q.id) + '">EXPORT CSV</button>' +
+                '<button class="ws-btn ghost sm" data-qdel="' + esc(q.id) + '">DELETE</button>' +
+                '</span><div id="qres-' + esc(q.id) + '"></div></div>';
             }).join('') + '</div>';
           }
         }
@@ -116,6 +151,102 @@
           b.addEventListener('click', function () {
             window.RootsInstSavedReportToRun = b.dataset.openrpt;
             ctx.go('reports');
+          });
+        });
+        host.querySelectorAll('[data-qrun]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var q = byId(b.dataset.qrun);
+            if (!q) return;
+            Store.logOrgAudit('RUN_QUERY', 'Query', q.name, {});
+            var box = document.getElementById('qres-' + q.id);
+            if (!box) return;
+            if (box.dataset.open) { box.innerHTML = ''; delete box.dataset.open; return; }
+            if (!peopleAllowed) { box.innerHTML = '<div class="hint">PEOPLE dataset not approved for your account.</div>'; return; }
+            var m = queryMatches(q);
+            box.dataset.open = '1';
+            box.innerHTML = '<div class="hint">' + m.length + ' match(es)' + (m.length ? ':<br>' +
+              m.slice(0, 8).map(function (p) {
+                var a = p.admin || {};
+                return esc(p.name + ' (' + p.id + ')' + (a.villageBookId ? ' - ' + a.villageBookId : ''));
+              }).join('<br>') : '') + '</div>';
+          });
+        });
+        host.querySelectorAll('[data-qexp]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var q = byId(b.dataset.qexp);
+            if (!q) return;
+            if (!peopleAllowed) { ctx.toast('PEOPLE dataset not approved for your account.'); return; }
+            var m = queryMatches(q);
+            ctx.csv('query-' + String(q.name).replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '.csv',
+              ['id', 'name', 'gender', 'province', 'village_book', 'totem'],
+              m.map(function (p) {
+                return [p.id, p.name, p.gender || '', (p.admin || {}).province || '',
+                  (p.admin || {}).villageBookId || '', (p.kinship || {}).mutupo || ''];
+              }));
+            Store.logOrgAudit('EXPORT_QUERY_CSV', 'Query', q.name, { count: m.length });
+            ctx.toast(m.length + ' record(s) exported.');
+          });
+        });
+        host.querySelectorAll('[data-qdup]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var all = Store.get('SAVED');
+            var q = all.filter(function (x) { return x.id === b.dataset.qdup; })[0];
+            if (!q) return;
+            all.push({
+              id: 'QRY-' + Date.now().toString(36).toUpperCase(),
+              name: q.name + ' (copy)', summary: q.summary, filters: q.filters,
+              createdBy: ctx.session.adminName, at: new Date().toISOString()
+            });
+            Store.set('SAVED', all);
+            Store.logOrgAudit('DUPLICATE_QUERY', 'Query', q.name, {});
+            ctx.toast('Query duplicated.');
+            draw();
+          });
+        });
+        host.querySelectorAll('[data-qdel]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var all = Store.get('SAVED');
+            var q = all.filter(function (x) { return x.id === b.dataset.qdel; })[0];
+            if (!q) return;
+            if (!window.confirm('Delete saved query "' + q.name + '"?')) return;
+            Store.set('SAVED', all.filter(function (x) { return x.id !== q.id; }));
+            Store.logOrgAudit('DELETE_QUERY', 'Query', q.name, {});
+            ctx.toast('Query deleted.');
+            draw();
+          });
+        });
+        host.querySelectorAll('[data-qedit]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var row = document.getElementById('qrow-' + b.dataset.qedit);
+            var q = byId(b.dataset.qedit);
+            if (!row || !q) return;
+            var f0 = ((q.filters || [])[0] || {});
+            row.innerHTML =
+              '<input id="qeName" value="' + esc(q.name) + '" style="max-width:220px;"> ' +
+              '<select id="qeField">' + FIELDS.map(function (f) {
+                return '<option' + (f0.field === f ? ' selected' : '') + '>' + f + '</option>';
+              }).join('') + '</select> ' +
+              '<input id="qeValue" value="' + esc(f0.value || '') + '" placeholder="Value" style="max-width:160px;"> ' +
+              '<button class="ws-btn sm" id="qeSave">SAVE</button> ' +
+              '<button class="ws-btn ghost sm" id="qeCancel">CANCEL</button>';
+            row.querySelector('#qeCancel').addEventListener('click', draw);
+            row.querySelector('#qeSave').addEventListener('click', function () {
+              var name = row.querySelector('#qeName').value.trim();
+              if (!name) { ctx.toast('Name is required.'); return; }
+              var f = row.querySelector('#qeField').value;
+              var v = row.querySelector('#qeValue').value.trim();
+              var all = Store.get('SAVED');
+              all.forEach(function (x) {
+                if (x.id !== q.id) return;
+                x.name = name;
+                x.summary = f + ' = ' + (v || '(any)');
+                x.filters = [{ field: f, value: v }];
+              });
+              Store.set('SAVED', all);
+              Store.logOrgAudit('EDIT_QUERY', 'Query', name, {});
+              ctx.toast('Query updated.');
+              draw();
+            });
           });
         });
         document.getElementById('sqGo').addEventListener('click', function () {

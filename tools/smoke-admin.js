@@ -130,7 +130,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
     'admin/admin-login.html', 'admin/admin-login.js', 'admin/admin.html', 'admin/admin.js']
     .forEach((f) => check('file exists: ' + f, fs.existsSync(path.join(ROOT, f))));
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v11', /CACHE\s*=\s*'roots-v11'/.test(sw));
+  check('sw cache bumped to roots-v12', /CACHE\s*=\s*'roots-v12'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));
@@ -374,6 +374,14 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   check('auditor: no APPROVE action offered', ![...aud_.querySelectorAll('#adminPanelBody button[data-a]')].some((b) => b.dataset.a === 'approve'));
   check('no page JS errors (auditor)', aud.pageErrors.length === 0, aud.pageErrors.join(' | '));
   auw.close();
+
+  /* global admin search (Setup 3 §51) */
+  ad.getElementById('adminGlobalSearch').value = 'National Archives';
+  ad.getElementById('adminGlobalSearch').dispatchEvent(new aw.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await until(() => ad.getElementById('adminView').textContent.includes('Search results for'), 5000, 'global search results');
+  check('global search returns grouped rows', [...ad.querySelectorAll('#adminView tr.rowlink')].length >= 2,
+    ad.getElementById('adminView').textContent.slice(0, 80));
+  check('no page JS errors (global search)', adm.pageErrors.length === 0, adm.pageErrors.join(' | '));
   aw.close();
 
   console.log(failures ? '\n' + failures + ' PROBLEM(S)' : '\nALL ADMIN SMOKE CHECKS PASSED');

@@ -115,6 +115,45 @@
   });
 
   /* ---------- header identity (§4) ---------- */
+  /* ---------- first-login welcome summary (Setup 4, gap G1) ---------- */
+  (function welcomeGate() {
+    var seen = Store.get('WELCOME_SEEN') || {};
+    var orgKey = session.institutionId || session.applicationId || session.institutionName;
+    if (seen[orgKey]) return;
+    function wrow(k, vHtml) {
+      return '<div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.08);font-size:.82rem;">' +
+        '<span style="min-width:140px;opacity:.65;">' + esc(k) + '</span><span>' + vHtml + '</span></div>';
+    }
+    var ds = access.datasets || [];
+    var chips = ds.length
+      ? ds.map(function (d) {
+          return '<span style="display:inline-block;padding:2px 8px;margin:1px;border-radius:10px;background:rgba(0,0,0,.07);font-size:.72rem;">' + esc(d) + '</span>';
+        }).join(' ')
+      : '<span class="sub">None yet - request access in Access Centre.</span>';
+    var ov = el(
+      '<div id="wsWelcome" style="position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(20,24,18,.72);z-index:80;display:flex;align-items:center;justify-content:center;padding:16px;">' +
+      '<div class="ws-panel" style="max-width:520px;width:100%;margin:0;">' +
+      '<h3 style="margin-top:0;">Welcome to your workspace</h3>' +
+      '<p class="sub" style="margin-top:-6px;">' + esc(access.institutionName) + ' &middot; ' + esc(typeInfo ? typeInfo.title : access.institutionType) + '</p>' +
+      wrow('Signed in as', esc(session.adminName) + ' &middot; ' + esc(session.role || 'ADMINISTRATOR')) +
+      wrow('Geographic scope', esc(access.scopeLabel)) +
+      wrow('Plan', esc(access.planName) + (access.provisional ? ' <em>(provisional)</em>' : '')) +
+      wrow('Person-level data', access.personLevelAllowed
+        ? 'ALLOWED'
+        : 'NOT ALLOWED' + (access.anonymizationRequired ? ' &middot; anonymised exports only' : '')) +
+      wrow('Approved datasets', chips) +
+      '<button class="ws-btn" id="wsWelcomeGo" style="margin-top:14px;width:100%;">ENTER WORKSPACE</button>' +
+      '</div></div>');
+    document.body.appendChild(ov);
+    ov.querySelector('#wsWelcomeGo').addEventListener('click', function () {
+      seen[orgKey] = new Date().toISOString();
+      Store.set('WELCOME_SEEN', seen);
+      Store.logOrgAudit('WELCOME_ACK', 'Session', session.adminName, {});
+      ov.remove();
+      toast('Signed in. Use the side menu to explore your workspace.');
+    });
+  })();
+
   (function renderIdentity() {
     $('wsOrgTitle').textContent = access.institutionName;
     $('wsOrgType').textContent = (typeInfo ? typeInfo.title : access.institutionType) + ' Workspace';

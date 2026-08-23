@@ -97,7 +97,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
 
   /* TEST 2 — sw.js precache list exists */
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v11', /CACHE\s*=\s*'roots-v11'/.test(sw));
+  check('sw cache bumped to roots-v12', /CACHE\s*=\s*'roots-v12'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => u !== '' && !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));
@@ -244,6 +244,15 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   check('mobile bottom nav has 5 items', d3.querySelectorAll('#wsBottomNav button').length === 5);
   check('notifications bell rendered', d3.getElementById('wsBellCount').textContent.length > 0);
 
+  // First-login welcome summary (gap G1)
+  const welc = d3.getElementById('wsWelcome');
+  check('first-login welcome summary shown', !!welc && welc.textContent.includes('ENTER WORKSPACE') &&
+    welc.textContent.includes('National Archives of Zimbabwe'));
+  d3.getElementById('wsWelcomeGo').click();
+  await sleep(120);
+  check('welcome dismissed + flag persisted', !d3.getElementById('wsWelcome') &&
+    Object.keys(JSON.parse(w3.localStorage.getItem('WELCOME_SEEN') || '{}')).length === 1);
+
   // Aggregate-only records view (no grant seeded -> person-level locked)
   w3.location.hash = '#/records';
   await until(() => d3.getElementById('wsView').textContent.includes('AGGREGATE VIEW ONLY'), 5000, 'records aggregate view');
@@ -259,11 +268,50 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   check('hidden view falls back to default (no universal menu)', d3.getElementById('wsView').textContent.includes('REGIONAL DATA OVERVIEW'));
   check('no page JS errors (workspace)', wsp.pageErrors.length === 0, wsp.pageErrors.join(' | '));
 
+  // Saved queries: RUN / EDIT / DUPLICATE / EXPORT CSV / DELETE (gap G2)
+  const appid = JSON.parse(sessRaw).applicationId;
+  w3.localStorage.setItem('SAVED', JSON.stringify([{ id: 'QRY-SMOKE1', name: 'Masvingo records', summary: 'Province = Masvingo', filters: [{ field: 'Province', value: 'Masvingo' }], createdBy: 'Tendai Moyo', at: new Date().toISOString() }]));
+  w3.localStorage.setItem('roots_admin_grants', JSON.stringify([{ grantId: 'GRANT-SMOKE1', applicationId: appid, institutionId: 'INST-SMOKE', status: 'ACTIVE', approvedDatasets: ['PEOPLE'], personLevelAllowed: false, anonymizationRequired: true, expiresAt: '2027-01-01T00:00:00.000Z' }]));
+  w3.location.hash = '#/overview'; await sleep(120);
+  w3.location.hash = '#/saved';
+  await until(() => d3.querySelector('[data-qrun="QRY-SMOKE1"]'), 5000, 'saved view renders');
+  d3.querySelector('[data-qrun="QRY-SMOKE1"]').click();
+  await until(() => d3.getElementById('qres-QRY-SMOKE1') && /match/.test(d3.getElementById('qres-QRY-SMOKE1').textContent), 3000, 'query run output');
+  const runTxt = d3.getElementById('qres-QRY-SMOKE1').textContent;
+  check('query RUN reports matches (>0)', /^[1-9]/.test(runTxt.trim()), runTxt.slice(0, 50));
+  w3.URL.createObjectURL = () => 'blob:smoke';
+  w3.URL.revokeObjectURL = () => {};
+  d3.querySelector('[data-qexp="QRY-SMOKE1"]').click();
+  await until(() => JSON.parse(w3.localStorage.getItem('roots_inst_org_audit') || '[]').some((e) => e.action === 'EXPORT_QUERY_CSV'), 3000, 'export audit');
+  check('query EXPORT CSV audited', true);
+  d3.querySelector('[data-qedit="QRY-SMOKE1"]').click();
+  type(d3.getElementById('qeName'), 'Masvingo renamed');
+  d3.getElementById('qeSave').click();
+  await until(() => (JSON.parse(w3.localStorage.getItem('SAVED') || '[]')[0] || {}).name === 'Masvingo renamed', 3000, 'edit saved');
+  check('EDIT persists rename + rebuilt summary', true);
+  d3.querySelector('[data-qdup="QRY-SMOKE1"]').click();
+  await until(() => JSON.parse(w3.localStorage.getItem('SAVED')).length === 2, 3000, 'duplicate created');
+  check('DUPLICATE appends copy', JSON.parse(w3.localStorage.getItem('SAVED'))[1].name === 'Masvingo renamed (copy)');
+  w3.confirm = () => true;
+  d3.querySelector('[data-qdel]').click();
+  await until(() => JSON.parse(w3.localStorage.getItem('SAVED')).length === 1, 3000, 'delete done');
+  check('DELETE removes query after confirm', true);
+  check('no page JS errors (saved queries)', wsp.pageErrors.length === 0, wsp.pageErrors.join(' | '));
+
   // Sign out clears session
   d3.getElementById('wsSignOut').click();
   await sleep(80);
   check('sign out clears session', w3.localStorage.getItem('roots_institutional_session') === null);
   w3.close();
+
+  /* gap G1: welcome skipped on subsequent visits */
+  const skipSeed = Object.assign({}, wsSeed, { WELCOME_SEEN: { [JSON.parse(sessRaw).applicationId]: new Date().toISOString() } });
+  const wspSkip = await loadPage('/institutional/institutional-workspace.html', skipSeed);
+  const wsk = wspSkip.window, dsk = wsk.document;
+  await until(() => dsk.querySelectorAll('#wsView .stat-card').length > 0, 8000, 'skip-test overview');
+  check('welcome NOT shown on later visits', !dsk.getElementById('wsWelcome'));
+  check('no page JS errors (returning visit)', wspSkip.pageErrors.length === 0, wspSkip.pageErrors.join(' | '));
+  wsk.close();
 
   /* ---------- D1 completion: lifecycle view + sync chip (§51, §63-65) ---------- */
   const baseSess = JSON.parse(sessRaw);
