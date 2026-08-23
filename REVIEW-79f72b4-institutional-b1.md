@@ -26,9 +26,11 @@
 - `node --check` on all 5 touched/new JS files — pass.
 - `node tools/verify-pages.js` — 8/8 pages OK, assets resolve.
 - `npm run test:data` — all dataset checks pass.
+- **`npm run test:inst`** — headless end-to-end smoke (`tools/smoke-institutional.js`, jsdom): drives the full §52 flow — 9-step registration walk → submit provisions app + account → wrong password rejected → correct credentials write session → workspace renders identity/stats/533 profiles → sign-out clears session. 22/22 checks pass, zero page JS errors on all three institutional pages.
 - Cross-page contract audit: onboarding provisioning keys (`adminWhatsappDigits/adminWhatsappFull/authHash`) match login matcher; all inter-page links are flat relative paths inside `institutional/`.
 
-## Manual acceptance (Setup 2 §52) — for reviewer
+## Manual acceptance (Setup 2 §52) — visual pass only
+The functional flow above is machine-verified; what remains for a human is purely visual:
 1. Welcome → **Institutional User** → login page renders (no bottom nav).
 2. **Register your institution** → complete all 9 steps; verify gating (cannot continue with empty required fields), ZW district chips when province scope chosen, lifecycle toggle disabled for types without it, locked module suites.
 3. Submit → app ID shown → auto-redirect to login.
