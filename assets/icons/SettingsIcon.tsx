@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface SettingsIconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+  color?: string;
+}
+
+export const SettingsIcon: React.FC<SettingsIconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+  ...props
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
+      fill={color}
+      color={color}
+      className={className}
+      {...props}
+    >
+      <path d="M32 7 C34.5 7 36.6 8.9 36.8 11.4 C37.8 12.2 38.7 13.1 39.5 14.1 C41.8 13.5 44.3 14.4 45.4 16.5 C46.6 18.7 46.1 21.3 44.3 22.9 C44.8 24.1 45.1 25.4 45.2 26.8 C47.7 27.2 49.5 29.4 49.5 32 C49.5 34.6 47.7 36.8 45.2 37.2 C45.1 38.6 44.8 39.9 44.3 41.1 C46.1 42.7 46.6 45.3 45.4 47.5 C44.3 49.6 41.8 50.5 39.5 49.9 C38.7 50.9 37.8 51.8 36.8 52.6 C36.6 55.1 34.5 57 32 57 C29.5 57 27.4 55.1 27.2 52.6 C26.2 51.8 25.3 50.9 24.5 49.9 C22.2 50.5 19.7 49.6 18.6 47.5 C17.4 45.3 17.9 42.7 19.7 41.1 C19.2 39.9 18.9 38.6 18.8 37.2 C16.3 36.8 14.5 34.6 14.5 32 C14.5 29.4 16.3 27.2 18.8 26.8 C18.9 25.4 19.2 24.1 19.7 22.9 C17.9 21.3 17.4 18.7 18.6 16.5 C19.7 14.4 22.2 13.5 24.5 14.1 C25.3 13.1 26.2 12.2 27.2 11.4 C27.4 8.9 29.5 7 32 7 Z M32 23 C27 23 23 27 23 32 C23 37 27 41 32 41 C37 41 41 37 41 32 C41 27 37 23 32 23 Z" fillRule="evenodd" clipRule="evenodd" />
+    </svg>
+  );
+};
+
+export default SettingsIcon;

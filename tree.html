@@ -1,0 +1,3495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Temporal Cascade Matrix — Roots Engine v2</title>
+    <style>
+        :root {
+            --bg: #EDEDE9;
+            --rail: #D9D9D3;
+            --rail-line: #B9B9B2;
+            --card-bg: #FFFFFF;
+            --ink: #1C1C1C;
+            --ink-soft: #6B6B65;
+            --male: #2F6FED;
+            --female: #E0567C;
+            --dead-dark: #6E6E68;
+            --dead-light: #C8C8C2;
+            --line-neutral: #B8B8B0;
+            --status-civil: #1C1C1C;
+            --status-customary: #3E7D4C;
+            --status-cohabit: #9A9A93;
+            --status-severed: #C0392B;
+            --branch-a: #2F6FED;
+            --branch-b: #C0392B;
+            --branch-c: #3E7D4C;
+            --branch-d: #B5892A;
+            --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+            --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            --card-w: 148px;
+            --card-h: 205px;
+            --col-w: 178px;
+            --row-h: 195px;
+            --buffer: 30px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: var(--bg);
+            font-family: var(--sans);
+            color: var(--ink);
+            overflow: hidden;
+        }
+
+        #app {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---------- STATS STRIP ---------- */
+        #stats-strip {
+            display: flex;
+            background: var(--ink);
+            color: #F4F4F1;
+            z-index: 30;
+            flex-shrink: 0;
+        }
+        .stat-cell {
+            flex: 1;
+            padding: 8px 12px;
+            border-right: 1px solid rgba(255, 255, 255, 0.12);
+            font-family: var(--mono);
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .stat-cell:last-child {
+            border-right: none;
+        }
+        .stat-cell:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .stat-label {
+            font-size: 8.5px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #A8A89E;
+        }
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* ---------- MAIN ROW (viewport + rail) ---------- */
+        #main-row {
+            position: relative;
+            flex: 1;
+            display: flex;
+            min-height: 0;
+        }
+
+        /* ---------- SEARCH BAR (moved below main-row via flex order) ---------- */
+        #search-bar-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            border-top: 1px solid var(--rail-line);
+            border-bottom: 1px solid var(--rail-line);
+            padding: 8px 14px;
+            z-index: 29;
+            flex-shrink: 0;
+            order: 2;
+        }
+        #search-input {
+            flex: 1;
+            font-family: var(--mono);
+            font-size: 13px;
+            border: 1px solid var(--rail-line);
+            border-radius: 8px;
+            padding: 8px 12px;
+            background: var(--bg);
+            color: var(--ink);
+            outline: none;
+        }
+        #search-input:focus {
+            border-color: var(--ink);
+        }
+        .top-text-btn {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: var(--bg);
+            border: 1px solid var(--rail-line);
+            border-radius: 8px;
+            padding: 8px 11px;
+            cursor: pointer;
+            color: var(--ink);
+            white-space: nowrap;
+        }
+        .top-text-btn:hover {
+            background: #E2E2DC;
+        }
+
+        /* ---------- DECADE RAIL ---------- */
+        #decade-rail {
+            position: relative;
+            width: 78px;
+            min-width: 78px;
+            background: var(--rail);
+            border-right: 1px solid var(--rail-line);
+            z-index: 5;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+        }
+        .decade-tick {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 6px;
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.06em;
+            color: var(--ink-soft);
+            border-top: 1px dashed var(--rail-line);
+        }
+        .decade-tick span {
+            /* horizontal text — removed writing-mode */
+            display: inline-block;
+            font-size: 10.5px;
+        }
+        .decade-tick.blank {
+            color: #BEBEB6;
+        }
+
+        /* Rail toggle button pinned at bottom */
+        #rail-toggle-wrap {
+            margin-top: auto;
+            padding: 8px 0 12px 0;
+            display: flex;
+            justify-content: center;
+            border-top: 1px solid var(--rail-line);
+            background: var(--rail);
+            position: sticky;
+            bottom: 0;
+            z-index: 6;
+        }
+        #rail-toggle-btn {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: var(--ink);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+        #rail-toggle-btn:hover {
+            background: #333;
+        }
+
+        /* ---------- VIEWPORT ---------- */
+        #viewport {
+            position: relative;
+            flex: 1;
+            overflow: auto;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0;
+        }
+        #canvas {
+            position: relative;
+            transform-origin: top left;
+            transition: transform 0.25s ease;
+        }
+        #connector-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: visible;
+            z-index: 1;
+        }
+        .conn-line {
+            stroke: var(--line-neutral);
+            stroke-width: 2.5;
+            fill: none;
+            transition: d 0.3s ease, opacity 0.25s ease;
+        }
+        .conn-line.spouse {
+            stroke-width: 3;
+            stroke-dasharray: 6 4;
+        }
+        .conn-line.dimmed {
+            opacity: 0.15;
+        }
+
+        /* ---------- PERSON NODE ---------- */
+        .person-node {
+            position: absolute;
+            width: var(--card-w);
+            z-index: 3;
+            transition: left 0.35s ease, top 0.35s ease, opacity 0.3s ease;
+        }
+        .person-node.hidden-node {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .person-node.search-dim .card {
+            opacity: 0.18;
+        }
+        .person-node.search-match .card {
+            box-shadow: 0 0 0 3px var(--ink), 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zone-image {
+            padding: 10px 10px 0;
+            cursor: pointer;
+        }
+        .zone-image:active .thumb {
+            transform: scale(0.97);
+        }
+
+        .thumb {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            background: #F4F4F1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            border-width: 3px;
+            border-style: solid;
+            transition: transform 0.1s ease;
+        }
+        .thumb.gender-m {
+            border-color: rgba(47, 111, 237, 0.18);
+        }
+        .thumb.gender-f {
+            border-color: rgba(224, 86, 124, 0.18);
+        }
+        .thumb.status-civil {
+            border-color: var(--status-civil);
+            border-style: solid;
+        }
+        .thumb.status-customary {
+            border-color: var(--status-customary);
+            border-style: solid;
+        }
+        .thumb.status-cohabit {
+            border-color: var(--status-cohabit);
+            border-style: dashed;
+        }
+        .thumb.status-severed {
+            border-color: var(--status-severed);
+            border-style: dotted;
+        }
+        .thumb.deceased {
+            filter: grayscale(1);
+            border-color: var(--dead-light) !important;
+            border-style: solid !important;
+        }
+        .thumb.deceased::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .silhouette {
+            width: 78%;
+            height: 92%;
+            fill: #B9B9C7;
+            display: block;
+            position: relative;
+            z-index: 0;
+        }
+        .thumb.gender-f .silhouette {
+            fill: #D9AFC0;
+        }
+        .thumb.deceased .silhouette {
+            fill: var(--dead-light);
+        }
+
+        .severed-tag {
+            position: absolute;
+            top: 4px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+            color: #fff;
+            background: var(--status-severed);
+            padding: 2px 0;
+            z-index: 2;
+        }
+        .deceased-tag {
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--dead-dark);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 0;
+            z-index: 2;
+        }
+
+        .zone-text {
+            padding: 7px 8px 9px;
+            cursor: pointer;
+            border-top: 1px dashed rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        .zone-text:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        .name-row {
+            font-size: 11.5px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .surname-row {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            line-height: 1.15;
+        }
+        .year-row {
+            margin-top: 3px;
+            font-family: var(--mono);
+            font-size: 9.5px;
+            color: var(--ink-soft);
+        }
+        .tap-hint {
+            margin-top: 3px;
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #B0B0A8;
+        }
+
+        .ego-badge {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: var(--ink);
+            color: #fff;
+            font-family: var(--mono);
+            font-size: 8px;
+            letter-spacing: 0.06em;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            z-index: 4;
+        }
+
+        /* ---------- POPOVER ---------- */
+        .popover {
+            position: absolute;
+            z-index: 20;
+            width: 240px;
+            background: var(--ink);
+            color: #F4F4F1;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-family: var(--sans);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+            animation: pop-in 0.15s ease;
+        }
+        @keyframes pop-in {
+            from {
+                opacity: 0;
+                transform: translateY(4px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .popover .p-name {
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .popover .p-years {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: #C7C7C0;
+            margin-top: 2px;
+        }
+        .pop-field {
+            margin-top: 8px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: var(--mono);
+            color: #9E9E96;
+        }
+        .pop-field b {
+            display: block;
+            font-family: var(--sans);
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: 12.5px;
+            color: #fff;
+            margin-top: 1px;
+            font-weight: 600;
+        }
+        .popover .p-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
+        .popover button {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #fff;
+            border-radius: 7px;
+            padding: 6px 9px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .popover button:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .popover button.primary {
+            background: #fff;
+            color: var(--ink);
+            border-color: #fff;
+        }
+        .popover button.primary:hover {
+            background: #E9E9E4;
+        }
+
+        /* ---------- PROFILE OVERLAY ---------- */
+        #overlay-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 20, 18, 0.55);
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #overlay-backdrop.open {
+            display: flex;
+        }
+
+        .profile-modal {
+            width: 560px;
+            max-width: 94vw;
+            max-height: 88vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 18px;
+            padding: 26px;
+            position: relative;
+        }
+        .profile-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            cursor: pointer;
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 5px 9px;
+            z-index: 2;
+        }
+        .profile-close:hover {
+            color: var(--ink);
+        }
+
+        .profile-thumb-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 4px;
+        }
+        .profile-thumb {
+            width: 128px;
+            height: 128px;
+            border-radius: 16px;
+            background: #F4F4F1;
+            border-width: 4px;
+            border-style: solid;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .profile-thumb .silhouette {
+            width: 80%;
+            height: 94%;
+        }
+
+        .change-img-btn {
+            margin-top: 10px;
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: var(--bg);
+            border: 1px solid var(--rail-line);
+            border-radius: 8px;
+            padding: 7px 12px;
+            cursor: pointer;
+            color: var(--ink);
+        }
+        .change-img-btn:hover {
+            background: #E2E2DC;
+        }
+        #hidden-file-input {
+            display: none;
+        }
+
+        .profile-name {
+            text-align: center;
+            font-size: 19px;
+            font-weight: 700;
+            margin-top: 14px;
+        }
+        .profile-years {
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin-top: 3px;
+        }
+        .profile-flags {
+            text-align: center;
+            margin-top: 6px;
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .flag-chip {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 3px 7px;
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--ink-soft);
+        }
+        .flag-chip.deceased {
+            background: var(--dead-light);
+            color: #fff;
+        }
+        .flag-chip.severed {
+            background: var(--status-severed);
+            color: #fff;
+        }
+        .flag-chip.ego {
+            background: var(--ink);
+            color: #fff;
+        }
+
+        .edit-toggle-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .edit-toggle-row button {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border-radius: 8px;
+            padding: 8px 14px;
+            cursor: pointer;
+            border: 1px solid var(--rail-line);
+            background: #fff;
+            color: var(--ink);
+        }
+        .edit-toggle-row button.active {
+            background: var(--ink);
+            color: #fff;
+            border-color: var(--ink);
+        }
+
+        .profile-section {
+            margin-top: 18px;
+            border-top: 1px solid var(--bg);
+            padding-top: 12px;
+        }
+        .profile-section-label {
+            font-family: var(--mono);
+            font-size: 9.5px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 8px;
+        }
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 10px;
+        }
+        .field-grid.single {
+            grid-template-columns: 1fr;
+        }
+        .field-grid.three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .field-item {
+            font-size: 12.5px;
+        }
+        .field-item-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #A8A8A0;
+            margin-bottom: 2px;
+        }
+        .field-item-value {
+            font-weight: 500;
+            color: var(--ink);
+        }
+        .field-item-value.empty {
+            color: #B8B8B0;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .field-edit-input {
+            width: 100%;
+            font-family: var(--sans);
+            font-size: 12.5px;
+            border: 1px solid var(--rail-line);
+            border-radius: 6px;
+            padding: 6px 8px;
+            background: var(--bg);
+            color: var(--ink);
+        }
+        .field-select-btn {
+            width: 100%;
+            text-align: left;
+            font-family: var(--sans);
+            font-size: 12.5px;
+            border: 1px solid var(--rail-line);
+            border-radius: 6px;
+            padding: 6px 8px;
+            background: #fff;
+            color: var(--ink);
+            cursor: pointer;
+        }
+        .field-select-btn:hover {
+            border-color: var(--ink);
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .rel-chip {
+            display: flex;
+            flex-direction: column;
+            font-size: 11.5px;
+            background: var(--bg);
+            border-radius: 7px;
+            padding: 5px 12px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            min-width: 100px;
+            flex: 0 1 auto;
+            transition: border-color 0.15s ease;
+        }
+        .rel-chip:hover {
+            border-color: var(--ink);
+        }
+        .rel-chip .rc-name {
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .rel-chip .rc-sub {
+            font-size: 10px;
+            color: var(--ink-soft);
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .rel-chip .rc-sub .rc-tag {
+            font-family: var(--mono);
+            font-size: 8.5px;
+            color: var(--ink-soft);
+            text-transform: uppercase;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0 6px;
+            border-radius: 4px;
+        }
+        .rel-chip .rc-sub .rc-deceased {
+            color: var(--dead-dark);
+            font-family: var(--mono);
+            font-size: 8.5px;
+            text-transform: uppercase;
+            background: var(--dead-light);
+            padding: 0 6px;
+            border-radius: 4px;
+        }
+
+        .notes-box {
+            width: 100%;
+            min-height: 70px;
+            font-family: var(--sans);
+            font-size: 12.5px;
+            border: 1px solid var(--rail-line);
+            border-radius: 8px;
+            padding: 10px;
+            background: var(--bg);
+            color: var(--ink);
+            resize: vertical;
+        }
+        .notes-display {
+            font-size: 12.5px;
+            line-height: 1.5;
+            color: var(--ink);
+            white-space: pre-wrap;
+        }
+        .notes-display.empty {
+            color: #B8B8B0;
+            font-style: italic;
+        }
+
+        .action-link-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        .action-link {
+            flex: 1;
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border-radius: 10px;
+            padding: 11px 0;
+            cursor: pointer;
+            border: none;
+        }
+        .action-link.view-as {
+            background: var(--ink);
+            color: #fff;
+        }
+        .action-link.view-as:hover {
+            background: #333;
+        }
+        .action-link.view-as.is-ego {
+            background: var(--bg);
+            color: var(--ink-soft);
+            cursor: default;
+        }
+        .action-link.add-rel {
+            background: var(--status-customary);
+            color: #fff;
+        }
+        .action-link.add-rel:hover {
+            background: #326840;
+        }
+
+        .exogamy-warning {
+            margin-top: 14px;
+            background: #FBEAE8;
+            border: 1px solid var(--status-severed);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 11.5px;
+            color: #8B2A20;
+            display: none;
+        }
+        .exogamy-warning.show {
+            display: block;
+        }
+
+        /* ---------- SELECT MODAL ---------- */
+        #select-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 20, 18, 0.6);
+            z-index: 70;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #select-modal-backdrop.open {
+            display: flex;
+        }
+        .select-modal {
+            width: 340px;
+            max-width: 90vw;
+            max-height: 76vh;
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+        }
+        .select-modal-title {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+        }
+        .select-modal-search {
+            font-family: var(--sans);
+            font-size: 13px;
+            border: 1px solid var(--rail-line);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            background: var(--bg);
+        }
+        .select-modal-list {
+            overflow-y: auto;
+            flex: 1;
+        }
+        .select-modal-item {
+            padding: 10px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .select-modal-item:hover {
+            background: var(--bg);
+        }
+        .select-modal-item .smi-sub {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--ink-soft);
+        }
+
+        /* ---------- EGO PICKER ---------- */
+        #ego-picker-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 20, 18, 0.5);
+            z-index: 60;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #ego-picker-backdrop.open {
+            display: flex;
+        }
+        .ego-picker-modal {
+            width: 320px;
+            max-height: 70vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .ego-picker-title {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+        }
+        .ego-picker-item {
+            padding: 10px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13.5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ego-picker-item:hover {
+            background: var(--bg);
+        }
+        .ego-picker-item .yr {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+        }
+
+        /* ---------- LEGEND PANEL ---------- */
+        #legend-panel {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 260px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+            padding: 16px 18px;
+            z-index: 39;
+            display: none;
+        }
+        #legend-panel.open {
+            display: block;
+        }
+        .legend-title {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+        }
+        .legend-group {
+            margin-bottom: 12px;
+        }
+        .legend-group-label {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #A8A8A0;
+            margin-bottom: 6px;
+        }
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            margin-bottom: 5px;
+        }
+        .legend-swatch {
+            width: 22px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            border-width: 2px;
+            border-style: solid;
+        }
+        .legend-line-swatch {
+            width: 22px;
+            height: 0;
+            border-top-width: 3px;
+            border-top-style: solid;
+            flex-shrink: 0;
+        }
+
+        /* ---------- STAT LIST MODAL ---------- */
+        #stat-list-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 20, 18, 0.6);
+            z-index: 75;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #stat-list-modal-backdrop.open {
+            display: flex;
+        }
+        .stat-list-modal {
+            width: 380px;
+            max-width: 92vw;
+            max-height: 70vh;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-list-title {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stat-list-close {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--ink-soft);
+            cursor: pointer;
+            background: var(--bg);
+            border: none;
+            border-radius: 6px;
+            padding: 4px 10px;
+        }
+        .stat-list-close:hover {
+            color: var(--ink);
+        }
+        .stat-list-scroll {
+            overflow-y: auto;
+            flex: 1;
+        }
+        .stat-list-item {
+            padding: 10px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13.5px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--bg);
+        }
+        .stat-list-item:hover {
+            background: var(--bg);
+        }
+        .stat-list-item .sl-name {
+            font-weight: 500;
+        }
+        .stat-list-item .sl-meta {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--ink-soft);
+        }
+
+        /* ---------- DECADE-YEAR MODAL ---------- */
+        #decade-year-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 20, 18, 0.6);
+            z-index: 76;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #decade-year-modal-backdrop.open {
+            display: flex;
+        }
+        .decade-year-modal {
+            width: 420px;
+            max-width: 92vw;
+            max-height: 76vh;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .decade-year-title {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .decade-year-scroll {
+            overflow-y: auto;
+            flex: 1;
+        }
+        .decade-year-group {
+            margin-bottom: 12px;
+        }
+        .decade-year-group .dy-header {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ink);
+            padding: 6px 0 4px 0;
+            border-bottom: 1px solid var(--rail-line);
+            margin-bottom: 6px;
+        }
+        .decade-year-group .dy-item {
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .decade-year-group .dy-item:hover {
+            background: var(--bg);
+        }
+        .decade-year-group .dy-item .dy-name {
+            font-weight: 500;
+        }
+        .decade-year-group .dy-item .dy-date {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--ink-soft);
+        }
+
+        /* ---------- NESTED MODAL (Work/Education detail) ---------- */
+        #nested-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 20, 18, 0.7);
+            z-index: 80;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #nested-modal-backdrop.open {
+            display: flex;
+        }
+        .nested-modal {
+            width: 420px;
+            max-width: 92vw;
+            max-height: 74vh;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .nested-modal-title {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+        }
+        .nested-modal-scroll {
+            overflow-y: auto;
+            flex: 1;
+        }
+        .nested-modal-back-btn {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: var(--bg);
+            border: 1px solid var(--rail-line);
+            border-radius: 8px;
+            padding: 8px 14px;
+            cursor: pointer;
+            color: var(--ink);
+            margin-top: 12px;
+            align-self: flex-start;
+        }
+        .nested-modal-back-btn:hover {
+            background: #E2E2DC;
+        }
+
+        /* ---------- BOTTOM RIGHT CONTROLS ---------- */
+        #controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .ctrl-btn {
+            font-family: var(--mono);
+            background: var(--ink);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            transition: background 0.15s ease;
+        }
+        .ctrl-btn:hover {
+            background: #333;
+        }
+
+        /* Ego nav group: < | View as: Name | > */
+        #ego-nav-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--ink);
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        #ego-nav-group .ctrl-btn {
+            background: transparent;
+            box-shadow: none;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 14px;
+            line-height: 1;
+        }
+        #ego-nav-group .ctrl-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        #ego-switch-btn {
+            background: transparent;
+            box-shadow: none;
+            font-size: 10.5px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 10px 14px;
+            white-space: nowrap;
+            min-width: 120px;
+        }
+        #ego-switch-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .zoom-group {
+            display: flex;
+            gap: 6px;
+        }
+        .zoom-btn {
+            width: 38px;
+            height: 38px;
+            font-size: 18px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zoom-btn:hover {
+            background: #333;
+        }
+
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C9C9C2;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* scrollable content inside modal */
+        .modal-scroll-content {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* responsive tweaks */
+        @media (max-width: 700px) {
+            .profile-modal {
+                padding: 16px;
+                max-width: 98vw;
+            }
+            .field-grid {
+                grid-template-columns: 1fr;
+            }
+            .field-grid.three {
+                grid-template-columns: 1fr;
+            }
+            .stat-cell {
+                padding: 6px 4px;
+                font-size: 9px;
+            }
+            .stat-value {
+                font-size: 13px;
+            }
+            #ego-switch-btn {
+                font-size: 9px;
+                padding: 8px 10px;
+                min-width: 80px;
+            }
+            #ego-nav-group .ctrl-btn {
+                padding: 8px 8px;
+                font-size: 12px;
+            }
+            #decade-rail {
+                width: 52px;
+                min-width: 52px;
+            }
+            .decade-tick {
+                font-size: 8.5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+
+        <!-- STATS STRIP -->
+        <div id="stats-strip">
+            <div class="stat-cell" data-filter="all"><div class="stat-label">Total People</div><div class="stat-value" id="stat-total">—</div></div>
+            <div class="stat-cell" data-filter="blood"><div class="stat-label">Blood Line</div><div class="stat-value" id="stat-blood">—</div></div>
+            <div class="stat-cell" data-filter="married"><div class="stat-label">Married In</div><div class="stat-value" id="stat-married">—</div></div>
+            <div class="stat-cell" data-filter="living"><div class="stat-label">Living</div><div class="stat-value" id="stat-living">—</div></div>
+            <div class="stat-cell" data-filter="generations"><div class="stat-label">Generations</div><div class="stat-value" id="stat-gens">—</div></div>
+        </div>
+
+        <!-- MAIN ROW: rail + viewport -->
+        <div id="main-row">
+            <div id="decade-rail">
+                <!-- ticks injected by JS -->
+                <div id="rail-toggle-wrap">
+                    <button id="rail-toggle-btn">Decade</button>
+                </div>
+            </div>
+            <div id="viewport">
+                <div id="canvas">
+                    <svg id="connector-svg"></svg>
+                    <!-- person nodes injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH BAR (now below main-row) -->
+        <div id="search-bar-wrap">
+            <input type="text" id="search-input" placeholder="Search by name or surname…">
+            <button class="top-text-btn" id="legend-toggle-btn-top">Legend</button>
+        </div>
+
+    </div>
+
+    <!-- CONTROLS (bottom right) -->
+    <div id="controls">
+        <div id="ego-nav-group">
+            <button class="ctrl-btn" id="ego-prev-btn">‹</button>
+            <button id="ego-switch-btn" class="ctrl-btn">View as</button>
+            <button class="ctrl-btn" id="ego-next-btn">›</button>
+        </div>
+        <div class="zoom-group">
+            <button id="zoom-out" class="ctrl-btn zoom-btn">−</button>
+            <button id="zoom-fit" class="ctrl-btn zoom-btn" style="width:auto; padding:0 10px; font-size:10px;">FIT</button>
+            <button id="zoom-in" class="ctrl-btn zoom-btn">+</button>
+        </div>
+    </div>
+
+    <!-- LEGEND -->
+    <div id="legend-panel">
+        <div class="legend-title">Legend</div>
+        <div class="legend-group">
+            <div class="legend-group-label">Lineage Branches</div>
+            <div class="legend-row"><div class="legend-line-swatch" style="border-color:var(--branch-a);"></div>Wife A branch</div>
+            <div class="legend-row"><div class="legend-line-swatch" style="border-color:var(--branch-b);"></div>Wife B branch</div>
+            <div class="legend-row"><div class="legend-line-swatch" style="border-color:var(--branch-c);"></div>Ex-Wife C branch</div>
+            <div class="legend-row"><div class="legend-line-swatch" style="border-color:var(--branch-d);"></div>Woman D branch</div>
+        </div>
+        <div class="legend-group">
+            <div class="legend-group-label">Spouse Status</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:var(--status-civil); background:#fff;"></div>Civil marriage</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:var(--status-customary); background:#fff;"></div>Customary union</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:var(--status-cohabit); border-style:dashed; background:#fff;"></div>Cohabiting</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:var(--status-severed); border-style:dotted; background:#fff;"></div>Severed</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:var(--dead-light); background:#eee;"></div>Deceased</div>
+        </div>
+    </div>
+
+    <!-- PROFILE OVERLAY -->
+    <div id="overlay-backdrop">
+        <div class="profile-modal" id="profile-modal-content"></div>
+    </div>
+
+    <!-- EGO PICKER -->
+    <div id="ego-picker-backdrop">
+        <div class="ego-picker-modal">
+            <div class="ego-picker-title">View tree as —</div>
+            <div id="ego-picker-list"></div>
+        </div>
+    </div>
+
+    <!-- SELECT MODAL -->
+    <div id="select-modal-backdrop">
+        <div class="select-modal">
+            <div class="select-modal-title" id="select-modal-title">Select</div>
+            <input type="text" class="select-modal-search" id="select-modal-search" placeholder="Filter…">
+            <div class="select-modal-list" id="select-modal-list"></div>
+        </div>
+    </div>
+
+    <!-- STAT LIST MODAL -->
+    <div id="stat-list-modal-backdrop">
+        <div class="stat-list-modal">
+            <div class="stat-list-title">
+                <span id="stat-list-title-text">Records</span>
+                <button class="stat-list-close" id="stat-list-close-btn">Close</button>
+            </div>
+            <div class="stat-list-scroll" id="stat-list-scroll"></div>
+        </div>
+    </div>
+
+    <!-- DECADE-YEAR MODAL -->
+    <div id="decade-year-modal-backdrop">
+        <div class="decade-year-modal">
+            <div class="decade-year-title">
+                <span id="decade-year-title-text">Timeline</span>
+                <button class="stat-list-close" id="decade-year-close-btn">Close</button>
+            </div>
+            <div class="decade-year-scroll" id="decade-year-scroll"></div>
+        </div>
+    </div>
+
+    <!-- NESTED MODAL (Work/Education detail) -->
+    <div id="nested-modal-backdrop">
+        <div class="nested-modal">
+            <div class="nested-modal-title" id="nested-modal-title">Detail</div>
+            <div class="nested-modal-scroll" id="nested-modal-scroll"></div>
+            <button class="nested-modal-back-btn" id="nested-modal-back-btn">← Back</button>
+        </div>
+    </div>
+
+    <input type="file" id="hidden-file-input" accept="image/*">
+
+    <script>
+        (function() {
+
+            /* =========================================================================
+               0. REFERENCE / LOOKUP TABLES
+               ========================================================================= */
+
+            const TOTEM_TABLE = [
+                { totem: 'Moyo (Heart)', chidawo: 'Moyondizvo' },
+                { totem: 'Moyo (Heart)', chidawo: 'Chirandu' },
+                { totem: 'Moyo (Heart)', chidawo: 'Sinyoro (Vachinjanja)' },
+                { totem: 'Shumba (Lion)', chidawo: 'Murambwi' },
+                { totem: 'Shumba (Lion)', chidawo: 'Mhazi' },
+                { totem: 'Soko (Monkey)', chidawo: 'Mukanya' },
+                { totem: 'Soko (Monkey)', chidawo: 'Murehwa' },
+                { totem: 'Mbizi (Zebra)', chidawo: 'Samaita' },
+                { totem: 'Tembo (Zebra)', chidawo: 'Mazvimbakupa' },
+                { totem: 'Nzou (Elephant)', chidawo: 'Samanyanga' },
+                { totem: 'Zhou (Elephant)', chidawo: 'Mhukahuru' },
+                { totem: 'Shava (Eland)', chidawo: 'Museyamwa' },
+                { totem: 'Shava (Eland)', chidawo: 'Chihera' },
+                { totem: 'Gumbo (Leg)', chidawo: 'Madyirapasi' },
+                { totem: 'Dziva (Pool)', chidawo: 'Mbedzi' },
+                { totem: 'Ngara (Porcupine)', chidawo: 'Chipunza' },
+                { totem: 'Garwe (Crocodile)', chidawo: 'Nyamasvisva' },
+                { totem: 'Nyati (Buffalo)', chidawo: 'Chidawanyika' },
+                { totem: 'Humba (Boar)', chidawo: 'Nyakuvimba' },
+                { totem: 'Beta (Termite)', chidawo: 'Mazviona' },
+                { totem: 'Tsiwo (Genitalia)', chidawo: 'Gushungo' },
+                { totem: 'Shiri (Bird)', chidawo: 'Hungwe' },
+                { totem: 'Khumalo', chidawo: 'Mntungwa' },
+                { totem: 'Sibanda', chidawo: 'Shumba (Chibi equiv)' },
+                { totem: 'Dube', chidawo: 'Zephania' },
+                { totem: 'Ndlovu', chidawo: 'Gatsheni' },
+                { totem: 'Ncube', chidawo: 'Mzilankatha' },
+                { totem: 'Ngwenya', chidawo: 'Mambo' },
+            ];
+
+            const LANGUAGE_CLUSTERS = [
+                'Zezuru', 'Karanga', 'Manyika', 'Korekore', 'Ndau',
+                'Ndebele', 'Kalanga', 'Tswana', 'Venda', 'Xhosa', 'Nambya', 'Tonga (Zambezi)', 'Birwa', 'Kgalagadi',
+                'Zulu', 'Sotho'
+            ];
+
+            const MARITAL_STATUSES = ['Single', 'Married', 'Divorced/Severed', 'Widowed', 'Cohabiting'];
+            const MARRIAGE_TYPES = ['Civil Marriage', 'Customary Union', 'Cohabiting / Unregistered', 'Severed / Divorced'];
+            const ROORA_STATUSES = ['Paid', 'Partial', 'Pending', 'Not Applicable'];
+            const RELATIONSHIP_TYPES = ['Bloodline', 'Married In'];
+            const PROVINCES = ['Harare', 'Bulawayo', 'Manicaland', 'Mashonaland Central', 'Mashonaland East',
+                'Mashonaland West', 'Masvingo', 'Matabeleland North', 'Matabeleland South', 'Midlands'
+            ];
+            const NATIONALITIES = ['Zimbabwean', 'South African', 'Botswanan', 'Zambian', 'Malawian', 'Mozambican',
+                'Other'
+            ];
+            const GENDERS = ['m', 'f', 'other'];
+            const RELIGIONS = ['Christian', 'African Traditional', 'Muslim', 'Hindu', 'Buddhist', 'None', 'Other'];
+            const EDUCATION_LEVELS = ['None', 'Primary', 'Secondary', 'Tertiary', 'Postgraduate'];
+            const EMPLOYMENT_STATUSES = ['Employed', 'Self-Employed', 'Unemployed', 'Retired', 'Student', 'Homemaker',
+                'Other'
+            ];
+
+            const STATUS_TO_CSS = {
+                'Civil Marriage': 'status-civil',
+                'Customary Union': 'status-customary',
+                'Cohabiting / Unregistered': 'status-cohabit',
+                'Severed / Divorced': 'status-severed',
+            };
+
+            /* =========================================================================
+               1. EXTENDED DATA SCHEMA
+               ========================================================================= */
+
+            function blankSchema() {
+                return {
+                    // identity
+                    name: '',
+                    surname: '',
+                    gender: 'm',
+                    aliases: [],
+                    nationalities: [],
+                    dob_display: '',
+                    // moved from Fundamental to Admin
+                    place_of_birth: '',
+                    religion: '',
+                    education_level: '',
+                    employment_status: '',
+                    occupation: '',
+                    national_id: '',
+                    languages: [],
+                    clan: '',
+                    subclan: '',
+                    // lineage
+                    mutupo: '',
+                    chidawo: '',
+                    maternal_totem: '',
+                    maternal_chidawo: '',
+                    // admin / geographic
+                    province: '',
+                    district: '',
+                    constituency: '',
+                    ward: '',
+                    village_name: '',
+                    headman: '',
+                    chief: '',
+                    ancestral_home: '',
+                    coordinates: '',
+                    residential_address: '',
+                    language_cluster: '',
+                    // marriage
+                    marital_status: '',
+                    marriage_type: '',
+                    marriage_date: '',
+                    roora_status: '',
+                    family_head: false,
+                    clan_position: '',
+                    // vital records (moved from Estate)
+                    date_of_passing: '',
+                    burial_location: '',
+                    vital_birth_cert: '',
+                    vital_id_doc: '',
+                    vital_marriage_cert: '',
+                    vital_death_cert: '',
+                    vital_burial_permit: '',
+                    // rites & milestones
+                    baptism_details: '',
+                    initiation_rites: '',
+                    migration_history: [], // [{date, from, to, reason}]
+                    // medical
+                    medical_history: [], // [{condition, diagnosed, notes}]
+                    cause_of_death: '',
+                    // education timeline
+                    education_history: [], // [{institution, from, to, activities, subjects}]
+                    // work history
+                    work_history: [], // [{company, role, from, to, responsibilities}]
+                    // media
+                    photo_gallery: [], // urls
+                    voice_recordings: [],
+                    oral_interviews: [],
+                    phone: '',
+                    whatsapp: '',
+                    email: '',
+                    social_facebook: '',
+                    social_twitter: '',
+                    social_instagram: '',
+                    social_tiktok: '',
+                    // kinship
+                    relationship_type: '',
+                    // oral
+                    notes: '',
+                    // system
+                    deceased: false,
+                    image: null,
+                    parents: [],
+                    children: [],
+                    spouses: [],
+                    spouseStatus: {},
+                    branch: null,
+                };
+            }
+
+            /* =========================================================================
+               2. PEOPLE DATA
+               ========================================================================= */
+
+            const MALE_SVG = `<svg class="silhouette" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="34" r="20"/>
+              <path d="M50 58c-24 0-38 14-38 34v8h76v-8c0-20-14-34-38-34z"/>
+            </svg>`;
+
+            const FEMALE_SVG = `<svg class="silhouette" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="32" r="19"/>
+              <path d="M50 53c-4 6-4 10-2 14l-14 6c-14 6-20 16-20 27v0h72v0c0-11-6-21-20-27l-14-6c2-4 2-8-2-14z"/>
+            </svg>`;
+
+            const people = {};
+
+            function addPerson(id, opts) {
+                people[id] = Object.assign(blankSchema(), {
+                    id,
+                    deceased: false,
+                    image: null,
+                    parents: [],
+                    children: [],
+                    spouses: [],
+                    spouseStatus: {},
+                    branch: null,
+                }, opts);
+                return people[id];
+            }
+
+            // --- Generation 0 ---
+            addPerson('gf', { name: 'Grandfather', surname: 'Chitate', born: 1960, gender: 'm', relationship_type: 'Bloodline',
+                mutupo: 'Moyo (Heart)', chidawo: 'Moyondizvo', languages: ['Shona'], nationalities: ['Zimbabwean'],
+                clan: 'Moyo', subclan: 'Moyondizvo' });
+
+            // --- Generation 1 (spouses) ---
+            addPerson('exwifeC', { name: 'Ex-Wife C', surname: 'Ndlovu', born: 1965, gender: 'f', spouses: ['gf'],
+                relationship_type: 'Married In', branch: 'c', languages: ['Ndebele'], nationalities: ['Zimbabwean'] });
+            addPerson('womanD', { name: 'Woman D', surname: 'Moyo', born: 1967, gender: 'f', spouses: ['gf'],
+                relationship_type: 'Married In', branch: 'd', languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('wifeA', { name: 'Wife A', surname: 'Dube', born: 1969, gender: 'f', spouses: ['gf'],
+                relationship_type: 'Married In', branch: 'a', languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('wifeB', { name: 'Wife B', surname: 'Sibanda', born: 1970, gender: 'f', spouses: ['gf'],
+                relationship_type: 'Married In', branch: 'b', languages: ['Ndebele'], nationalities: ['Zimbabwean'] });
+            people.gf.spouses = ['exwifeC', 'womanD', 'wifeA', 'wifeB'];
+            people.gf.spouseStatus = { exwifeC: 'Severed / Divorced', womanD: 'Cohabiting / Unregistered',
+                wifeA: 'Civil Marriage', wifeB: 'Customary Union' };
+            people.exwifeC.spouseStatus = { gf: 'Severed / Divorced' };
+            people.womanD.spouseStatus = { gf: 'Cohabiting / Unregistered' };
+            people.wifeA.spouseStatus = { gf: 'Civil Marriage' };
+            people.wifeB.spouseStatus = { gf: 'Customary Union' };
+
+            // --- Generation 2 (children) ---
+            addPerson('childC1', { name: 'Child C1', surname: 'Chitate', born: 1987, gender: 'm', parents: ['gf',
+                    'exwifeC'
+                ], relationship_type: 'Bloodline', branch: 'c', mutupo: 'Moyo (Heart)', chidawo: 'Moyondizvo',
+                languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('childC2', { name: 'Child C2', surname: 'Chitate', born: 1993, gender: 'f', parents: ['gf',
+                    'exwifeC'
+                ], relationship_type: 'Bloodline', branch: 'c', mutupo: 'Moyo (Heart)', chidawo: 'Moyondizvo',
+                languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('childD1', { name: 'Child D1', surname: 'Chitate', born: 1989, gender: 'f', parents: ['gf',
+                    'womanD'
+                ], relationship_type: 'Bloodline', branch: 'd', mutupo: 'Moyo (Heart)', chidawo: 'Moyondizvo',
+                languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('childD2', { name: 'Child D2', surname: 'Chitate', born: 1992, gender: 'm', parents: ['gf',
+                    'womanD'
+                ], relationship_type: 'Bloodline', branch: 'd', mutupo: 'Moyo (Heart)', chidawo: 'Moyondizvo',
+                languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('childA1', { name: 'Child A1', surname: 'Chitate', born: 1989, gender: 'm', parents: ['gf',
+                    'wifeA'
+                ], relationship_type: 'Bloodline', branch: 'a', mutupo: 'Moyo (Heart)', chidawo: 'Moyondizvo',
+                languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('childA2', { name: 'Child A2', surname: 'Chitate', born: 1991, gender: 'f', parents: ['gf',
+                    'wifeA'
+                ], relationship_type: 'Bloodline', branch: 'a', mutupo: 'Moyo (Heart)', chidawo: 'Moyondizvo',
+                languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('childB1', { name: 'Child B1', surname: 'Chitate', born: 1995, gender: 'm', parents: ['gf',
+                    'wifeB'
+                ], relationship_type: 'Bloodline', branch: 'b', mutupo: 'Moyo (Heart)', chidawo: 'Moyondizvo',
+                languages: ['Shona'], nationalities: ['Zimbabwean'] });
+
+            people.exwifeC.children = ['childC1', 'childC2'];
+            people.womanD.children = ['childD1', 'childD2'];
+            people.wifeA.children = ['childA1', 'childA2'];
+            people.wifeB.children = ['childB1'];
+            people.gf.children = ['childC1', 'childC2', 'childD1', 'childD2', 'childA1', 'childA2', 'childB1'];
+
+            // --- Generation 2 spouses (in-laws) ---
+            addPerson('spC1', { name: 'SP-C1', surname: 'Zhou', born: 1987, gender: 'f', spouses: ['childC1'],
+                relationship_type: 'Married In', branch: 'c', languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('spD1', { name: 'SP-D1', surname: 'Ngwenya', born: 1988, gender: 'm', spouses: ['childD1'],
+                relationship_type: 'Married In', branch: 'd', languages: ['Ndebele'], nationalities: ['Zimbabwean'] });
+            addPerson('spA1', { name: 'SP-A1', surname: 'Khumalo', born: 1989, gender: 'f', spouses: ['childA1'],
+                relationship_type: 'Married In', branch: 'a', languages: ['Ndebele'], nationalities: ['Zimbabwean'] });
+            addPerson('spA2', { name: 'SP-A2', surname: 'Mhofu', born: 1990, gender: 'm', spouses: ['childA2'],
+                relationship_type: 'Married In', branch: 'a', languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('spD2', { name: 'SP-D2', surname: 'Nyati', born: 1992, gender: 'f', spouses: ['childD2'],
+                relationship_type: 'Married In', branch: 'd', languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('spC2', { name: 'SP-C2', surname: 'Dube', born: 1994, gender: 'm', spouses: ['childC2'],
+                relationship_type: 'Married In', branch: 'c', languages: ['Shona'], nationalities: ['Zimbabwean'] });
+            addPerson('spB1', { name: 'SP-B1', surname: 'Ncube', born: 1995, gender: 'f', spouses: ['childB1'],
+                relationship_type: 'Married In', branch: 'b', languages: ['Ndebele'], nationalities: ['Zimbabwean'] });
+
+            people.childC1.spouses = ['spC1'];
+            people.childC1.spouseStatus = { spC1: 'Civil Marriage' };
+            people.spC1.spouseStatus = { childC1: 'Civil Marriage' };
+            people.childD1.spouses = ['spD1'];
+            people.childD1.spouseStatus = { spD1: 'Customary Union' };
+            people.spD1.spouseStatus = { childD1: 'Customary Union' };
+            people.childA1.spouses = ['spA1'];
+            people.childA1.spouseStatus = { spA1: 'Civil Marriage' };
+            people.spA1.spouseStatus = { childA1: 'Civil Marriage' };
+            people.childA2.spouses = ['spA2'];
+            people.childA2.spouseStatus = { spA2: 'Cohabiting / Unregistered' };
+            people.spA2.spouseStatus = { childA2: 'Cohabiting / Unregistered' };
+            people.childD2.spouses = ['spD2'];
+            people.childD2.spouseStatus = { spD2: 'Customary Union' };
+            people.spD2.spouseStatus = { childD2: 'Customary Union' };
+            people.childC2.spouses = ['spC2'];
+            people.childC2.spouseStatus = { spC2: 'Civil Marriage' };
+            people.spC2.spouseStatus = { childC2: 'Civil Marriage' };
+            people.childB1.spouses = ['spB1'];
+            people.childB1.spouseStatus = { spB1: 'Customary Union' };
+            people.spB1.spouseStatus = { childB1: 'Customary Union' };
+
+            // --- Generation 3 (grandchildren) ---
+            const gen3 = [
+                ['C1A', 2015, 'm', 'childC1', 'spC1', 'c'],
+                ['C1B', 2016, 'f', 'childC1', 'spC1', 'c'],
+                ['D1A', 2017, 'm', 'childD1', 'spD1', 'd'],
+                ['D1B', 2018, 'f', 'childD1', 'spD1', 'd'],
+                ['A1A', 2017, 'f', 'childA1', 'spA1', 'a'],
+                ['A1B', 2018, 'm', 'childA1', 'spA1', 'a'],
+                ['A2A', 2019, 'm', 'childA2', 'spA2', 'a'],
+                ['A2B', 2020, 'f', 'childA2', 'spA2', 'a'],
+                ['D2A', 2020, 'f', 'childD2', 'spD2', 'd'],
+                ['D2B', 2021, 'm', 'childD2', 'spD2', 'd'],
+                ['C2A', 2021, 'm', 'childC2', 'spC2', 'c'],
+                ['C2B', 2022, 'f', 'childC2', 'spC2', 'c'],
+                ['B1A', 2024, 'f', 'childB1', 'spB1', 'b'],
+                ['B1B', 2025, 'm', 'childB1', 'spB1', 'b'],
+            ];
+            gen3.forEach(([id, born, gender, p1, p2, branch]) => {
+                addPerson(id, { name: id, surname: 'Chitate', born, gender, parents: [p1, p2],
+                    relationship_type: 'Bloodline', branch, mutupo: 'Moyo (Heart)',
+                    chidawo: 'Moyondizvo', languages: ['Shona'], nationalities: ['Zimbabwean'] });
+                people[p1].children.push(id);
+                people[p2].children.push(id);
+            });
+
+            // mark deceased
+            people.exwifeC.deceased = true;
+            people.exwifeC.date_of_passing = '2019';
+            people.exwifeC.cause_of_death = 'Illness';
+
+            /* =========================================================================
+               3. RELATIONSHIP CALCULATION
+               ========================================================================= */
+
+            const FIXED_GEN = {
+                gf: 0,
+                exwifeC: 0,
+                womanD: 0,
+                wifeA: 0,
+                wifeB: 0,
+                childC1: 1,
+                childC2: 1,
+                childD1: 1,
+                childD2: 1,
+                childA1: 1,
+                childA2: 1,
+                childB1: 1,
+                spC1: 1,
+                spD1: 1,
+                spA1: 1,
+                spA2: 1,
+                spD2: 1,
+                spC2: 1,
+                spB1: 1,
+            };
+            gen3.forEach(([id]) => { FIXED_GEN[id] = 2; });
+
+            function getParentsOf(id) { return people[id].parents || []; }
+
+            function getChildrenOf(id) { return people[id].children || []; }
+
+            function getSpousesOf(id) { return people[id].spouses || []; }
+
+            function getSiblingsOf(id) {
+                const parents = getParentsOf(id);
+                if (!parents.length) return [];
+                const sibSet = new Set();
+                parents.forEach(p => getChildrenOf(p).forEach(c => { if (c !== id) sibSet.add(c); }));
+                return [...sibSet];
+            }
+
+            function calcRelation(egoId, targetId) {
+                if (egoId === targetId) return 'Self';
+                const target = people[targetId];
+                if (getSpousesOf(egoId).includes(targetId)) { return target.gender === 'f' ? 'Wife' : 'Husband'; }
+                if (getParentsOf(egoId).includes(targetId)) { return target.gender === 'f' ? 'Mother' : 'Father'; }
+                if (getChildrenOf(egoId).includes(targetId)) { return target.gender === 'f' ? 'Daughter' : 'Son'; }
+                if (getSiblingsOf(egoId).includes(targetId)) { return target.gender === 'f' ? 'Sister' : 'Brother'; }
+                const egoParents = getParentsOf(egoId);
+                for (const p of egoParents) {
+                    if (getParentsOf(p).includes(targetId)) { return target.gender === 'f' ? 'Grandmother' :
+                        'Grandfather'; }
+                }
+                const egoChildren = getChildrenOf(egoId);
+                for (const c of egoChildren) {
+                    if (getChildrenOf(c).includes(targetId)) { return target.gender === 'f' ? 'Granddaughter' :
+                        'Grandson'; }
+                }
+                for (const p of egoParents) {
+                    if (getSiblingsOf(p).includes(targetId)) { return target.gender === 'f' ? 'Aunt' : 'Uncle'; }
+                    if (getSiblingsOf(p).some(sib => getSpousesOf(sib).includes(targetId))) {
+                        return (target.gender === 'f' ? 'Aunt' : 'Uncle') + ' (by marriage)';
+                    }
+                }
+                for (const sib of getSiblingsOf(egoId)) {
+                    if (getChildrenOf(sib).includes(targetId)) { return target.gender === 'f' ? 'Niece' : 'Nephew'; }
+                }
+                for (const sp of getSpousesOf(egoId)) {
+                    if (getParentsOf(sp).includes(targetId)) return (target.gender === 'f' ? 'Mother-in-law' :
+                        'Father-in-law');
+                    if (getSiblingsOf(sp).includes(targetId)) return (target.gender === 'f' ? 'Sister-in-law' :
+                        'Brother-in-law');
+                }
+                for (const sib of getSiblingsOf(egoId)) {
+                    if (getSpousesOf(sib).includes(targetId)) return (target.gender === 'f' ? 'Sister-in-law' :
+                        'Brother-in-law');
+                }
+                for (const c of egoChildren) {
+                    if (getSpousesOf(c).includes(targetId)) return (target.gender === 'f' ? 'Daughter-in-law' :
+                        'Son-in-law');
+                }
+
+                function grandparentsOf(id) {
+                    const gps = new Set();
+                    getParentsOf(id).forEach(p => getParentsOf(p).forEach(gp => gps.add(gp)));
+                    return gps;
+                }
+                const egoGPs = grandparentsOf(egoId);
+                const targetGPs = grandparentsOf(targetId);
+                let sharedGP = false;
+                egoGPs.forEach(gp => { if (targetGPs.has(gp)) sharedGP = true; });
+                if (sharedGP) return '1st Cousin';
+                for (const spouseOfTarget of getSpousesOf(targetId)) {
+                    const spGPs = grandparentsOf(spouseOfTarget);
+                    let shared2 = false;
+                    egoGPs.forEach(gp => { if (spGPs.has(gp)) shared2 = true; });
+                    if (shared2) return "Cousin's spouse";
+                }
+                return 'Relative';
+            }
+
+            function calculateAge(p) {
+                if (!p.born) return '?';
+                const now = new Date().getFullYear();
+                const age = now - p.born;
+                if (p.deceased && p.date_of_passing) {
+                    const deathYear = parseInt(p.date_of_passing);
+                    if (!isNaN(deathYear)) return (deathYear - p.born) + ' (d.' + deathYear + ')';
+                }
+                return age + ' yrs';
+            }
+
+            /* =========================================================================
+               4. LAYOUT ENGINE (with micro-Y offset)
+               ========================================================================= */
+
+            const CARD_W = 148;
+            const CARD_H = 205;
+            const COL_W = CARD_W + 30;
+            const ROW_H_BASE = CARD_H + 30;
+
+            // base layout (col, row) — row is decade index
+            const BASE_LAYOUT = {
+                gf: { col: 9, row: 0 },
+
+                wifeB: { col: 4, row: 1 },
+                wifeA: { col: 6, row: 1 },
+                womanD: { col: 8, row: 1 },
+                exwifeC: { col: 10, row: 1 },
+
+                childB1: { col: 2, row: 2 },
+                childA1: { col: 5, row: 2 },
+                childA2: { col: 7, row: 3 },
+                childD1: { col: 9, row: 2 },
+                childD2: { col: 8, row: 3.3 },
+                childC1: { col: 12, row: 2 },
+                childC2: { col: 10, row: 3.6 },
+
+                spB1: { col: 3.4, row: 2 },
+                spA1: { col: 6.4, row: 2 },
+                spA2: { col: 8.4, row: 3 },
+                spD1: { col: 10.4, row: 2 },
+                spD2: { col: 9.4, row: 3.3 },
+                spC1: { col: 13.4, row: 2 },
+                spC2: { col: 11.4, row: 3.6 },
+
+                B1A: { col: 1.2, row: 5 },
+                B1B: { col: 2.6, row: 5 },
+                A1A: { col: 4.6, row: 4.6 },
+                A1B: { col: 6.0, row: 4.6 },
+                A2A: { col: 7.2, row: 5.3 },
+                A2B: { col: 8.6, row: 5.3 },
+                D1A: { col: 9.6, row: 4.6 },
+                D1B: { col: 11.0, row: 4.6 },
+                D2A: { col: 8.8, row: 6 },
+                D2B: { col: 10.2, row: 6 },
+                C1A: { col: 12.6, row: 4.6 },
+                C1B: { col: 14.0, row: 4.6 },
+                C2A: { col: 10.6, row: 6.6 },
+                C2B: { col: 12.0, row: 6.6 },
+            };
+
+            // Micro-offset map: stores deltaY per person per decade for staggering
+            const microOffsets = {};
+
+            function computeMicroOffsets() {
+                // group by decade (row index)
+                const byDecade = {};
+                Object.keys(BASE_LAYOUT).forEach(id => {
+                    const p = people[id];
+                    if (!p || !p.born) return;
+                    const row = Math.floor(BASE_LAYOUT[id].row);
+                    if (!byDecade[row]) byDecade[row] = [];
+                    byDecade[row].push({ id, born: p.born, month: p._month || 6 });
+                });
+                Object.keys(byDecade).forEach(rowKey => {
+                    const row = parseInt(rowKey);
+                    const list = byDecade[row];
+                    list.sort((a, b) => a.born - b.born || a.month - b.month);
+                    const count = list.length;
+                    list.forEach((item, idx) => {
+                        // spread between 5px and 25px
+                        const frac = count > 1 ? idx / (count - 1) : 0.5;
+                        const deltaY = 5 + frac * 20;
+                        microOffsets[item.id] = deltaY;
+                    });
+                });
+            }
+            computeMicroOffsets();
+
+            // Also store explicit year-based row offset for 'years' mode
+            const yearRowOffsets = {};
+
+            function computeYearOffsets() {
+                // For 'years' mode, we shift within the decade row based on exact year
+                const minYear = 1960;
+                const maxYear = 2025;
+                Object.keys(BASE_LAYOUT).forEach(id => {
+                    const p = people[id];
+                    if (!p || !p.born) return;
+                    const baseRow = Math.floor(BASE_LAYOUT[id].row);
+                    const yearFrac = (p.born - minYear) / (maxYear - minYear);
+                    // map to -15px .. +15px within the row
+                    const offset = (yearFrac - 0.5) * 30;
+                    yearRowOffsets[id] = offset;
+                });
+            }
+            computeYearOffsets();
+
+            let railMode = 'decade'; // 'decade' | 'years'
+
+            function getLayoutCoord(id) {
+                const base = BASE_LAYOUT[id];
+                if (!base) return null;
+                let rowBase = base.row;
+                let extraY = 0;
+                if (railMode === 'years') {
+                    extraY = yearRowOffsets[id] || 0;
+                }
+                // apply micro-offset (birth date staggering) — always applied
+                const micro = microOffsets[id] || 0;
+                // but micro is already baked into the row, so we add it as an offset
+                // Actually microOffsets is a delta from the base row, so we add it to the Y
+                // We'll compute px from col/row plus micro
+                return {
+                    col: base.col,
+                    row: rowBase,
+                    microY: micro + extraY
+                };
+            }
+
+            function px(coord) {
+                const x = coord.col * COL_W;
+                const y = coord.row * ROW_H_BASE + (coord.microY || 0);
+                return { x, y };
+            }
+
+            const BRANCH_COLOR = { a: 'var(--branch-a)', b: 'var(--branch-b)', c: 'var(--branch-c)',
+            d: 'var(--branch-d)' };
+            const BRANCH_COLOR_HEX = { a: '#2F6FED', b: '#C0392B', c: '#3E7D4C', d: '#B5892A' };
+
+            /* =========================================================================
+               5. STATE ENGINE
+               ========================================================================= */
+
+            let currentEgo = 'gf';
+            let zoomLevel = 1;
+            let visible = {};
+            let childrenRevealed = {};
+            let gen3Revealed = {};
+            let searchTerm = '';
+
+            function resetState() {
+                visible = {};
+                childrenRevealed = {};
+                gen3Revealed = {};
+                visible['gf'] = true;
+            }
+            resetState();
+
+            function isVisible(id) { return !!visible[id]; }
+
+            function getVisiblePeople() {
+                return Object.keys(people).filter(id => isVisible(id));
+            }
+
+            function focusNode(personId) {
+                const node = nodeEls[personId];
+                if (node) {
+                    node.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                }
+            }
+
+            function toggleCascade(id) {
+                closePopover();
+                if (id === 'gf') {
+                    const anyVisible = people.gf.spouses.some(s => visible[s]);
+                    if (anyVisible) {
+                        people.gf.spouses.forEach(s => { visible[s] = false;
+                            collapseSpouseBranch(s); });
+                    } else {
+                        people.gf.spouses.forEach(s => visible[s] = true);
+                    }
+                } else if (people.gf.spouses.includes(id)) {
+                    if (childrenRevealed[id]) {
+                        childrenRevealed[id] = false;
+                        people[id].children.forEach(c => { visible[c] = false;
+                            collapseChildBranch(c); });
+                    } else {
+                        childrenRevealed[id] = true;
+                        people[id].children.forEach(c => visible[c] = true);
+                    }
+                } else if (FIXED_GEN[id] === 1) {
+                    if (gen3Revealed[id]) {
+                        gen3Revealed[id] = false;
+                        const sp = getSpousesOf(id)[0];
+                        if (sp) visible[sp] = false;
+                        getChildrenOf(id).forEach(gc => { if (FIXED_GEN[gc] === 2) visible[gc] = false; });
+                    } else {
+                        gen3Revealed[id] = true;
+                        const sp = getSpousesOf(id)[0];
+                        if (sp) visible[sp] = true;
+                        getChildrenOf(id).forEach(gc => { if (FIXED_GEN[gc] === 2) visible[gc] = true; });
+                    }
+                }
+                render();
+            }
+
+            function collapseSpouseBranch(spouseId) {
+                childrenRevealed[spouseId] = false;
+                (people[spouseId].children || []).forEach(c => { visible[c] = false;
+                    collapseChildBranch(c); });
+            }
+
+            function collapseChildBranch(childId) {
+                gen3Revealed[childId] = false;
+                const sp = getSpousesOf(childId)[0];
+                if (sp) visible[sp] = false;
+                getChildrenOf(childId).forEach(gc => { if (FIXED_GEN[gc] === 2) visible[gc] = false; });
+            }
+
+            function expandAll() {
+                Object.keys(people).forEach(id => visible[id] = true);
+                people.gf.spouses.forEach(s => childrenRevealed[s] = true);
+                Object.keys(FIXED_GEN).forEach(id => { if (FIXED_GEN[id] === 1 && !people.gf.spouses.includes(id))
+                        gen3Revealed[id] = true; });
+            }
+
+            /* =========================================================================
+               6. RENDERING
+               ========================================================================= */
+
+            const canvas = document.getElementById('canvas');
+            const svg = document.getElementById('connector-svg');
+            const railEl = document.getElementById('decade-rail');
+            const viewport = document.getElementById('viewport');
+
+            const DECADES = ['1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'];
+
+            function buildRail() {
+                railEl.innerHTML = '';
+                DECADES.forEach((label, i) => {
+                    const tick = document.createElement('div');
+                    tick.className = 'decade-tick' + (label === '2000s' ? ' blank' : '');
+                    tick.style.top = (i * ROW_H_BASE) + 'px';
+                    tick.style.height = ROW_H_BASE + 'px';
+                    tick.innerHTML = `<span>${label}</span>`;
+                    tick.dataset.decade = i;
+                    railEl.appendChild(tick);
+                });
+                // re-add toggle wrap
+                const wrap = document.createElement('div');
+                wrap.id = 'rail-toggle-wrap';
+                wrap.innerHTML = `<button id="rail-toggle-btn">Decade</button>`;
+                railEl.appendChild(wrap);
+                document.getElementById('rail-toggle-btn').addEventListener('click', toggleRailMode);
+                // click on rail opens decade-year modal
+                railEl.addEventListener('click', (e) => {
+                    if (e.target.closest('#rail-toggle-wrap')) return;
+                    openDecadeYearModal();
+                });
+            }
+
+            let nodeEls = {};
+
+            function primaryStatusClassFor(p) {
+                const statuses = Object.values(p.spouseStatus || {});
+                const withStatus = statuses.find(s => STATUS_TO_CSS[s]);
+                return withStatus ? STATUS_TO_CSS[withStatus] : '';
+            }
+
+            function silhouetteFor(p) { return p.gender === 'f' ? FEMALE_SVG : MALE_SVG; }
+
+            function yearLabel(p) {
+                if (p.deceased && p.date_of_passing) {
+                    return `b.${p.born} – d.${p.date_of_passing}`;
+                }
+                return `b.${p.born}`;
+            }
+
+            function renderCardHTML(p) {
+                const genderClass = p.gender === 'f' ? 'gender-f' : 'gender-m';
+                const statusClass = primaryStatusClassFor(p);
+                const deceasedClass = p.deceased ? 'deceased' : '';
+                const isSevered = Object.values(p.spouseStatus || {}).includes('Severed / Divorced');
+                const img = p.image ?
+                    `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">` :
+                    silhouetteFor(p);
+                const severedTag = (isSevered && !p.deceased) ? `<div class="severed-tag">Severed</div>` : '';
+                const deathTag = p.deceased ? `<div class="deceased-tag">Deceased</div>` : '';
+                const egoBadge = p.id === currentEgo ? `<div class="ego-badge">Ego</div>` : '';
+
+                return `
+                <div class="card">
+                  ${egoBadge}
+                  <div class="zone-image" data-role="cascade">
+                    <div class="thumb ${genderClass} ${statusClass} ${deceasedClass}">
+                      ${severedTag}
+                      ${img}
+                      ${deathTag}
+                    </div>
+                  </div>
+                  <div class="zone-text" data-role="popover">
+                    <div class="name-row">${p.name}</div>
+                    <div class="surname-row">${p.surname || ''}</div>
+                    <div class="year-row">${yearLabel(p)}</div>
+                    <div class="tap-hint">tap for info</div>
+                  </div>
+                </div>
+              `;
+            }
+
+            function attachNodeHandlers(node, id) {
+                const cascadeZone = node.querySelector('[data-role="cascade"]');
+                const popoverZone = node.querySelector('[data-role="popover"]');
+                cascadeZone.addEventListener('click', () => toggleCascade(id));
+                popoverZone.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showPopover(id, popoverZone);
+                });
+            }
+
+            function buildNodes() {
+                canvas.innerHTML = '';
+                canvas.appendChild(svg);
+                nodeEls = {};
+
+                Object.keys(people).forEach(id => {
+                    const p = people[id];
+                    const coord = getLayoutCoord(id);
+                    if (!coord) return;
+                    const { x, y } = px(coord);
+
+                    const node = document.createElement('div');
+                    node.className = 'person-node';
+                    node.style.left = x + 'px';
+                    node.style.top = y + 'px';
+                    node.dataset.id = id;
+                    node.innerHTML = renderCardHTML(p);
+                    canvas.appendChild(node);
+                    nodeEls[id] = node;
+                    attachNodeHandlers(node, id);
+                });
+
+                let maxX = 0,
+                    maxY = 0;
+                Object.keys(BASE_LAYOUT).forEach(id => {
+                    const coord = getLayoutCoord(id);
+                    if (!coord) return;
+                    const { x, y } = px(coord);
+                    maxX = Math.max(maxX, x + CARD_W + 40);
+                    maxY = Math.max(maxY, y + CARD_H + 30);
+                });
+                canvas.dataset.contentW = maxX;
+                canvas.dataset.contentH = maxY;
+                canvas.style.width = maxX + 'px';
+                canvas.style.height = maxY + 'px';
+                svg.setAttribute('width', maxX);
+                svg.setAttribute('height', maxY);
+            }
+
+            function updateNode(id) {
+                const node = nodeEls[id];
+                if (!node) return;
+                const p = people[id];
+                node.innerHTML = renderCardHTML(p);
+                attachNodeHandlers(node, id);
+            }
+
+            function renderVisibility() {
+                Object.keys(nodeEls).forEach(id => {
+                    const node = nodeEls[id];
+                    node.classList.toggle('hidden-node', !isVisible(id));
+                });
+                applySearchDimming();
+            }
+
+            function applySearchDimming() {
+                const term = searchTerm.trim().toLowerCase();
+                Object.keys(nodeEls).forEach(id => {
+                    const node = nodeEls[id];
+                    node.classList.remove('search-dim', 'search-match');
+                    if (!term) return;
+                    const p = people[id];
+                    const hay = (p.name + ' ' + (p.surname || '')).toLowerCase();
+                    if (hay.includes(term)) {
+                        node.classList.add('search-match');
+                    } else {
+                        node.classList.add('search-dim');
+                    }
+                });
+            }
+
+            /* -------- CONNECTORS -------- */
+
+            function centerTopOf(id) { const c = getLayoutCoord(id); if (!c) return { x: 0, y: 0 }; const { x, y } = px(
+                c); return { x: x + CARD_W / 2, y: y }; }
+
+            function centerBottomOf(id) { const c = getLayoutCoord(id); if (!c) return { x: 0, y: 0 }; const { x, y } =
+                px(c); return { x: x + CARD_W / 2, y: y + CARD_H }; }
+
+            function centerLeftOf(id) { const c = getLayoutCoord(id); if (!c) return { x: 0, y: 0 }; const { x, y } = px(
+                c); return { x: x, y: y + CARD_H / 2 }; }
+
+            function centerRightOf(id) { const c = getLayoutCoord(id); if (!c) return { x: 0, y: 0 }; const { x, y } =
+                px(c); return { x: x + CARD_W, y: y + CARD_H / 2 }; }
+
+            function bothVisible(a, b) { return isVisible(a) && isVisible(b); }
+
+            function branchColorFor(id) {
+                const p = people[id];
+                return p.branch ? BRANCH_COLOR_HEX[p.branch] : '#B8B8B0';
+            }
+
+            function buildConnectorList() {
+                const conns = [];
+
+                people.gf.spouses.forEach(s => {
+                    if (bothVisible('gf', s)) conns.push({ a: 'gf', b: s, type: 'branch',
+                        color: branchColorFor(s) });
+                });
+
+                people.gf.spouses.forEach(s => {
+                    (people[s].children || []).forEach(c => {
+                        if (bothVisible(s, c)) conns.push({ a: s, b: c, type: 'branch',
+                            color: branchColorFor(c) });
+                    });
+                });
+
+                Object.keys(people).forEach(id => {
+                    if (FIXED_GEN[id] === 1 && !people.gf.spouses.includes(id)) {
+                        const sp = getSpousesOf(id)[0];
+                        if (sp && bothVisible(id, sp)) {
+                            const status = (people[id].spouseStatus && people[id].spouseStatus[sp]) ||
+                                'Customary Union';
+                            conns.push({ a: id, b: sp, type: 'spouse', color: statusLineColor(status) });
+                        }
+                    }
+                });
+
+                Object.keys(people).forEach(id => {
+                    if (FIXED_GEN[id] === 1 && !people.gf.spouses.includes(id)) {
+                        getChildrenOf(id).forEach(gc => {
+                            if (FIXED_GEN[gc] === 2 && bothVisible(id, gc)) {
+                                conns.push({ a: id, b: gc, type: 'branch', color: branchColorFor(gc) });
+                            }
+                        });
+                    }
+                });
+
+                return conns;
+            }
+
+            function statusLineColor(status) {
+                switch (status) {
+                    case 'Civil Marriage':
+                        return '#1C1C1C';
+                    case 'Customary Union':
+                        return '#3E7D4C';
+                    case 'Cohabiting / Unregistered':
+                        return '#9A9A93';
+                    case 'Severed / Divorced':
+                        return '#C0392B';
+                    default:
+                        return '#9A9A93';
+                }
+            }
+
+            function drawConnectors() {
+                svg.innerHTML = '';
+                const conns = buildConnectorList();
+                const term = searchTerm.trim().toLowerCase();
+
+                conns.forEach(conn => {
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    let d;
+                    let dimmed = false;
+                    if (term) {
+                        const aMatch = (people[conn.a].name + ' ' + (people[conn.a].surname || '')).toLowerCase()
+                            .includes(term);
+                        const bMatch = (people[conn.b].name + ' ' + (people[conn.b].surname || '')).toLowerCase()
+                            .includes(term);
+                        dimmed = !(aMatch || bMatch);
+                    }
+
+                    if (conn.type === 'spouse') {
+                        const p1 = centerRightOf(conn.a);
+                        const p2 = centerLeftOf(conn.b);
+                        const midX = (p1.x + p2.x) / 2;
+                        d = `M ${p1.x} ${p1.y} L ${midX} ${p1.y} L ${midX} ${p2.y} L ${p2.x} ${p2.y}`;
+                        path.setAttribute('class', 'conn-line spouse' + (dimmed ? ' dimmed' : ''));
+                    } else {
+                        const p1 = centerBottomOf(conn.a);
+                        const p2 = centerTopOf(conn.b);
+                        const midY = (p1.y + p2.y) / 2;
+                        d = `M ${p1.x} ${p1.y} L ${p1.x} ${midY} L ${p2.x} ${midY} L ${p2.x} ${p2.y}`;
+                        path.setAttribute('class', 'conn-line' + (dimmed ? ' dimmed' : ''));
+                    }
+                    path.setAttribute('d', d);
+                    path.setAttribute('stroke', conn.color);
+                    svg.appendChild(path);
+                });
+            }
+
+            function render() {
+                renderVisibility();
+                requestAnimationFrame(drawConnectors);
+                updateAllNodes();
+                updateStats();
+                updateEgoButton();
+            }
+
+            function updateAllNodes() {
+                Object.keys(nodeEls).forEach(id => updateNode(id));
+                renderVisibility();
+            }
+
+            /* =========================================================================
+               7. STATS STRIP
+               ========================================================================= */
+
+            function updateStats() {
+                const all = Object.values(people);
+                const total = all.length;
+                const blood = all.filter(p => p.relationship_type === 'Bloodline').length;
+                const married = all.filter(p => p.relationship_type === 'Married In').length;
+                const living = all.filter(p => !p.deceased).length;
+                const gens = new Set(Object.values(FIXED_GEN)).size;
+                document.getElementById('stat-total').textContent = total;
+                document.getElementById('stat-blood').textContent = blood;
+                document.getElementById('stat-married').textContent = married;
+                document.getElementById('stat-living').textContent = living;
+                document.getElementById('stat-gens').textContent = gens;
+            }
+
+            /* =========================================================================
+               8. STAT LIST MODAL
+               ========================================================================= */
+
+            const statListBackdrop = document.getElementById('stat-list-modal-backdrop');
+            const statListScroll = document.getElementById('stat-list-scroll');
+            const statListTitle = document.getElementById('stat-list-title-text');
+
+            function openStatList(filterType) {
+                let list = [];
+                let title = '';
+                switch (filterType) {
+                    case 'all':
+                        list = Object.values(people);
+                        title = 'All People';
+                        break;
+                    case 'blood':
+                        list = Object.values(people).filter(p => p.relationship_type === 'Bloodline');
+                        title = 'Blood Line';
+                        break;
+                    case 'married':
+                        list = Object.values(people).filter(p => p.relationship_type === 'Married In');
+                        title = 'Married In';
+                        break;
+                    case 'living':
+                        list = Object.values(people).filter(p => !p.deceased);
+                        title = 'Living';
+                        break;
+                    case 'generations':
+                        const genMap = {};
+                        Object.keys(FIXED_GEN).forEach(id => {
+                            const g = FIXED_GEN[id];
+                            if (!genMap[g]) genMap[g] = [];
+                            genMap[g].push(people[id]);
+                        });
+                        // flatten with generation label
+                        list = [];
+                        Object.keys(genMap).sort((a, b) => a - b).forEach(g => {
+                            genMap[g].forEach(p => {
+                                list.push({ ...p, _genLabel: 'Generation ' + g });
+                            });
+                        });
+                        title = 'Generations';
+                        break;
+                    default:
+                        return;
+                }
+
+                statListTitle.textContent = title + ' (' + list.length + ')';
+                statListScroll.innerHTML = '';
+                list.forEach(p => {
+                    const item = document.createElement('div');
+                    item.className = 'stat-list-item';
+                    const genLabel = p._genLabel || '';
+                    const age = calculateAge(p);
+                    item.innerHTML = `
+                    <span class="sl-name">${p.name} ${p.surname||''}</span>
+                    <span class="sl-meta">${p.born || '?'} · ${genLabel || p.relationship_type || ''} · ${age}</span>
+                  `;
+                    item.addEventListener('click', () => {
+                        statListBackdrop.classList.remove('open');
+                        focusNode(p.id);
+                    });
+                    statListScroll.appendChild(item);
+                });
+
+                statListBackdrop.classList.add('open');
+            }
+
+            document.getElementById('stat-list-close-btn').addEventListener('click', () => {
+                statListBackdrop.classList.remove('open');
+            });
+            statListBackdrop.addEventListener('click', (e) => {
+                if (e.target === statListBackdrop) statListBackdrop.classList.remove('open');
+            });
+
+            // wire stats cells
+            document.querySelectorAll('.stat-cell').forEach(cell => {
+                cell.addEventListener('click', () => {
+                    const filter = cell.dataset.filter;
+                    openStatList(filter);
+                });
+            });
+
+            /* =========================================================================
+               9. DECADE-YEAR MODAL
+               ========================================================================= */
+
+            const decadeModalBackdrop = document.getElementById('decade-year-modal-backdrop');
+            const decadeScroll = document.getElementById('decade-year-scroll');
+            const decadeTitle = document.getElementById('decade-year-title-text');
+
+            function openDecadeYearModal() {
+                decadeTitle.textContent = 'Timeline · ' + (railMode === 'decade' ? 'Decade' : 'Year') + ' View';
+                decadeScroll.innerHTML = '';
+
+                // group by decade
+                const byDecade = {};
+                Object.keys(people).forEach(id => {
+                    const p = people[id];
+                    if (!p.born) return;
+                    const decade = Math.floor(p.born / 10) * 10;
+                    if (!byDecade[decade]) byDecade[decade] = [];
+                    byDecade[decade].push(p);
+                });
+
+                const sortedDecades = Object.keys(byDecade).sort((a, b) => a - b);
+                sortedDecades.forEach(dec => {
+                    const group = document.createElement('div');
+                    group.className = 'decade-year-group';
+                    const header = document.createElement('div');
+                    header.className = 'dy-header';
+                    header.textContent = dec + 's';
+                    group.appendChild(header);
+
+                    const items = byDecade[dec].sort((a, b) => a.born - b.born);
+                    items.forEach(p => {
+                        const item = document.createElement('div');
+                        item.className = 'dy-item';
+                        const age = calculateAge(p);
+                        item.innerHTML = `
+                        <span class="dy-name">${p.name} ${p.surname||''}</span>
+                        <span class="dy-date">b.${p.born} · ${age}</span>
+                      `;
+                        item.addEventListener('click', () => {
+                            decadeModalBackdrop.classList.remove('open');
+                            focusNode(p.id);
+                        });
+                        group.appendChild(item);
+                    });
+                    decadeScroll.appendChild(group);
+                });
+
+                decadeModalBackdrop.classList.add('open');
+            }
+
+            document.getElementById('decade-year-close-btn').addEventListener('click', () => {
+                decadeModalBackdrop.classList.remove('open');
+            });
+            decadeModalBackdrop.addEventListener('click', (e) => {
+                if (e.target === decadeModalBackdrop) decadeModalBackdrop.classList.remove('open');
+            });
+
+            /* =========================================================================
+               10. RAIL MODE TOGGLE
+               ========================================================================= */
+
+            function toggleRailMode() {
+                railMode = (railMode === 'decade') ? 'years' : 'decade';
+                document.getElementById('rail-toggle-btn').textContent = railMode === 'decade' ? 'Decade' : 'Year';
+                // rebuild nodes with new layout
+                computeYearOffsets();
+                buildNodes();
+                render();
+                // re-focus ego
+                focusNode(currentEgo);
+            }
+
+            /* =========================================================================
+               11. POPOVER
+               ========================================================================= */
+
+            let activePopover = null;
+
+            function closePopover() {
+                if (activePopover) { activePopover.remove();
+                    activePopover = null; }
+            }
+
+            function marriageSummary(p) {
+                if (!p.marriage_type && !p.marital_status) return null;
+                const type = p.marriage_type || p.marital_status;
+                const date = p.marriage_date ? ` [${p.marriage_date}]` : '';
+                return type + date;
+            }
+
+            function showPopover(id, anchorEl) {
+                closePopover();
+                const p = people[id];
+                const rel = calcRelation(currentEgo, id);
+                const marriage = marriageSummary(p);
+
+                const pop = document.createElement('div');
+                pop.className = 'popover';
+                pop.innerHTML = `
+                <div class="p-name">${p.name} ${p.surname||''}</div>
+                <div class="p-years">${yearLabel(p)}</div>
+                <div class="pop-field">Totem / Mutupo<b>${p.mutupo || 'Not set'}${p.chidawo ? ' — '+p.chidawo : ''}</b></div>
+                <div class="pop-field">Tribe / Heritage<b>${p.language_cluster || 'Not set'}</b></div>
+                <div class="pop-field">Location / Base<b>${p.residential_address || p.village_name || 'Not set'}</b></div>
+                <div class="pop-field">Relationship to ${people[currentEgo].name}<b>${rel} · ${p.relationship_type || '—'}</b></div>
+                <div class="pop-field">Marriage Status<b>${marriage || 'Not set'}</b></div>
+                <div class="p-actions">
+                  <button class="primary" data-action="profile">View Full Record</button>
+                  <button data-action="close">Close</button>
+                </div>
+              `;
+
+                const nodeRect = anchorEl.closest('.person-node');
+                let left = parseFloat(nodeRect.style.left) + CARD_W + 12;
+                const contentW = parseFloat(canvas.dataset.contentW || 2400);
+                if (left + 240 > contentW) left = parseFloat(nodeRect.style.left) - 252;
+                pop.style.left = left + 'px';
+                pop.style.top = (parseFloat(nodeRect.style.top)) + 'px';
+
+                canvas.appendChild(pop);
+                activePopover = pop;
+
+                pop.querySelector('[data-action="close"]').addEventListener('click', closePopover);
+                pop.querySelector('[data-action="profile"]').addEventListener('click', () => {
+                    closePopover();
+                    openProfile(id);
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                if (activePopover && !e.target.closest('.popover') && !e.target.closest('[data-role="popover"]')) {
+                    closePopover();
+                }
+            });
+
+            /* =========================================================================
+               12. PROFILE OVERLAY (extended schema)
+               ========================================================================= */
+
+            const overlayBackdrop = document.getElementById('overlay-backdrop');
+            const profileContent = document.getElementById('profile-modal-content');
+            const fileInput = document.getElementById('hidden-file-input');
+            let profileTargetId = null;
+            let profileEditMode = false;
+
+            function fieldVal(v) {
+                if (v === '' || v === null || v === undefined || (Array.isArray(v) && !v.length))
+                    return `<span class="field-item-value empty">Not set</span>`;
+                if (Array.isArray(v)) return `<span class="field-item-value">${v.join(', ')}</span>`;
+                return `<span class="field-item-value">${v}</span>`;
+            }
+
+            function fieldEditText(id, key, label, placeholder) {
+                const val = people[id][key] || '';
+                return `
+                <div class="field-item">
+                  <div class="field-item-label">${label}</div>
+                  <input class="field-edit-input" data-field="${key}" type="text" value="${val.replace(/"/g,'&quot;')}" placeholder="${placeholder||''}">
+                </div>
+              `;
+            }
+
+            function fieldViewText(id, key, label) {
+                return `
+                <div class="field-item">
+                  <div class="field-item-label">${label}</div>
+                  ${fieldVal(people[id][key])}
+                </div>
+              `;
+            }
+
+            function fieldSelectBtn(id, key, label, listType) {
+                const val = people[id][key] || 'Not set';
+                return `
+                <div class="field-item">
+                  <div class="field-item-label">${label}</div>
+                  <button class="field-select-btn" data-select="${listType}" data-field="${key}">${val}</button>
+                </div>
+              `;
+            }
+
+            function renderRelChips(ids, tagLabel) {
+                if (!ids || !ids.length) return `<span class="field-item-value empty">None recorded</span>`;
+                return `<div class="chip-row">${ids.map(rid=>{
+                const rp = people[rid];
+                if (!rp) return '';
+                const age = calculateAge(rp);
+                const deceasedTag = rp.deceased ? `<span class="rc-deceased">Late</span>` : '';
+                return `<div class="rel-chip" data-jump="${rid}">
+                  <span class="rc-name">${rp.name} ${rp.surname||''}</span>
+                  <span class="rc-sub">
+                    <span>${tagLabel}</span>
+                    <span>·</span>
+                    <span>${age}</span>
+                    ${deceasedTag}
+                    <span class="rc-tag">${rp.relationship_type || ''}</span>
+                  </span>
+                </div>`;
+              }).join('')}</div>`;
+            }
+
+            function openProfile(id) {
+                profileTargetId = id;
+                profileEditMode = false;
+                renderProfileModal();
+                overlayBackdrop.classList.add('open');
+            }
+
+            function renderProfileModal() {
+                const id = profileTargetId;
+                const p = people[id];
+                if (!p) return;
+                const rel = calcRelation(currentEgo, id);
+                const genderClass = p.gender === 'f' ? 'gender-f' : 'gender-m';
+                const statusClass = primaryStatusClassFor(p);
+                const deceasedClass = p.deceased ? 'deceased' : '';
+                const img = p.image ?
+                    `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">` :
+                    silhouetteFor(p);
+
+                const isEgo = id === currentEgo;
+                const edit = profileEditMode;
+
+                // --- Identity ---
+                const identityFields = edit ? `
+                <div class="field-grid three">
+                  ${fieldEditText(id,'name','First Name')}
+                  ${fieldEditText(id,'surname','Surname')}
+                  ${fieldSelectBtn(id,'gender','Gender','gender')}
+                  ${fieldEditText(id,'aliases','Aliases (comma)','e.g. Tich, Moyo')}
+                  ${fieldEditText(id,'nationalities','Nationalities (comma)','Zimbabwean, ...')}
+                  ${fieldEditText(id,'languages','Languages (comma)','Shona, Ndebele, ...')}
+                  ${fieldEditText(id,'clan','Clan')}
+                  ${fieldEditText(id,'subclan','Sub-clan')}
+                </div>
+              ` : `
+                <div class="field-grid three">
+                  ${fieldViewText(id,'name','First Name')}
+                  ${fieldViewText(id,'surname','Surname')}
+                  ${fieldViewText(id,'gender','Gender')}
+                  ${fieldViewText(id,'aliases','Aliases')}
+                  ${fieldViewText(id,'nationalities','Nationalities')}
+                  ${fieldViewText(id,'languages','Languages')}
+                  ${fieldViewText(id,'clan','Clan')}
+                  ${fieldViewText(id,'subclan','Sub-clan')}
+                </div>
+              `;
+
+                // --- Admin & Geographic (includes place_of_birth) ---
+                const adminFields = edit ? `
+                <div class="field-grid">
+                  ${fieldEditText(id,'place_of_birth','Place of Birth')}
+                  ${fieldSelectBtn(id,'province','Province','province')}
+                  ${fieldEditText(id,'district','District')}
+                  ${fieldEditText(id,'constituency','Constituency')}
+                  ${fieldEditText(id,'ward','Ward Number')}
+                  ${fieldEditText(id,'village_name','Village Name')}
+                  ${fieldEditText(id,'headman','Headman (Sabhuku)')}
+                  ${fieldEditText(id,'chief','Chief (Ishe/Mambo)')}
+                  ${fieldEditText(id,'ancestral_home','Ancestral Home District')}
+                  ${fieldEditText(id,'coordinates','Coordinates (Lat/Long)')}
+                  ${fieldEditText(id,'residential_address','Current Residential Address')}
+                </div>
+              ` : `
+                <div class="field-grid">
+                  ${fieldViewText(id,'place_of_birth','Place of Birth')}
+                  ${fieldViewText(id,'province','Province')}
+                  ${fieldViewText(id,'district','District')}
+                  ${fieldViewText(id,'constituency','Constituency')}
+                  ${fieldViewText(id,'ward','Ward Number')}
+                  ${fieldViewText(id,'village_name','Village Name')}
+                  ${fieldViewText(id,'headman','Headman (Sabhuku)')}
+                  ${fieldViewText(id,'chief','Chief (Ishe/Mambo)')}
+                  ${fieldViewText(id,'ancestral_home','Ancestral Home District')}
+                  ${fieldViewText(id,'coordinates','Coordinates')}
+                  ${fieldViewText(id,'residential_address','Residential Address')}
+                </div>
+              `;
+
+                // --- Totemic ---
+                const totemicFields = edit ? `
+                <div class="field-grid">
+                  ${fieldSelectBtn(id,'mutupo','Mutupo (Totem)','mutupo')}
+                  ${fieldSelectBtn(id,'chidawo','Chidawo (Praise)','chidawo')}
+                  ${fieldEditText(id,'maternal_totem','Maternal Totem')}
+                  ${fieldEditText(id,'maternal_chidawo','Maternal Chidawo')}
+                  ${fieldSelectBtn(id,'language_cluster','Language Cluster','language')}
+                  ${fieldEditText(id,'religion','Religion','Christian, ATR, ...')}
+                  ${fieldEditText(id,'education_level','Education Level','Primary, Secondary, ...')}
+                  ${fieldEditText(id,'employment_status','Employment Status')}
+                  ${fieldEditText(id,'occupation','Primary Occupation')}
+                  ${fieldEditText(id,'national_id','National ID','63-XXXXXX-X-27')}
+                </div>
+              ` : `
+                <div class="field-grid">
+                  ${fieldViewText(id,'mutupo','Mutupo (Totem)')}
+                  ${fieldViewText(id,'chidawo','Chidawo (Praise)')}
+                  ${fieldViewText(id,'maternal_totem','Maternal Totem')}
+                  ${fieldViewText(id,'maternal_chidawo','Maternal Chidawo')}
+                  ${fieldViewText(id,'language_cluster','Language Cluster')}
+                  ${fieldViewText(id,'religion','Religion')}
+                  ${fieldViewText(id,'education_level','Education Level')}
+                  ${fieldViewText(id,'employment_status','Employment Status')}
+                  ${fieldViewText(id,'occupation','Primary Occupation')}
+                  ${fieldViewText(id,'national_id','National ID')}
+                </div>
+              `;
+
+                // --- Marriage ---
+                const marriageFields = edit ? `
+                <div class="field-grid">
+                  ${fieldSelectBtn(id,'marital_status','Marital Status','marital_status')}
+                  ${fieldSelectBtn(id,'marriage_type','Marriage Type','marriage_type')}
+                  ${fieldEditText(id,'marriage_date','Date of Marriage','YYYY or YYYY-MM-DD')}
+                  ${fieldSelectBtn(id,'roora_status','Roora / Amalobolo','roora')}
+                  ${fieldEditText(id,'clan_position','Clan Hierarchy Position')}
+                  ${fieldEditText(id,'family_head','Family Head?','true/false')}
+                </div>
+              ` : `
+                <div class="field-grid">
+                  ${fieldViewText(id,'marital_status','Marital Status')}
+                  ${fieldViewText(id,'marriage_type','Marriage Type')}
+                  ${fieldViewText(id,'marriage_date','Date of Marriage')}
+                  ${fieldViewText(id,'roora_status','Roora / Amalobolo')}
+                  ${fieldViewText(id,'clan_position','Clan Hierarchy Position')}
+                  ${fieldViewText(id,'family_head','Family Head')}
+                </div>
+              `;
+
+                // --- Vital Records (includes date_of_passing, burial_location) ---
+                const vitalFields = edit ? `
+                <div class="field-grid">
+                  ${fieldEditText(id,'date_of_passing','Date of Passing','YYYY or YYYY-MM-DD')}
+                  ${fieldEditText(id,'burial_location','Burial Location')}
+                  ${fieldEditText(id,'cause_of_death','Cause of Death')}
+                  ${fieldEditText(id,'vital_birth_cert','Birth Certificate #')}
+                  ${fieldEditText(id,'vital_id_doc','National ID #')}
+                  ${fieldEditText(id,'vital_marriage_cert','Marriage Certificate #')}
+                  ${fieldEditText(id,'vital_death_cert','Death Certificate #')}
+                  ${fieldEditText(id,'vital_burial_permit','Burial Permit #')}
+                </div>
+              ` : `
+                <div class="field-grid">
+                  ${fieldViewText(id,'date_of_passing','Date of Passing')}
+                  ${fieldViewText(id,'burial_location','Burial Location')}
+                  ${fieldViewText(id,'cause_of_death','Cause of Death')}
+                  ${fieldViewText(id,'vital_birth_cert','Birth Certificate')}
+                  ${fieldViewText(id,'vital_id_doc','National ID')}
+                  ${fieldViewText(id,'vital_marriage_cert','Marriage Certificate')}
+                  ${fieldViewText(id,'vital_death_cert','Death Certificate')}
+                  ${fieldViewText(id,'vital_burial_permit','Burial Permit')}
+                </div>
+              `;
+
+                // --- Rites & Milestones ---
+                const ritesFields = edit ? `
+                <div class="field-grid">
+                  ${fieldEditText(id,'baptism_details','Baptism Details')}
+                  ${fieldEditText(id,'initiation_rites','Initiation / Rite of Passage')}
+                </div>
+                <div style="margin-top:8px;">
+                  <div class="field-item-label">Migration History</div>
+                  <button class="field-select-btn" style="width:auto;" id="edit-migration-btn">+ Edit Migrations</button>
+                  <div style="margin-top:4px;font-size:12px;color:var(--ink-soft);">${(p.migration_history||[]).length > 0 ? p.migration_history.map(m=>m.from+' → '+m.to+' ('+m.date+')').join('; ') : 'None recorded'}</div>
+                </div>
+              ` : `
+                <div class="field-grid">
+                  ${fieldViewText(id,'baptism_details','Baptism Details')}
+                  ${fieldViewText(id,'initiation_rites','Initiation / Rite of Passage')}
+                </div>
+                <div style="margin-top:8px;">
+                  <div class="field-item-label">Migration History</div>
+                  <div style="font-size:12px;color:var(--ink-soft);">${(p.migration_history||[]).length > 0 ? p.migration_history.map(m=>m.from+' → '+m.to+' ('+m.date+')').join('; ') : 'None recorded'}</div>
+                </div>
+              `;
+
+                // --- Education History (with nested modal trigger) ---
+                const eduHistory = (p.education_history || []).length > 0 ?
+                    p.education_history.map(e => `${e.institution} (${e.from}-${e.to})`).join('; ') :
+                    'None recorded';
+                const eduSection = `
+                <div>
+                  <div class="field-item-label">Education Timeline</div>
+                  <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">${eduHistory}</div>
+                  ${edit ? `<button class="field-select-btn" style="width:auto;" id="edit-education-btn">+ Edit Education</button>` : ''}
+                </div>
+              `;
+
+                // --- Work History (with nested modal trigger) ---
+                const workHistory = (p.work_history || []).length > 0 ?
+                    p.work_history.map(w => `${w.role} at ${w.company} (${w.from}-${w.to})`).join('; ') :
+                    'None recorded';
+                const workSection = `
+                <div>
+                  <div class="field-item-label">Work History</div>
+                  <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">${workHistory}</div>
+                  ${edit ? `<button class="field-select-btn" style="width:auto;" id="edit-work-btn">+ Edit Work</button>` : ''}
+                </div>
+              `;
+
+                // --- Media & Social ---
+                const mediaFields = edit ? `
+                <div class="field-grid">
+                  ${fieldEditText(id,'phone','Phone Number')}
+                  ${fieldEditText(id,'whatsapp','WhatsApp')}
+                  ${fieldEditText(id,'email','Email')}
+                  ${fieldEditText(id,'social_facebook','Facebook')}
+                  ${fieldEditText(id,'social_twitter','Twitter/X')}
+                  ${fieldEditText(id,'social_instagram','Instagram')}
+                  ${fieldEditText(id,'social_tiktok','TikTok')}
+                </div>
+                <div style="margin-top:8px;">
+                  <div class="field-item-label">Media Gallery</div>
+                  <button class="field-select-btn" style="width:auto;" id="edit-gallery-btn">+ Manage Gallery</button>
+                </div>
+              ` : `
+                <div class="field-grid">
+                  ${fieldViewText(id,'phone','Phone')}
+                  ${fieldViewText(id,'whatsapp','WhatsApp')}
+                  ${fieldViewText(id,'email','Email')}
+                  ${fieldViewText(id,'social_facebook','Facebook')}
+                  ${fieldViewText(id,'social_twitter','Twitter/X')}
+                  ${fieldViewText(id,'social_instagram','Instagram')}
+                  ${fieldViewText(id,'social_tiktok','TikTok')}
+                </div>
+              `;
+
+                // --- Notes ---
+                const notesSection = edit ?
+                    `<textarea class="notes-box" id="notes-edit-box" placeholder="Oral history, proverbs, biographical notes…">${p.notes||''}</textarea>` :
+                    `<div class="notes-display ${p.notes ? '' : 'empty'}">${p.notes || 'No oral history notes recorded yet.'}</div>`;
+
+                // --- Flags ---
+                const flags = [];
+                if (id === currentEgo) flags.push(`<span class="flag-chip ego">Ego</span>`);
+                if (p.deceased) flags.push(`<span class="flag-chip deceased">Deceased</span>`);
+                if (Object.values(p.spouseStatus || {}).includes('Severed / Divorced')) flags.push(
+                    `<span class="flag-chip severed">Severed</span>`);
+
+                profileContent.innerHTML = `
+                <div class="profile-close" id="profile-close-btn">Close ✕</div>
+                <div class="profile-thumb-wrap">
+                  <div class="profile-thumb ${genderClass} ${statusClass} ${deceasedClass}">${img}</div>
+                  <button class="change-img-btn" id="change-img-btn">Change Image</button>
+                  <div class="profile-name">${p.name} ${p.surname||''}</div>
+                  <div class="profile-years">${yearLabel(p)}</div>
+                  <div class="profile-flags">${flags.join('')}</div>
+                  <div class="edit-toggle-row">
+                    <button id="mode-view-btn" class="${edit?'':'active'}">View</button>
+                    <button id="mode-edit-btn" class="${edit?'active':''}">Edit</button>
+                  </div>
+                </div>
+
+                <div class="exogamy-warning" id="exogamy-warning-box">
+                  ⚠ Exogamy conflict: matching Mutupo and Chidawo detected with a proposed spouse.
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Relation to ${people[currentEgo].name}</div>
+                  <div class="field-item-value">${rel} · ${p.relationship_type || 'Not set'}</div>
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Fundamental Identity</div>
+                  ${identityFields}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Lineage &amp; Totemic Mapping</div>
+                  ${totemicFields}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Administrative &amp; Geographic</div>
+                  ${adminFields}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Customary Marriage &amp; Kinship</div>
+                  ${marriageFields}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Vital Records</div>
+                  ${vitalFields}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Rites &amp; Milestones</div>
+                  ${ritesFields}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Education</div>
+                  ${eduSection}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Work &amp; Career</div>
+                  ${workSection}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Media &amp; Social</div>
+                  ${mediaFields}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Parents</div>
+                  ${renderRelChips(getParentsOf(id), 'parent')}
+                </div>
+                <div class="profile-section">
+                  <div class="profile-section-label">Siblings</div>
+                  ${renderRelChips(getSiblingsOf(id), 'sibling')}
+                </div>
+                <div class="profile-section">
+                  <div class="profile-section-label">Spouse(s)</div>
+                  ${renderRelChips(getSpousesOf(id), 'spouse')}
+                </div>
+                <div class="profile-section">
+                  <div class="profile-section-label">Children</div>
+                  ${renderRelChips(getChildrenOf(id), 'child')}
+                </div>
+
+                <div class="profile-section">
+                  <div class="profile-section-label">Oral History Notes</div>
+                  ${notesSection}
+                </div>
+
+                <div class="action-link-row">
+                  <button class="action-link view-as ${isEgo?'is-ego':''}" id="view-as-this-btn" ${isEgo?'disabled':''}>
+                    ${isEgo ? 'Currently Viewing As' : 'View Tree As ' + p.name}
+                  </button>
+                  <button class="action-link add-rel" id="add-relative-btn">+ Add Relative</button>
+                </div>
+              `;
+
+                wireProfileHandlers(id);
+            }
+
+            function wireProfileHandlers(id) {
+                document.getElementById('profile-close-btn').addEventListener('click', closeProfile);
+                document.getElementById('change-img-btn').addEventListener('click', () => fileInput.click());
+
+                document.getElementById('mode-view-btn').addEventListener('click', () => {
+                    if (profileEditMode) saveProfileEdits(id);
+                    profileEditMode = false;
+                    renderProfileModal();
+                });
+                document.getElementById('mode-edit-btn').addEventListener('click', () => {
+                    profileEditMode = true;
+                    renderProfileModal();
+                });
+
+                const viewAsBtn = document.getElementById('view-as-this-btn');
+                if (id !== currentEgo) {
+                    viewAsBtn.addEventListener('click', () => { setEgo(id);
+                        closeProfile(); });
+                }
+
+                document.getElementById('add-relative-btn').addEventListener('click', () => {
+                    alert('Add Relative: connect this node to a new person record. (Placeholder)');
+                });
+
+                profileContent.querySelectorAll('[data-jump]').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        if (profileEditMode && profileTargetId) saveProfileEdits(profileTargetId);
+                        const targetId = chip.dataset.jump;
+                        openProfile(targetId);
+                    });
+                });
+
+                profileContent.querySelectorAll('[data-select]').forEach(btn => {
+                    btn.addEventListener('click', () => openSelectModal(btn.dataset.select, btn.dataset.field,
+                        id));
+                });
+
+                // Nested modal triggers
+                const eduBtn = document.getElementById('edit-education-btn');
+                if (eduBtn) eduBtn.addEventListener('click', () => openNestedModal('education', id));
+                const workBtn = document.getElementById('edit-work-btn');
+                if (workBtn) workBtn.addEventListener('click', () => openNestedModal('work', id));
+                const migBtn = document.getElementById('edit-migration-btn');
+                if (migBtn) migBtn.addEventListener('click', () => openNestedModal('migration', id));
+                const galBtn = document.getElementById('edit-gallery-btn');
+                if (galBtn) galBtn.addEventListener('click', () => openNestedModal('gallery', id));
+            }
+
+            function saveProfileEdits(id) {
+                const p = people[id];
+                profileContent.querySelectorAll('.field-edit-input').forEach(input => {
+                    const key = input.dataset.field;
+                    if (key === 'aliases' || key === 'nationalities' || key === 'languages') {
+                        p[key] = input.value.split(',').map(s => s.trim()).filter(Boolean);
+                    } else if (key === 'family_head') {
+                        p[key] = input.value.toLowerCase() === 'true';
+                    } else {
+                        p[key] = input.value;
+                    }
+                });
+                const notesBox = document.getElementById('notes-edit-box');
+                if (notesBox) p.notes = notesBox.value;
+                updateNode(id);
+                renderVisibility();
+                updateStats();
+            }
+
+            function closeProfile() {
+                if (profileEditMode && profileTargetId) saveProfileEdits(profileTargetId);
+                overlayBackdrop.classList.remove('open');
+                profileTargetId = null;
+                profileEditMode = false;
+            }
+
+            overlayBackdrop.addEventListener('click', (e) => { if (e.target === overlayBackdrop) closeProfile(); });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file || !profileTargetId) return;
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    people[profileTargetId].image = evt.target.result;
+                    renderProfileModal();
+                    updateNode(profileTargetId);
+                    renderVisibility();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            /* =========================================================================
+               13. NESTED MODAL (Work / Education / Migration / Gallery)
+               ========================================================================= */
+
+            const nestedBackdrop = document.getElementById('nested-modal-backdrop');
+            const nestedScroll = document.getElementById('nested-modal-scroll');
+            const nestedTitle = document.getElementById('nested-modal-title');
+            let nestedContext = { type: '', personId: '' };
+
+            function openNestedModal(type, personId) {
+                nestedContext = { type, personId };
+                const p = people[personId];
+                let title = '';
+                let content = '';
+
+                switch (type) {
+                    case 'education':
+                        title = 'Education Timeline';
+                        const edu = p.education_history || [];
+                        content = edu.length ? edu.map((e, i) =>
+                            `<div style="padding:8px 0;border-bottom:1px solid var(--bg);">
+                            <strong>${e.institution}</strong> (${e.from}–${e.to})<br>
+                            <span style="font-size:12px;color:var(--ink-soft);">${e.activities||''} ${e.subjects||''}</span>
+                          </div>`
+                        ).join('') : '<div style="color:var(--ink-soft);">No education records.</div>';
+                        content +=
+                            `<button class="field-select-btn" style="margin-top:10px;width:auto;" id="nested-add-btn">+ Add Entry</button>`;
+                        break;
+                    case 'work':
+                        title = 'Work History';
+                        const work = p.work_history || [];
+                        content = work.length ? work.map((w, i) =>
+                            `<div style="padding:8px 0;border-bottom:1px solid var(--bg);">
+                            <strong>${w.role}</strong> at ${w.company} (${w.from}–${w.to})<br>
+                            <span style="font-size:12px;color:var(--ink-soft);">${w.responsibilities||''}</span>
+                          </div>`
+                        ).join('') : '<div style="color:var(--ink-soft);">No work records.</div>';
+                        content +=
+                            `<button class="field-select-btn" style="margin-top:10px;width:auto;" id="nested-add-btn">+ Add Entry</button>`;
+                        break;
+                    case 'migration':
+                        title = 'Migration History';
+                        const mig = p.migration_history || [];
+                        content = mig.length ? mig.map((m, i) =>
+                            `<div style="padding:8px 0;border-bottom:1px solid var(--bg);">
+                            ${m.from} → ${m.to} (${m.date})<br>
+                            <span style="font-size:12px;color:var(--ink-soft);">${m.reason||''}</span>
+                          </div>`
+                        ).join('') : '<div style="color:var(--ink-soft);">No migration records.</div>';
+                        content +=
+                            `<button class="field-select-btn" style="margin-top:10px;width:auto;" id="nested-add-btn">+ Add Entry</button>`;
+                        break;
+                    case 'gallery':
+                        title = 'Photo Gallery';
+                        const gal = p.photo_gallery || [];
+                        content = gal.length ? gal.map((url, i) =>
+                            `<div style="padding:4px 0;"><a href="${url}" target="_blank" style="color:var(--ink);">📷 Image ${i+1}</a></div>`
+                        ).join('') :
+                            '<div style="color:var(--ink-soft);">No gallery images.</div>';
+                        content +=
+                            `<button class="field-select-btn" style="margin-top:10px;width:auto;" id="nested-add-btn">+ Add Image URL</button>`;
+                        break;
+                    default:
+                        content = '<div style="color:var(--ink-soft);">No data.</div>';
+                }
+
+                nestedTitle.textContent = title;
+                nestedScroll.innerHTML = content;
+                nestedBackdrop.classList.add('open');
+
+                const addBtn = document.getElementById('nested-add-btn');
+                if (addBtn) {
+                    addBtn.addEventListener('click', () => {
+                        const val = prompt('Enter new entry (format depends on section):');
+                        if (val) {
+                            // simple append — in production you'd parse structured data
+                            if (type === 'education') {
+                                if (!p.education_history) p.education_history = [];
+                                p.education_history.push({ institution: val, from: '', to: '' });
+                            } else if (type === 'work') {
+                                if (!p.work_history) p.work_history = [];
+                                p.work_history.push({ company: val, role: '', from: '', to: '' });
+                            } else if (type === 'migration') {
+                                if (!p.migration_history) p.migration_history = [];
+                                p.migration_history.push({ from: val, to: '', date: '', reason: '' });
+                            } else if (type === 'gallery') {
+                                if (!p.photo_gallery) p.photo_gallery = [];
+                                p.photo_gallery.push(val);
+                            }
+                            openNestedModal(type, personId);
+                            renderProfileModal();
+                        }
+                    });
+                }
+            }
+
+            document.getElementById('nested-modal-back-btn').addEventListener('click', () => {
+                nestedBackdrop.classList.remove('open');
+                renderProfileModal();
+            });
+            nestedBackdrop.addEventListener('click', (e) => {
+                if (e.target === nestedBackdrop) nestedBackdrop.classList.remove('open');
+            });
+
+            /* =========================================================================
+               14. SELECTION MODALS
+               ========================================================================= */
+
+            const selectModalBackdrop = document.getElementById('select-modal-backdrop');
+            const selectModalTitle = document.getElementById('select-modal-title');
+            const selectModalSearch = document.getElementById('select-modal-search');
+            const selectModalList = document.getElementById('select-modal-list');
+            let selectModalContext = null;
+
+            function getListData(listType) {
+                switch (listType) {
+                    case 'mutupo':
+                        return TOTEM_TABLE.map(t => ({ label: t.totem, sub: t.chidawo }));
+                    case 'chidawo':
+                        return TOTEM_TABLE.map(t => ({ label: t.chidawo, sub: t.totem }));
+                    case 'language':
+                        return LANGUAGE_CLUSTERS.map(l => ({ label: l }));
+                    case 'province':
+                        return PROVINCES.map(p => ({ label: p }));
+                    case 'marital_status':
+                        return MARITAL_STATUSES.map(s => ({ label: s }));
+                    case 'marriage_type':
+                        return MARRIAGE_TYPES.map(s => ({ label: s }));
+                    case 'roora':
+                        return ROORA_STATUSES.map(s => ({ label: s }));
+                    case 'gender':
+                        return GENDERS.map(g => ({ label: g }));
+                    default:
+                        return [];
+                }
+            }
+
+            function openSelectModal(listType, field, personId) {
+                selectModalContext = { listType, field, personId };
+                selectModalTitle.textContent = 'Select — ' + field.replace(/_/g, ' ');
+                selectModalSearch.value = '';
+                renderSelectList('');
+                selectModalBackdrop.classList.add('open');
+                selectModalSearch.focus();
+            }
+
+            function renderSelectList(filter) {
+                const data = getListData(selectModalContext.listType);
+                const f = filter.trim().toLowerCase();
+                const filtered = data.filter(d => !f || d.label.toLowerCase().includes(f) || (d.sub || '').toLowerCase()
+                    .includes(f));
+                selectModalList.innerHTML = filtered.map(d =>
+                    `<div class="select-modal-item" data-value="${d.label.replace(/"/g,'&quot;')}">
+                    <span>${d.label}</span>
+                    ${d.sub ? `<span class="smi-sub">${d.sub}</span>` : ''}
+                  </div>`
+                ).join('') || `<div style="padding:14px;color:var(--ink-soft);font-size:13px;">No matches.</div>`;
+
+                selectModalList.querySelectorAll('.select-modal-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        applySelectValue(item.dataset.value);
+                    });
+                });
+            }
+
+            function applySelectValue(value) {
+                const { field, personId } = selectModalContext;
+                const p = people[personId];
+                if (field === 'mutupo' || field === 'chidawo') {
+                    const prevOther = field === 'mutupo' ? p.chidawo : p.mutupo;
+                    p[field] = value;
+                    checkExogamy(personId);
+                } else {
+                    p[field] = value;
+                }
+                selectModalBackdrop.classList.remove('open');
+                if (profileTargetId === personId) renderProfileModal();
+            }
+
+            function checkExogamy(personId) {
+                const p = people[personId];
+                const warnBox = document.getElementById('exogamy-warning-box');
+                if (!warnBox || !p.mutupo || !p.chidawo) return;
+                const conflict = getSpousesOf(personId).some(spId => {
+                    const sp = people[spId];
+                    return sp.mutupo === p.mutupo && sp.chidawo === p.chidawo;
+                });
+                warnBox.classList.toggle('show', conflict);
+            }
+
+            selectModalSearch.addEventListener('input', (e) => renderSelectList(e.target.value));
+            selectModalBackdrop.addEventListener('click', (e) => {
+                if (e.target === selectModalBackdrop) selectModalBackdrop.classList.remove('open');
+            });
+
+            /* =========================================================================
+               15. EGO SWITCHING
+               ========================================================================= */
+
+            const egoSwitchBtn = document.getElementById('ego-switch-btn');
+            const egoPrevBtn = document.getElementById('ego-prev-btn');
+            const egoNextBtn = document.getElementById('ego-next-btn');
+            const egoPickerBackdrop = document.getElementById('ego-picker-backdrop');
+            const egoPickerList = document.getElementById('ego-picker-list');
+
+            function getVisiblePeopleList() {
+                return getVisiblePeople();
+            }
+
+            function setEgo(id) {
+                currentEgo = id;
+                resetState();
+                // expand to show at least immediate relations
+                people.gf.spouses.forEach(s => visible[s] = true);
+                buildNodes();
+                render();
+                updateEgoButton();
+                setTimeout(() => focusNode(id), 100);
+            }
+
+            function updateEgoButton() {
+                const p = people[currentEgo];
+                if (p) {
+                    egoSwitchBtn.textContent = p.name + ' ' + (p.surname || '');
+                }
+            }
+
+            function egoNavigate(delta) {
+                const visibleList = getVisiblePeopleList();
+                if (!visibleList.length) return;
+                const idx = visibleList.indexOf(currentEgo);
+                if (idx === -1) {
+                    setEgo(visibleList[0]);
+                    return;
+                }
+                const newIdx = (idx + delta + visibleList.length) % visibleList.length;
+                setEgo(visibleList[newIdx]);
+            }
+
+            egoPrevBtn.addEventListener('click', () => egoNavigate(-1));
+            egoNextBtn.addEventListener('click', () => egoNavigate(1));
+
+            egoSwitchBtn.addEventListener('click', openEgoPicker);
+
+            function openEgoPicker() {
+                egoPickerList.innerHTML = '';
+                Object.values(people)
+                    .sort((a, b) => a.born - b.born)
+                    .forEach(p => {
+                        const item = document.createElement('div');
+                        item.className = 'ego-picker-item';
+                        item.innerHTML =
+                            `<span>${p.name}${p.id===currentEgo ? ' (current)' : ''}</span><span class="yr">b.${p.born}</span>`;
+                        item.addEventListener('click', () => {
+                            setEgo(p.id);
+                            egoPickerBackdrop.classList.remove('open');
+                        });
+                        egoPickerList.appendChild(item);
+                    });
+                egoPickerBackdrop.classList.add('open');
+            }
+
+            egoPickerBackdrop.addEventListener('click', (e) => {
+                if (e.target === egoPickerBackdrop) egoPickerBackdrop.classList.remove('open');
+            });
+
+            /* =========================================================================
+               16. ZOOM CONTROLS
+               ========================================================================= */
+
+            function applyZoom() {
+                canvas.style.transform = `scale(${zoomLevel})`;
+            }
+
+            document.getElementById('zoom-in').addEventListener('click', () => {
+                zoomLevel = Math.min(1.6, zoomLevel + 0.1);
+                applyZoom();
+            });
+            document.getElementById('zoom-out').addEventListener('click', () => {
+                zoomLevel = Math.max(0.15, zoomLevel - 0.1);
+                applyZoom();
+            });
+            document.getElementById('zoom-fit').addEventListener('click', () => {
+                expandAll();
+                render();
+                requestAnimationFrame(() => {
+                    const contentW = parseFloat(canvas.dataset.contentW || 2400);
+                    const contentH = parseFloat(canvas.dataset.contentH || 1400);
+                    const vw = viewport.clientWidth;
+                    const vh = viewport.clientHeight;
+                    const scaleX = vw / contentW;
+                    const scaleY = vh / contentH;
+                    zoomLevel = Math.max(0.12, Math.min(scaleX, scaleY) * 0.96);
+                    applyZoom();
+                    viewport.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                    setTimeout(() => focusNode(currentEgo), 200);
+                });
+            });
+
+            /* =========================================================================
+               17. SEARCH
+               ========================================================================= */
+
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                searchTerm = e.target.value;
+                applySearchDimming();
+                drawConnectors();
+                if (searchTerm.trim()) {
+                    const term = searchTerm.trim().toLowerCase();
+                    const match = Object.values(people).find(p =>
+                        (p.name + ' ' + (p.surname || '')).toLowerCase().includes(term) && isVisible(p.id)
+                    );
+                    if (match) {
+                        focusNode(match.id);
+                    }
+                }
+            });
+
+            /* =========================================================================
+               18. LEGEND TOGGLE
+               ========================================================================= */
+
+            const legendPanel = document.getElementById('legend-panel');
+            document.getElementById('legend-toggle-btn-top').addEventListener('click', () => {
+                legendPanel.classList.toggle('open');
+            });
+
+            /* =========================================================================
+               19. INIT
+               ========================================================================= */
+
+            buildRail();
+            buildNodes();
+            render();
+            // initial focus
+            setTimeout(() => focusNode(currentEgo), 200);
+
+            // re-draw connectors on resize
+            window.addEventListener('resize', () => requestAnimationFrame(drawConnectors));
+
+            // Expose for debug
+            window.__people = people;
+            window.__setEgo = setEgo;
+
+        })();
+    </script>
+</body>
+</html>

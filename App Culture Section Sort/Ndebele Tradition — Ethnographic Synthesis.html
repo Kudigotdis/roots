@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1a3a5c" />
+    <title>Ndebele Tradition — Ethnographic Synthesis</title>
+    <style>
+        :root {
+            --ink: #1e2a36;
+            --muted: #5a6a78;
+            --paper: #f4f6f9;
+            --surface: #ffffff;
+            --line: #dce1e8;
+            --clay: #1a5a7a;
+            --clay-dark: #0e3a52;
+            --gold: #b8863a;
+            --green: #3a6b4a;
+            --shadow: 0 7px 20px rgba(20, 40, 60, .08);
+            --radius: 16px;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: var(--paper);
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+        a {
+            color: inherit;
+        }
+        .page {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 16px 48px;
+        }
+        .sitebar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 0;
+            color: var(--muted);
+            font-size: .86rem;
+        }
+        .sitebar a {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--clay-dark);
+        }
+        .hero {
+            background: linear-gradient(145deg, #0e3a52, #1a5a7a 55%, #2a7a9a);
+            color: #f4faff;
+            border-radius: 0 0 24px 24px;
+            margin: 0 -16px 24px;
+            padding: 34px 20px 26px;
+            box-shadow: var(--shadow);
+        }
+        .eyebrow {
+            margin: 0 0 8px;
+            text-transform: uppercase;
+            letter-spacing: .11em;
+            font-size: .73rem;
+            font-weight: 800;
+            opacity: .85;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 10vw, 3.25rem);
+            line-height: 1.06;
+            letter-spacing: -.045em;
+        }
+        .dek {
+            margin: 15px 0 0;
+            max-width: 38ch;
+            font-size: 1rem;
+            line-height: 1.48;
+            opacity: .94;
+        }
+        .chips {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 20px 0 2px;
+            scrollbar-width: none;
+        }
+        .chips::-webkit-scrollbar {
+            display: none;
+        }
+        .chips a {
+            white-space: nowrap;
+            text-decoration: none;
+            padding: 7px 11px;
+            border: 1px solid rgba(255, 255, 255, .4);
+            border-radius: 999px;
+            font-size: .82rem;
+            background: rgba(255, 255, 255, .1);
+        }
+        .lead,
+        .notice,
+        .term,
+        .fact-card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .lead {
+            padding: 18px;
+            margin: 0 0 24px;
+        }
+        .lead h2,
+        .glossary h2,
+        .closing h2 {
+            margin: 0 0 8px;
+            font-size: 1.1rem;
+        }
+        .lead ul {
+            padding-left: 1.15rem;
+            margin: 10px 0 0;
+        }
+        .lead li+li {
+            margin-top: 5px;
+        }
+        .section-label {
+            margin: 24px 4px 9px;
+            color: var(--muted);
+            font-size: .78rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        details {
+            overflow: clip;
+        }
+        .accordion {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            margin: 10px 0;
+            box-shadow: var(--shadow);
+        }
+        summary {
+            position: relative;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            list-style: none;
+            padding: 16px 48px 16px 15px;
+            min-height: 58px;
+            align-items: flex-start;
+        }
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        summary::after {
+            content: "+";
+            position: absolute;
+            right: 16px;
+            top: 14px;
+            color: var(--clay);
+            font-size: 1.55rem;
+            font-weight: 350;
+            line-height: 1;
+        }
+        details[open]>summary::after {
+            content: "−";
+        }
+        summary:focus-visible {
+            outline: 3px solid #8ab3c9;
+            outline-offset: -3px;
+            border-radius: var(--radius);
+        }
+        .num {
+            display: inline-grid;
+            place-items: center;
+            flex: 0 0 29px;
+            height: 29px;
+            border-radius: 50%;
+            background: #dce8f0;
+            color: var(--clay-dark);
+            font-size: .73rem;
+            font-weight: 800;
+        }
+        .summary-copy {
+            display: grid;
+            gap: 2px;
+        }
+        .summary-copy strong {
+            font-size: 1rem;
+            line-height: 1.25;
+        }
+        .summary-copy small {
+            color: var(--muted);
+            font-size: .8rem;
+            line-height: 1.35;
+        }
+        .content {
+            padding: 0 15px 17px;
+            border-top: 1px solid var(--line);
+        }
+        .content>:first-child {
+            margin-top: 15px;
+        }
+        .content p {
+            margin: 0 0 14px;
+        }
+        .sub {
+            margin: 11px 0;
+            border-radius: 12px;
+            box-shadow: none;
+            background: #f8faff;
+        }
+        .sub summary {
+            padding: 13px 42px 13px 13px;
+            font-weight: 750;
+            font-size: .94rem;
+            min-height: 51px;
+        }
+        .sub summary::after {
+            top: 11px;
+            right: 13px;
+            font-size: 1.35rem;
+        }
+        .sub .content {
+            padding: 0 13px 14px;
+            font-size: .94rem;
+        }
+        .subsub {
+            margin: 9px 0;
+            border-radius: 10px;
+            box-shadow: none;
+            background: #fff;
+        }
+        .subsub summary {
+            padding: 11px 38px 11px 12px;
+            min-height: 45px;
+            font-size: .9rem;
+        }
+        .subsub summary::after {
+            top: 9px;
+            right: 12px;
+            font-size: 1.2rem;
+        }
+        .subsub .content {
+            padding: 0 12px 12px;
+            font-size: .9rem;
+        }
+        .term {
+            padding: 13px;
+            margin: 14px 0;
+            border-left: 4px solid var(--gold);
+            box-shadow: none;
+        }
+        .term h4 {
+            margin: 0 0 3px;
+            color: var(--clay-dark);
+            font-size: .96rem;
+        }
+        .term p {
+            margin: 0;
+        }
+        .timeline {
+            display: grid;
+            gap: 11px;
+            margin: 13px 0;
+        }
+        .step {
+            position: relative;
+            padding: 12px 12px 12px 49px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+        }
+        .step b {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            display: grid;
+            place-items: center;
+            height: 27px;
+            width: 27px;
+            border-radius: 50%;
+            color: #fff;
+            background: var(--green);
+            font-size: .8rem;
+        }
+        .step h4 {
+            margin: 0 0 3px;
+            font-size: .94rem;
+        }
+        .step p {
+            margin: 0;
+            font-size: .88rem;
+        }
+        .role-grid,
+        .card-grid {
+            display: grid;
+            gap: 10px;
+            margin: 13px 0;
+        }
+        .fact-card {
+            padding: 13px;
+            box-shadow: none;
+        }
+        .fact-card h4 {
+            margin: 0 0 4px;
+            color: var(--clay-dark);
+            font-size: .95rem;
+        }
+        .fact-card p {
+            margin: 0;
+            font-size: .89rem;
+        }
+        dl {
+            margin: 12px 0 0;
+        }
+        dl div {
+            display: grid;
+            grid-template-columns: 105px 1fr;
+            gap: 9px;
+            padding: 8px 0;
+            border-top: 1px solid var(--line);
+        }
+        dt {
+            color: var(--muted);
+            font-size: .8rem;
+            font-weight: 800;
+        }
+        dd {
+            margin: 0;
+            font-size: .88rem;
+        }
+        .bullets {
+            margin: 8px 0 12px;
+            padding-left: 1.15rem;
+        }
+        .bullets li+li {
+            margin-top: 6px;
+        }
+        .notice {
+            padding: 15px;
+            margin: 24px 0;
+            border-left: 4px solid var(--green);
+            box-shadow: none;
+            font-size: .9rem;
+        }
+        .notice strong {
+            color: var(--green);
+        }
+        .glossary,
+        .closing {
+            margin-top: 28px;
+            padding: 18px;
+            background: #dce8f0;
+            border-radius: var(--radius);
+        }
+        .glossary details {
+            border-bottom: 1px solid rgba(14, 58, 82, .18);
+        }
+        .glossary details:last-child {
+            border-bottom: 0;
+        }
+        .glossary summary {
+            padding: 10px 32px 10px 0;
+            min-height: 43px;
+            font-size: .92rem;
+            font-weight: 800;
+        }
+        .glossary summary::after {
+            right: 2px;
+            top: 8px;
+        }
+        .glossary .content {
+            border: 0;
+            padding: 0 0 11px;
+            font-size: .9rem;
+        }
+        .back {
+            display: inline-block;
+            margin: 14px 2px 2px;
+            color: var(--clay-dark);
+            font-size: .86rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+        footer {
+            color: var(--muted);
+            text-align: center;
+            font-size: .78rem;
+            padding: 28px 10px 0;
+        }
+        .totem-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .88rem;
+            margin: 10px 0;
+        }
+        .totem-table th {
+            background: var(--clay-dark);
+            color: #fff;
+            padding: 8px 10px;
+            text-align: left;
+            font-weight: 700;
+        }
+        .totem-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top;
+        }
+        .totem-table tr:nth-child(even) td {
+            background: #f8faff;
+        }
+        @media (min-width: 560px) {
+            .page {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+            .hero {
+                margin-left: -24px;
+                margin-right: -24px;
+                padding-left: 28px;
+                padding-right: 28px;
+            }
+            .role-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page" id="top">
+        <nav class="sitebar" aria-label="Page navigation">
+            <a href="#top">Ndebele Tradition</a>
+            <span>Ethnographic guide</span>
+        </nav>
+
+        <header class="hero">
+            <p class="eyebrow">Ethnographic and analytical synthesis</p>
+            <h1>Ndebele Tradition</h1>
+            <p class="dek">Marriage and kinship, totemic identity, pregnancy and childbirth, social etiquette, foodways, and mortuary practices.</p>
+            <nav class="chips" aria-label="Jump to a topic">
+                <a href="#marriage">Marriage</a>
+                <a href="#clans">Clans &amp; Totems</a>
+                <a href="#pregnancy">Pregnancy</a>
+                <a href="#manners">Manners</a>
+                <a href="#food">Foodways</a>
+                <a href="#funeral">Funerals</a>
+            </nav>
+        </header>
+
+        <section class="lead" aria-labelledby="overview">
+            <h2 id="overview">At a glance</h2>
+            <ul>
+                <li>Ndebele identity is rooted in patrilineal clans (<em>isibongo</em>) and totems (<em>isitemo</em>) that define kinship, marriage eligibility, and belonging.</li>
+                <li>Marriage (<em>lobola</em>) is a negotiated process involving cattle, gifts, and the participation of extended family; it is understood as payment for offspring, not for the bride alone.</li>
+                <li>Pregnancy is honoured through ritual goats, herbal care, and delivery at the maternal grandmother's home, with distinct protocols for wedlock and out-of-wedlock births.</li>
+                <li><em>Ubuntu</em> — humanness — underpins all social interaction, expressed through <em>ukuhlonipha</em> (respect), greetings, hospitality, and hierarchical deference.</li>
+            </ul>
+        </section>
+
+        <p class="section-label">Explore the synthesis</p>
+
+        <!-- SECTION 01: MARRIAGE AND LOBOLA -->
+        <details class="accordion" id="marriage" open>
+            <summary><span class="num">01</span><span class="summary-copy"><strong>Marriage and Lobola</strong><small>Customary law, negotiations, and ceremonial sequence</small></span></summary>
+            <div class="content">
+                <details class="accordion sub" open>
+                    <summary>Customary Law Marriage</summary>
+                    <div class="content">
+                        <p><em>Lobola</em> is the Ndebele customary-law marriage between a man and a woman, serving as the foundation of traditional union for generations. In modern times, couples often complement lobola with a Western-style church or civil ceremony, but the customary marriage remains paramount.</p>
+                        <div class="term">
+                            <h4>What is Lobola?</h4>
+                            <p>Lobola is the bride price or dowry a man pays to enter into traditional marriage. A man is not considered fully married until lobola has been paid in full. The price is traditionally paid in cattle or cash equivalent. Families agree on a price per cow, calculated against the number of cows charged by the bride's negotiating team. The process can take months and includes additional monetary payments and gifts to the bride's family.</p>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Why Lobola is Necessary</summary>
+                    <div class="content">
+                        <p>Lobola formalizes the union between a man and a woman, bringing families together, establishing accountability, and providing recourse in case of marital difficulties. The process is broken into deliberate steps that build gradual relationships and trust between the two families.</p>
+                        <p>In the past, when a woman could not conceive, lobola was used as a tool to return her to her family — the bride's family could physically return cows and money to the groom's family upon dissolution of the marriage. This reflects the core Ndebele understanding that lobola is paid for the children born into a marriage, not for the bride herself.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Key Participants</summary>
+                    <div class="content">
+                        <div class="role-grid">
+                            <article class="fact-card"><h4>Idombo</h4><p>The groom's chief negotiator — typically an uncle or trusted friend, never the father or a woman.</p></article>
+                            <article class="fact-card"><h4>Obabomdala / Obabomncane</h4><p>Paternal uncles (older and younger brothers of the father).</p></article>
+                            <article class="fact-card"><h4>Omalume</h4><p>Maternal uncles (mother's brothers).</p></article>
+                            <article class="fact-card"><h4>Omamabadala / Omamabancane</h4><p>Paternal aunts (older and younger sisters of the father).</p></article>
+                            <article class="fact-card"><h4>Umakoti / Umlobokazi</h4><p>The bride-to-be — not allowed to participate in actual negotiations.</p></article>
+                            <article class="fact-card"><h4>Umkhwenyana / Umyeni</h4><p>The groom-to-be — not allowed to participate in actual negotiations.</p></article>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Declaration of Intentions</summary>
+                    <div class="content">
+                        <p>Before the lobola process begins, the bride and groom exchange gifts (engagement tokens). They then approach their respective aunt or uncle to present their intention to marry — each party informs their uncle/aunt in the absence of the other.</p>
+                        <p>The groom's family asks for a meeting date with the bride's family. A trusted person (<em>Idombo</em>) is sent in a practice called <em>ukucela umlilo</em> — "seeking a relationship." The bride's family presents all the girls in the household so the messenger can identify the correct girl. She must produce a gift exchanged with the young man (a tie, small money, etc.) as proof of their relationship and his promise to marry her.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>The Negotiations — Ukulobola</summary>
+                    <div class="content">
+                        <div class="timeline">
+                            <div class="step"><b>1</b><h4>Arrival — Ukungena ekhaya</h4><p>The groom's party arrives at the specified time. Punctuality is essential — lateness can incur fines as a sign of disrespect. The party stands outside the homestead until they pay a fee (<em>ukungena ekhaya</em>) to enter. They may be kept waiting for hours to test their resolve and demonstrate the value attached to the bride.</p></div>
+                            <div class="step"><b>2</b><h4>Announcing arrival</h4><p>The party may shout their clan name and purpose at the gate. Announcing themselves more than once or too loudly can be deemed disrespectful and may result in fines.</p></div>
+                            <div class="step"><b>3</b><h4>Mouth Opener — IsiVulamlomo</h4><p>A cow or cash fee is paid to "open the mouths" of the bride's negotiating team, allowing them to acknowledge and speak to the groom's family. In modern times, this fee may be broken into multiple payments: to see the father, to sit down, to bring in the bride, etc.</p></div>
+                            <div class="step"><b>4</b><h4>Introduction — Ukangaziwe</h4><p>After payment, the <em>Idombo</em> declares the groom's intention to marry their daughter. The bride identifies the groom by producing his gift. A token in cash or livestock is paid before introductions proceed.</p></div>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Payments and Ceremonial Items</summary>
+                    <div class="content">
+                        <div class="card-grid">
+                            <article class="fact-card"><h4>Inkomo yohlanga</h4><p>The "Mother's Cow" — a female cow given to the mother as appreciation for raising the bride. This cow is counted among the lobola cattle and must be "walking" (live), as it cannot be translated to cash equivalent due to its symbolism.</p></article>
+                            <article class="fact-card"><h4>Ijazili kababa</h4><p>A jacket for the bride's father.</p></article>
+                            <article class="fact-card"><h4>Ingubo kamama</h4><p>A blanket for the bride's mother, plus a complete outfit (shoes, dress, headpiece <em>iqhiye</em> or hat).</p></article>
+                            <article class="fact-card"><h4>Groceries</h4><p>Not a traditional requirement, but offered at the family's discretion. It may bring favour or displeasure, as it may be interpreted as implying they lack enough food.</p></article>
+                        </div>
+                        <p>Once part of the lobola is paid, the groom is formally introduced as <em>umkhwenyana</em> (son-in-law), and the bride is handed over to her in-laws. A celebration (<em>umthimba</em>) marks the union. If a Western wedding is desired, it may occur afterward. The couple is recognized as husband and wife once part of the lobola has been paid.</p>
+                        <p>The bride lives with her husband even if lobola is not fully paid. Once a child is born, the bride's family can pressure the groom to complete payment, because <em>"kulotshwa abantwana"</em> — lobola is paid for the offspring. The lobola process is usually concluded when the first child is born.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <!-- SECTION 02: CLANS AND TOTEMS -->
+        <details class="accordion" id="clans">
+            <summary><span class="num">02</span><span class="summary-copy"><strong>Clans and Totems</strong><small>Isibongo, isitemo, kinship, and environmental guardianship</small></span></summary>
+            <div class="content">
+                <details class="accordion sub" open>
+                    <summary>Isibongo — Patrilineal identity</summary>
+                    <div class="content">
+                        <p>Ndebele society is patriarchal, so a child inherits their father's surname (<em>isibongo</em>), which establishes the bloodline. The word derives from <em>bonga</em> (to thank, praise, or worship), meaning one draws pride and identity from their father's clan. A child must also adopt their father's totem (<em>isitemo</em>), another essential emblem of <em>isibongo</em>.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Totems — Isitemo</summary>
+                    <div class="content">
+                        <p>Totems are derived from animals, plants, and nature, with elements of ancestral names, physical power, appearance, and deeds. They symbolize harmony between humans, animals, and the environment, reflecting a clan's relationship with a specific animal.</p>
+                        <div class="term">
+                            <h4>Why totems matter</h4>
+                            <ul class="bullets">
+                                <li><strong>Establish family relations:</strong> Totems define bloodlines; people of a clan are generally related.</li>
+                                <li><strong>Symbols of clan pride:</strong> Comparable to European coats of arms or Scottish clan kilts.</li>
+                                <li><strong>Prevent incest:</strong> It is taboo to marry someone from your own clan, as they are considered of the same bloodline.</li>
+                                <li><strong>Environmental protection:</strong> Because clans had multiple totems, not every animal was hunted or harmed.</li>
+                                <li><strong>Oral tradition:</strong> Totem histories are passed down through stories, praise poems, and <em>imbongi</em> (praise poets).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Ndebele Clan Totems</summary>
+                    <div class="content">
+                        <table class="totem-table">
+                            <thead><tr><th>Ndebele</th><th>English</th><th>Association / Symbolism</th></tr></thead>
+                            <tbody>
+                                <tr><td>Sibanda</td><td>Lion</td><td>Strength, competitiveness, fearlessness</td></tr>
+                                <tr><td>Ndlovu</td><td>Elephant</td><td>Mighty people, well built in stature, great hunters, intelligent</td></tr>
+                                <tr><td>Dube</td><td>Zebra</td><td>People of pride</td></tr>
+                                <tr><td>Nyoni</td><td>Fish Eagle</td><td>Uniters, hard workers</td></tr>
+                                <tr><td>Ngulube</td><td>Pig</td><td>Shy, hardworking, generous, serious, friendly, loving, caring</td></tr>
+                                <tr><td>Mpofu</td><td>Eland</td><td>Domineering women, powerful, charming males, good warriors</td></tr>
+                                <tr><td>Nyati</td><td>Cape Buffalo</td><td>Wise, hardworking, intelligent, slender males, orators, artful</td></tr>
+                                <tr><td>Maphosa</td><td>Porcupine / hedgehog</td><td>Common totem, known as the King's in-law, shy women</td></tr>
+                                <tr><td>Impala</td><td>Antelope</td><td>Hard workers, women, great homemakers</td></tr>
+                                <tr><td>Tshuma</td><td>Sheep</td><td>Quiet people, intelligent, beautiful women, heavily built</td></tr>
+                                <tr><td>Bonga</td><td>Wild cat</td><td>Nocturnal, intelligent</td></tr>
+                                <tr><td>Ncube</td><td>Monkey</td><td>Most intelligent and wise, known as "the kiss" due to pronunciation</td></tr>
+                                <tr><td>Nkomo</td><td>Cow</td><td>Mature, proud, smart</td></tr>
+                                <tr><td>Mlambo</td><td>Ants</td><td>The ant people, united, fighters, believe in strength in numbers</td></tr>
+                                <tr><td>Ngwenya</td><td>Crocodile</td><td>People of the water/river, united, believe in continuity</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Clan protocol and taboos</summary>
+                    <div class="content">
+                        <p>Historically, each member was responsible for physically protecting and defending their totem. This included not harming the animal or plant and actively nourishing, rescuing, or caring for it as needed. It remains taboo to consume an animal that is a symbol of one's totem. Totems are a source of identity, defining bloodlines and preventing incest — to this day, it is taboo to marry someone from your own clan, as custom considers them of the same bloodline.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <!-- SECTION 03: PREGNANCY AND CHILDBIRTH -->
+        <details class="accordion" id="pregnancy">
+            <summary><span class="num">03</span><span class="summary-copy"><strong>Pregnancy and Childbirth</strong><small>Wedlock protocols, out-of-wedlock, rituals, and postnatal care</small></span></summary>
+            <div class="content">
+                <details class="accordion sub" open>
+                    <summary>Pregnancy in wedlock</summary>
+                    <div class="content">
+                        <p>Falling pregnant in wedlock is a welcome and eagerly awaited occurrence. When the couple realizes the bride is pregnant, several procedures follow:</p>
+                        <div class="timeline">
+                            <div class="step"><b>1</b><h4>Imbudzi yokhu Binga Isisu</h4><p>The husband informs his wife's parents, bringing a female goat to be slaughtered and eaten by both parents. This goat "strengthens the mother's back" — it is believed that not slaughtering it will make the wife's mother weak and she might "break her back." The goat is partly ritualistic; in eating it, family elders educate the expectant mother on pregnancy and child care.</p></div>
+                            <div class="step"><b>2</b><h4>Herbal mixtures</h4><p>During the first and second trimesters, skilled elderly women prepare herbal supplements to strengthen the expectant mother's body and prepare her for delivery.</p></div>
+                            <div class="step"><b>3</b><h4>Ukubvula Ndlela</h4><p>Literally "opening the path/road" — a second-trimester massage therapy targeting the private parts to exercise muscles in readiness for childbirth. It is considered bad omen when a woman tears during delivery, so this massage is carried out until the final days of pregnancy.</p></div>
+                            <div class="step"><b>4</b><h4>Waiting for childbirth</h4><p>As delivery approaches, the husband takes his wife to her mother's house, where she gives birth under the care of her experienced mother and aunts. The husband brings two goats of different sexes — one for celebration (slaughtered to welcome the newborn) and one for the mother's upkeep after birth (to boost milk production).</p></div>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>After birth — Ukucolewa</summary>
+                    <div class="content">
+                        <p>Two to three weeks after the child's birth, the father's family visits to see the baby for the first time (<em>ukucolewa</em>). They observe the child carefully to confirm if it is truly theirs, looking for similarities and birth marks found in their bloodline. The groom's family also decides whether the newborn and mother remain with the bride's mother or move back to the in-laws.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Marriage out of wedlock</summary>
+                    <div class="content">
+                        <p>Like other Nguni/Bantu tribes, the Ndebele value pregnancies after marriage. A child falling pregnant before marriage is often seen as a shame upon her parents. If this occurs, the girl's aunt and uncle inquire who impregnated her. Upon being informed, they take the pregnant girl to the impregnator's parents' house and leave her there. The boy's parents cannot chase her out, even if their son disagrees — accepting the pregnant girl symbolizes that pregnancy and childbirth should result from a committed relationship, not just lust.</p>
+                        <p>Notably, the <em>Imbudzi yokhu Binga Isisu</em> is not required for out-of-wedlock pregnancies. After childbirth, the man must begin paying lobola and associated damages for impregnating someone before marriage.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <!-- SECTION 04: MANNERS, PROTOCOLS, AND UBUNTU -->
+        <details class="accordion" id="manners">
+            <summary><span class="num">04</span><span class="summary-copy"><strong>Manners, Protocols, and Ubuntu</strong><small>Respect, hierarchy, greetings, and family etiquette</small></span></summary>
+            <div class="content">
+                <details class="accordion sub" open>
+                    <summary>Ubuntu and Ukuhlonipha</summary>
+                    <div class="content">
+                        <div class="term">
+                            <h4>Ubuntu — "Humanness"</h4>
+                            <p>Guided by the foundational principles of respect, politeness, obedience, warmth, empathy, and other moral values held high by society. <em>Ukuhlonipha</em> (respect) forms a significant aspect, representing acknowledging another person by subduing oneself and elevating the other (humility), reflected in bowing, kneeling, squatting, or avoiding eye contact with elders.</p>
+                        </div>
+                        <div class="card-grid">
+                            <article class="fact-card"><h4>Politeness</h4><p>Graciousness, civility, courtesy, respect, and empathy — "walking in another person's shoes."</p></article>
+                            <article class="fact-card"><h4>Obedience</h4><p>Adherence to set principles, values, and behavioural standards within society; following instructions of parents, elders, or supervisors.</p></article>
+                            <article class="fact-card"><h4>Warmth</h4><p>Empathy — feeling another's pain and wishing them well; cancels out selfishness.</p></article>
+                            <article class="fact-card"><h4>Hierarchy</h4><p>Relationships between young and old, royals and subjects, village elders, married and unmarried — determines how members interact and maintains orderliness.</p></article>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Greetings</summary>
+                    <div class="content">
+                        <p>Greetings are a symbol of respect, empathy, and humility. It is fundamental for a well-mannered person to pass greetings and respond appropriately. Not greeting others is seen as a sign of disrespect and is not tolerated.</p>
+                        <p>The younger person is expected to greet the older first. Elders may keep quiet until a younger person greets them — failure to do so is disrespectful.</p>
+                        <dl>
+                            <div><dt>Salibonani</dt><dd>Good morning / good afternoon / good evening — standard greeting.</dd></div>
+                            <div><dt>Uvukenjani / Livukenjani</dt><dd>How did you sleep? (how are you this morning?) — <em>U</em> is singular, <em>Li</em> is plural (used for respect toward elders).</dd></div>
+                            <div><dt>U(Li)itshonenjani</dt><dd>Good afternoon — how was your day?</dd></div>
+                            <div><dt>U(Li)lale kuhle</dt><dd>Good night — sleep well.</dd></div>
+                        </dl>
+                        <p>Using the plural form (<em>Li</em>) when greeting an elder is expected; using the singular is considered impolite. This also applies to high-ranking members of society — royals, mayors, members of parliament, etc.</p>
+                        <p>It is unacceptable to use a person's first name unless you are familiar with them and of the same age group. Children are prohibited from mentioning an elder's first name. Elders with children are referred to by their children's names — e.g., "mother of Bekhezile" or "father of Zwelihle."</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Guests and hospitality</summary>
+                    <div class="content">
+                        <p>The Ndebele place a premium on treating visitors well, as this reflects family values and can determine how society views the entire extended family. All guests are welcome and treated with utmost respect.</p>
+                        <ul class="bullets">
+                            <li>Visitors are expected to bring a present or token — a sign of thoughtfulness and appreciation.</li>
+                            <li>Women generally join the matriarch to assist with meal preparation, table setting, or cleaning up.</li>
+                            <li>It is considered polite to eat whatever the host provides (whether you feel full or not) and not to be wasteful, as this reflects your family's values.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Manners within the family</summary>
+                    <div class="content">
+                        <div class="card-grid">
+                            <article class="fact-card"><h4>Eye contact</h4><p>Never look elders in the eyes — it is seen as a challenge to authority and undermining the elderly.</p></article>
+                            <article class="fact-card"><h4>Addressing siblings</h4><p>Brothers and sisters are <em>umnewethu</em> and <em>udadewethu</em>. Elder brothers are referred to as <em>ubhudi</em> followed by their name.</p></article>
+                            <article class="fact-card"><h4>Responses</h4><p>One may answer "we-e-e!" to younger siblings. Parents always respond "we-e-e!" to their children regardless of age — symbolizing hierarchy.</p></article>
+                            <article class="fact-card"><h4>Relatives</h4><p>Father's sister: <em>Babakazi</em>; mother's brother: <em>Malume</em>. Father's brothers are <em>Baba</em>; mother's sisters are <em>Ma</em> — all elders are one's parents.</p></article>
+                            <article class="fact-card"><h4>Grandparents</h4><p>Both maternal and paternal grandparents are <em>Babamkhulu</em> or <em>Khulu</em> (grandfather) and <em>Gogo</em> (grandmother).</p></article>
+                            <article class="fact-card"><h4>Girl children</h4><p>Traditionally, a girl child was expected to kneel when talking to her father and not look any elder directly in the eyes.</p></article>
+                        </div>
+                        <ul class="bullets">
+                            <li>Receive and give items with both hands — using one hand is disrespectful. Always use the right hand; the left hand carries bad luck.</li>
+                            <li>Children must not point a finger at anybody older than them.</li>
+                            <li>Do not eat while standing — respect the cook by sitting down; men must remove hats.</li>
+                            <li>Children in the company of elders must be quiet, not start conversations, and go outside rather than disturb elders' discussions.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <!-- SECTION 05: FOOD, DINING, AND HOSPITALITY -->
+        <details class="accordion" id="food">
+            <summary><span class="num">05</span><span class="summary-copy"><strong>Food, Dining, and Hospitality</strong><small>Staples, recipes, beverages, and dining etiquette</small></span></summary>
+            <div class="content">
+                <details class="accordion sub" open>
+                    <summary>Meal preparation and division of labour</summary>
+                    <div class="content">
+                        <p>Traditionally, men gathered firewood, cut it to size, slaughtered animals, or went hunting. Women, assisted by young girls, prepared meals. Meal times were daily family gatherings. With modern influences, the evening meal may be the only time the family gathers together.</p>
+                        <p>When guests visit, their needs are prioritized over those of the household. Families often prepare more than enough food. Guests receive the best food and drink. Women take out their best kitchenware — not to show off, but to show gratitude and value for the guest. This is part of Ubuntu hospitality.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Breakfast</summary>
+                    <div class="content">
+                        <p>A typical Ndebele breakfast consists of hot tea (plain or with milk) and homemade bread. Some may prefer lemon juice or coffee. Since the Ndebele are traditionally agriculturalists, they kept free-range chickens, and eggs could be added to breakfast — though not regularly, to allow chickens to multiply.</p>
+                        <p>Sometimes a light cornmeal porridge (plain or with milk) is served, or soft porridge from pounded sorghum, especially during ploughing season when manual labour requires lasting energy. This soft porridge is also consistently served to new mothers to boost milk production.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Lunch and dinner — Isitshwala</summary>
+                    <div class="content">
+                        <p>The Ndebele staple food is maize/corn, which can be eaten alone or with other ingredients. The main starch is <em>isitshwala</em>, a thick cornmeal porridge.</p>
+                        <div class="term">
+                            <h4>Isitshwala recipe</h4>
+                            <p><strong>Ingredients:</strong> Maize meal (<em>imphuphu</em>) and water.</p>
+                            <ol style="margin:6px 0 0 18px;font-size:.9rem;">
+                                <li>Boil 3 cups of water in a large saucepan.</li>
+                                <li>Mix one quarter maize meal with a cup of water in a mixing bowl until you get a thick paste.</li>
+                                <li>Add boiling water to the paste, constantly stirring with a wooden spoon to avoid lumps and sticking.</li>
+                                <li>Add a tablespoon of margarine (optional).</li>
+                                <li>Cover and let boil for 10–15 minutes over medium heat.</li>
+                                <li>Gradually add remaining maize meal, mixing vigorously to blend.</li>
+                                <li>Cover and simmer for 5–10 more minutes over low heat.</li>
+                                <li>Serve with green vegetables and beef/chicken stew or curdled (sour) milk.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Starches, proteins, and common foods</summary>
+                    <div class="content">
+                        <dl>
+                            <div><dt>Imphuphu</dt><dd>Any form of milled flour (maize, millet, sorghum, hominy, rice).</dd></div>
+                            <div><dt>Inyawuthi</dt><dd>Millet.</dd></div>
+                            <div><dt>Amabele</dt><dd>Sorghum.</dd></div>
+                            <div><dt>Umumbu</dt><dd>Corn/maize.</dd></div>
+                            <div><dt>Amatshakada</dt><dd>Hominy (from dried corn/maize).</dd></div>
+                        </dl>
+                        <div class="card-grid">
+                            <article class="fact-card"><h4>Animal proteins</h4><p>Beef (<em>inyama yenkomo</em>), chicken (<em>inyama yenkuku</em>), goat (<em>inyama yembuzi</em>), game meat, intestines (<em>amathumbu</em>), tripe (<em>ulusu</em>).</p></article>
+                            <article class="fact-card"><h4>Leafy greens</h4><p><em>Imbhida</em> (general), <em>ibhobola</em> (pumpkin leaves), <em>ulude</em> (spider flower), <em>amahlamvu endumba</em> (sugar bean leaves).</p></article>
+                            <article class="fact-card"><h4>Squash and melons</h4><p><em>Amakhomane</em> (squash family), <em>amathanga</em> (pumpkins), <em>amakhabe</em> (melons).</p></article>
+                            <article class="fact-card"><h4>Other staples</h4><p><em>Inopi</em> (pumpkin porridge), <em>inkobe</em> (boiled maize with beans/nuts), <em>umxhanxha</em> (melon with maize soup), <em>amazambane</em> (peanuts), <em>amaqanda</em> (eggs), <em>amasi</em> (curdled sour milk), <em>idelele</em> (okra).</p></article>
+                            <article class="fact-card"><h4>Delicacies</h4><p><em>Izinhlwa</em> (flying ants), <em>amacimbi</em> (mopane worms), <em>umganu</em> (marula fruit), <em>uxauxau</em> (snot apple/African chewing gum), <em>inhlanzi</em> (fish).</p></article>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Amahewu — traditional fermented drink</summary>
+                    <div class="content">
+                        <div class="term">
+                            <h4>Amahewu recipe</h4>
+                            <p><strong>Ingredients:</strong> 100g maize meal, 4 litres water, 100g sorghum with finger millet malt. (Leftover <em>isitshwala</em> can also be used.)</p>
+                            <ol style="margin:6px 0 0 18px;font-size:.9rem;">
+                                <li>Mix dry ingredients in a pot with a little water to create a paste.</li>
+                                <li>Boil 2½ litres of water and add to the paste while stirring to prevent curdling.</li>
+                                <li>Bring to a boil over medium heat, then cover and simmer for about 30 minutes.</li>
+                                <li>Remove from heat and allow to cool.</li>
+                                <li>Add remaining water cold to thin to a drinkable consistency.</li>
+                                <li>Cover and place in a warm, dry place for 3–4 days to brew (some put it in the sun). Stir at least once a day.</li>
+                                <li>After 4 days, <em>amahewu</em> is ready. Serve chilled or at room temperature; add sugar to taste. Makes about 4 litres.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <!-- SECTION 06: DEATH AND FUNERALS -->
+        <details class="accordion" id="funeral">
+            <summary><span class="num">06</span><span class="summary-copy"><strong>Death, Funerals, and Mourning</strong><small>Announcement, preparation, burial protocols, and community roles</small></span></summary>
+            <div class="content">
+                <details class="accordion sub" open>
+                    <summary>Death announcement</summary>
+                    <div class="content">
+                        <p>Death is treated as a community responsibility. In the olden days, elders (assisted by elderly neighbours) certified death. The immediate family is informed first, then extended family, who in turn inform neighbours and distant relatives. Today, telephones and social media accelerate the announcement; some families even post through local radio stations.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Preparations for the funeral</summary>
+                    <div class="content">
+                        <p>In the past, when there were no mortuaries, the corpse was buried within 24 hours. Those who couldn't arrive in time missed the burial but could participate in later rituals like <em>ukuphosa ilitshe</em> (throwing a stone on the grave).</p>
+                        <p>Today, with mortuaries and extended families living far away, a typical funeral can take a week or longer. During the week preceding burial, community members gather daily for prayers, console the bereaved, and share stories about the deceased as counseling. The chief mourner's will is taken into account, though family elders may override it.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Burial protocols</summary>
+                    <div class="content">
+                        <div class="timeline">
+                            <div class="step"><b>1</b><h4>Gravesite selection</h4><p>Identified by men in the family (sometimes with the chief mourner's advice) in the early morning on the day of burial.</p></div>
+                            <div class="step"><b>2</b><h4>Grave digging</h4><p>Strictly men, with the help of neighbours. An elder inspects for depth and size (determined by the deceased's size or casket).</p></div>
+                            <div class="step"><b>3</b><h4>Guarding the grave</h4><p>It is taboo to leave the dug grave alone — some diggers remain to guard it until the mourners arrive.</p></div>
+                            <div class="step"><b>4</b><h4>Division of labour</h4><p>Men dig and cover the grave; women collect stones to construct and strengthen the tomb/grave top.</p></div>
+                        </div>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Burial timing and categories</summary>
+                    <div class="content">
+                        <div class="card-grid">
+                            <article class="fact-card"><h4>Head of the family (older man)</h4><p>Buried in the early afternoon (just before lunch), never in the morning.</p></article>
+                            <article class="fact-card"><h4>Woman / mother</h4><p>Buried in the morning hours before noon, close to the <em>isiphala</em> (grain hut).</p></article>
+                            <article class="fact-card"><h4>Other family members</h4><p>Buried at any time of the day.</p></article>
+                        </div>
+                        <p>In the olden days, the Ndebele wrapped their dead in blankets or animal hides; graves were oblong and proportionate to the deceased's size. Today, caskets are used, and graves are sized accordingly.</p>
+                    </div>
+                </details>
+                <details class="accordion sub">
+                    <summary>Funeral procession and burial</summary>
+                    <div class="content">
+                        <p>With cars and caskets, the journey to the graveyard is shorter. The hearse carrying the corpse leads the procession, with the husband/wife/parent of the deceased also in the hearse, followed by the mourners. Hymns are sung as the casket is lowered. After burial, most community members return home, while elders and family remain to clean up and stay with the bereaved as they adapt to life without their loved one.</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <aside class="notice"><strong>Context note:</strong> Ndebele practices are not uniform. They vary by clan, locality, generation, family circumstance, and religious affiliation. This page is a structured synthesis of the supplied material, not a claim that every practice is universal or unchanged.</aside>
+
+        <section class="glossary" aria-labelledby="glossary-title">
+            <h2 id="glossary-title">Glossary</h2>
+            <details><summary>Lobola</summary><div class="content">The Ndebele customary-law marriage; also the bride price or dowry paid in cattle or cash to formalize union and secure offspring.</div></details>
+            <details><summary>Isibongo</summary><div class="content">Surname or clan name, derived from the father's bloodline; source of pride and identity.</div></details>
+            <details><summary>Isitemo</summary><div class="content">Totem — an animal, plant, or natural symbol that defines a clan's identity, prohibits inter-clan marriage, and connects humans to the environment.</div></details>
+            <details><summary>Ubuntu</summary><div class="content">"Humanness" — a philosophy of respect, politeness, obedience, warmth, empathy, and interdependence.</div></details>
+            <details><summary>Ukuhlonipha</summary><div class="content">Respect — a guiding principle expressed through humility, deference to elders, and proper social conduct.</div></details>
+            <details><summary>Isitshwala</summary><div class="content">Thick cornmeal porridge, the staple starch of Ndebele meals, served with relish or stew.</div></details>
+            <details><summary>Amahewu</summary><div class="content">A non-alcoholic fermented drink made from maize meal, sorghum, and malt; often served to new mothers and at communal gatherings.</div></details>
+            <details><summary>Imbudzi yokhu Binga Isisu</summary><div class="content">A ritual goat brought by the husband to his wife's parents to announce pregnancy and "strengthen the mother's back."</div></details>
+            <details><summary>Idombo</summary><div class="content">The groom's chief negotiator during lobola — typically an uncle or trusted friend.</div></details>
+            <details><summary>Ukucolewa</summary><div class="content">The postnatal visit by the father's family to see the newborn, usually two to three weeks after birth.</div></details>
+        </section>
+
+        <section class="closing" aria-labelledby="closing-title">
+            <h2 id="closing-title">Integrated cultural life</h2>
+            <p>Across marriage, totemic identity, pregnancy, etiquette, food, and death, the traditions described here connect social belonging with ancestral responsibility, collective care, and the enduring philosophy of Ubuntu.</p>
+        </section>
+
+        <p><a class="back" href="#top">↑ Back to top</a></p>
+        <footer>Single-page mobile-first layout. Replace or expand text, citations, source notes, and imagery according to your publication requirements.</footer>
+    </main>
+</body>
+</html>

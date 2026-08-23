@@ -1,0 +1,32 @@
+import React from 'react';
+
+export interface LinkIconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+  color?: string;
+}
+
+export const LinkIcon: React.FC<LinkIconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+  ...props
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
+      fill={color}
+      color={color}
+      className={className}
+      {...props}
+    >
+      <path d="M43.5 10.5 C37.8 4.8 28.5 4.8 22.8 10.5 L17.5 15.8 C16.3 17 16.3 18.9 17.5 20.1 C18.7 21.3 20.6 21.3 21.8 20.1 L27.1 14.8 C30.4 11.5 35.8 11.5 39.1 14.8 C42.4 18.1 42.4 23.5 39.1 26.8 L33.8 32.1 C32.6 33.3 32.6 35.2 33.8 36.4 C35 37.6 36.9 37.6 38.1 36.4 L43.5 31.1 C49.2 25.4 49.2 16.2 43.5 10.5 Z" />
+      <path d="M25.9 27.6 C24.7 26.4 22.8 26.4 21.6 27.6 L16.3 32.9 C10.6 38.6 10.6 47.8 16.3 53.5 C22 59.2 31.2 59.2 36.9 53.5 L42.2 48.2 C43.4 47 43.4 45.1 42.2 43.9 C41 42.7 39.1 42.7 37.9 43.9 L32.6 49.2 C29.3 52.5 23.9 52.5 20.6 49.2 C17.3 45.9 17.3 40.5 20.6 37.2 L25.9 31.9 C27.1 30.7 27.1 28.8 25.9 27.6 Z" />
+      <path d="M23.5 37.5 L37.5 23.5" stroke={color} strokeWidth={3.5} strokeLinecap="round" fill="none" />
+    </svg>
+  );
+};
+
+export default LinkIcon;

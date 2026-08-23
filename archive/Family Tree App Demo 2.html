@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>FamilyRoots – Zimbabwe Genealogy</title>
+    <style>
+        :root {
+            /* Palette */
+            --pure-white: #FFFFFF;
+            --near-white: #F7F9F7;
+            --soft-sage: #E8F2E8;
+            --medium-green: #4CAF7D;
+            --deep-green: #1B6B3A;
+            --light-grey: #E4E8E4;
+            --muted-text: #6B7B6B;
+            --near-black: #111C11;
+
+            /* Visual Variables */
+            --bg: var(--near-white);
+            --surface: var(--light-grey);
+            --card: var(--pure-white);
+            --text: var(--near-black);
+            --muted: var(--muted-text);
+            --border: var(--light-grey);
+            --radius: 14px;
+            --card-shadow: 0 4px 14px rgba(17, 28, 17, 0.04);
+
+            /* Gender Coding Accent Rules */
+            --male-accent: #4A90D9;
+            --male-bg: rgba(74, 144, 217, 0.05);
+            --female-accent: #D96B8A;
+            --female-bg: rgba(217, 107, 138, 0.05);
+            --deceased-bg: var(--near-black);
+            --deceased-text: var(--pure-white);
+
+            --wa: #25D366;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Tight letter-spacing for headings and bold font-weight hierarchy */
+        h1, h2, h3, h4, h5, h6, 
+        .welcome-title, .panel-title, .topbar-title, .inst-topbar-title {
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--near-black);
+        }
+
+        button, input, select, textarea {
+            font-family: inherit;
+        }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Welcome Screen Styling */
+        #welcome-screen {
+            background: var(--pure-white);
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 2rem;
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .welcome-eyebrow {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-title {
+            font-size: clamp(2.2rem, 8vw, 3.2rem);
+            font-weight: 800;
+            color: var(--deep-green);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-tagline {
+            color: var(--muted-text);
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .welcome-tree-svg {
+            margin-bottom: 2.5rem;
+            width: 120px;
+            height: 120px;
+        }
+
+        .welcome-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            width: 100%;
+            align-items: center;
+        }
+
+        .btn-role-primary {
+            width: 100%;
+            max-width: 280px;
+            padding: 1.1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: var(--deep-green);
+            color: var(--pure-white);
+            cursor: pointer;
+            transition: transform 0.15s, opacity 0.15s;
+            box-shadow: 0 4px 12px rgba(27, 107, 58, 0.1);
+        }
+
+        .btn-role-primary:active {
+            transform: scale(0.97);
+            opacity: 0.95;
+        }
+
+        .btn-role-secondary {
+            width: 100%;
+            max-width: 280px;
+            padding: 1.1rem 2rem;
+            border: 2px solid var(--light-grey);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: transparent;
+            color: var(--near-black);
+            cursor: pointer;
+            transition: transform 0.15s, background-color 0.15s;
+        }
+
+        .btn-role-secondary:active {
+            transform: scale(0.97);
+            background-color: var(--near-white);
+        }
+
+        .welcome-footer {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--muted-text);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            z-index: 2;
+        }
+
+        #regular-app {
+            background: var(--bg);
+        }
+
+        /* Navigation Topbar Styles */
+        .app-topbar {
+            height: 56px;
+            min-height: 56px;
+            background: var(--pure-white);
+            border-bottom: 1px solid var(--light-grey);
+            display: flex;
+            align-items: center;
+            padding: 0 1.2rem;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .topbar-back {
+            color: var(--near-black);
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 4px 8px;
+        }
+
+        .topbar-title {
+            color: var(--near-black);
+            font-weight: 800;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .topbar-action {
+            color: var(--muted-text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.15s;
+        }
+
+        .topbar-action:active {
+            background-color: var(--near-white);
+        }
+
+        .main-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .view {
+            position: absolute;
+            inset: 0;
+            display: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Bottom Nav - Clean & Flat */
+        .bottom-nav {
+            height: 64px;
+            min-height: 64px;
+            background: var(--pure-white);
+            display: flex;
+            border-top: 1px solid var(--light-grey);
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 10;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted-text);
+            cursor: pointer;
+            transition: color 0.15s;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--deep-green);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        .nav-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        /* Tree View Viewport (Using Zoom/Pan DOM Elements) */
+        #tree-view {
+            background: var(--near-white);
+        }
+
+        #tree-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+        }
+
+        #tree-container:active {
+            cursor: grabbing;
+        }
+
+        #tree-workspace {
+            position: absolute;
+            width: 5000px;
+            height: 5000px;
+            transform-origin: 0 0;
+            will-change: transform;
+            z-index: 1;
+        }
+
+        /* SVG layer for rendering connector lines */
+        #tree-connections-svg {
+            position: absolute;
+            inset: 0;
+            width: 5000px;
+            height: 5000px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Tree Node Card Layout */
+        .tree-node-wrapper {
+            position: absolute;
+            width: 175px;
+            height: 75px;
+            z-index: 2;
+        }
+
+        .tree-card {
+            width: 100%;
+            height: 100%;
+            background: var(--pure-white);
+            border-radius: var(--radius);
+            border: 1px solid var(--light-grey);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .tree-card:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 6px rgba(17, 28, 17, 0.02);
+        }
+
+        /* Crisp left-edge accent color strip */
+        .card-left-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            border-radius: var(--radius) 0 0 var(--radius);
+        }
+
+        /* Gender Coding Modifiers */
+        .tree-card.gender-m {
+            border-color: var(--male-accent);
+            background: var(--male-bg);
+        }
+        .tree-card.gender-m .card-left-bar {
+            background: var(--male-accent);
+        }
+
+        .tree-card.gender-f {
+            border-color: var(--female-accent);
+            background: var(--female-bg);
+        }
+        .tree-card.gender-f .card-left-bar {
+            background: var(--female-accent);
+        }
+
+        .tree-card.deceased {
+            background: var(--deceased-bg);
+            border-color: var(--near-black);
+        }
+        .tree-card.deceased .card-left-bar {
+            background: var(--pure-white);
+        }
+
+        /* Node Inner Content */
+        .card-body {
+            display: flex;
+            align-items: center;
+            padding-left: 14px;
+            padding-right: 28px;
+            gap: 10px;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Rounded square avatars */
+        .card-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius);
+            background: var(--pure-white);
+            border: 1px solid var(--light-grey);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(17, 28, 17, 0.03);
+        }
+
+        .tree-card.deceased .card-avatar {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--near-black);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tree-card.deceased .card-name {
+            color: var(--deceased-text);
+        }
+
+        .card-pill {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--muted-text);
+            background: var(--soft-sage);
+            padding: 2px 6px;
+            border-radius: 20px;
+            margin-top: 3px;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            align-self: flex-start;
+        }
+
+        .tree-card.deceased .card-pill {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--pure-white);
+        }
+
+        /* Interactive Card Plus Control */
+        .card-plus-btn {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid var(--light-grey);
+            background: var(--pure-white);
+            color: var(--near-black);
+            font-size: 10px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            z-index: 5;
+            transition: transform 0.1s, background-color 0.1s;
+        }
+
+        .card-plus-btn:hover {
+            background: var(--near-white);
+            transform: scale(1.1);
+        }
+
+        .tree-card.deceased .card-plus-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--pure-white);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Floating Action Controls on Tree View */
+        .tree-fab-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 5;
+        }
+
+        .tree-fab {
+            width: 46px;
+            height: 46px;
+            background: var(--deep-green);
+            color: var(--pure-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 14px rgba(27, 107, 58, 0.2);
+            transition: transform 0.1s;
+        }
+
+        .tree-fab:active {
+            transform: scale(0.95);
+        }
+
+        .tree-fab.secondary {
+            background: var(--pure-white);
+            color: var(--near-black);
+            border: 1px solid var(--light-grey);
+            box-shadow: var(--card-shadow);
+            font-size: 1.1rem;
+        }
+
+        .tree-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(17, 28, 17, 0.85);
+            color: var(--pure-white);
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 30px;
+            letter-spacing: 0.02em;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .tree-legend {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--light-grey);
+            border-radius: 10px;
+            padding: 6px 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--muted-text);
+            z-index: 4;
+            pointer-events: none;
+            display: flex;
+            gap: 10px;
+        }
+
+        .tree-legend span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Overlay & Drawer Sheet Animations */
+        .panel-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(17, 28, 17, 0.3);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: flex-end;
+            flex-direction: column;
+            z-index: 40;
+        }
+
+        .panel-overlay.active {
+            display: flex;
+        }
+
+        .settings-panel {
+            background: var(--pure-white);
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem 1.5rem 2.5rem;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-top: 1px solid var(--light-grey);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .panel-handle {
+            width: 36px;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--light-grey);
+            margin: 0 auto 1.2rem;
+        }
+
+        .panel-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--near-black);
+            margin-bottom: 1.2rem;
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--light-grey);
+        }
+
+        .setting-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--near-black);
+        }
+
+        .setting-sub {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+        }
+
+        /* Customized Flat Toggle Switches */
+        .toggle {
+            width: 48px;
+            height: 26px;
+            border-radius: 13px;
+            background: var(--light-grey);
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toggle.on {
+            background: var(--deep-green);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--pure-white);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+            transition: left 0.2s;
+        }
+
+        .toggle.on::after {
+            left: 25px;
+        }
+
+        .gen-row {
+            padding: 1rem 0;
+        }
+
+        .gen-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+
+        input[type=range] {
+            width: 100%;
+            accent-color: var(--deep-green);
+        }
+
+        .btn-done {
+            width: 100%;
+            padding: 0.95rem;
+            margin-top: 1.5rem;
+            background: var(--deep-green);
+            color: var(--pure-white);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        /* Feed/Timeline Layout styling */
+        #timeline-view {
+            padding: 12px 0 80px;
+            background: var(--bg);
+        }
+
+        .timeline-header {
+            padding: 0.8rem 1.2rem;
+        }
+
+        .timeline-header h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .post {
+            background: var(--pure-white);
+            margin: 10px 14px;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--light-grey);
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            gap: 12px;
+        }
+
+        /* Avatar styling matching standard contacts rounded square layout */
+        .post-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius);
+            background: var(--soft-sage);
+            color: var(--near-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            border: 1px solid var(--light-grey);
+        }
+
+        .post-meta strong {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--near-black);
+        }
+
+        .post-time {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+            font-weight: 400;
+        }
+
+        .privacy-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--soft-sage);
+            color: var(--deep-green);
+            margin-left: 8px;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 220px;
+            background: var(--near-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4.5rem;
+            border-top: 1px solid var(--light-grey);
+            border-bottom: 1px solid var(--light-grey);
+        }
+
+        .post-caption {
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--near-black);
+        }
+
+        .post-totem {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--muted-text);
+            padding: 0 14px 12px;
+        }
+
+        /* Groups View Tab styling */
+        #groups-view {
+            padding: 12px 0 80px;
+        }
+
+        .groups-header {
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .groups-header h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .group-card {
+            background: var(--pure-white);
+            margin: 10px 14px;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--light-grey);
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-icon {
+            font-size: 1.8rem;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius);
+            background: var(--soft-sage);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+
+        .group-name {
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .group-meta {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        .badge-vis {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--light-grey);
+            color: var(--near-black);
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1.1rem;
+            border: none;
+            border-radius: 50px;
+            background: var(--deep-green);
+            color: var(--pure-white);
+            font-weight: 600;
+            font-size: 0.82rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* Sleek Organic Editorial Profile View styling */
+        #profile-view {
+            padding: 0 0 80px;
+        }
+
+        .profile-hero {
+            background: var(--soft-sage);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--light-grey);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius);
+            background: var(--pure-white);
+            color: var(--deep-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--pure-white);
+            box-shadow: var(--card-shadow);
+        }
+
+        .profile-name {
+            color: var(--near-black);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.01em;
+        }
+
+        .profile-totem {
+            color: var(--muted-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .profile-body {
+            padding: 1.2rem;
+        }
+
+        .profile-card {
+            background: var(--pure-white);
+            border-radius: var(--radius);
+            border: 1px solid var(--light-grey);
+            box-shadow: var(--card-shadow);
+            padding: 1.2rem;
+            margin-bottom: 14px;
+        }
+
+        .profile-card h4 {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+            margin-bottom: 0.8rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--near-white);
+            font-size: 0.88rem;
+        }
+
+        .info-label {
+            color: var(--muted-text);
+            font-weight: 400;
+        }
+
+        .info-value {
+            color: var(--near-black);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        /* Action elements customized inside profile workspace */
+        .wa-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--wa);
+            color: var(--pure-white);
+            border: none;
+            border-radius: 50px;
+            padding: 0.85rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.15);
+        }
+
+        .export-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--deep-green);
+            color: var(--pure-white);
+            border: none;
+            border-radius: 50px;
+            padding: 0.85rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .import-area {
+            margin-top: 12px;
+        }
+
+        .import-area textarea {
+            width: 100%;
+            padding: 0.85rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--light-grey);
+            font-size: 0.8rem;
+            background: var(--near-white);
+            resize: none;
+            outline: none;
+            color: var(--near-black);
+            font-family: inherit;
+        }
+
+        .import-area textarea:focus {
+            border-color: var(--medium-green);
+        }
+
+        .btn-import {
+            margin-top: 8px;
+            padding: 0.75rem 1.5rem;
+            background: var(--deep-green);
+            color: var(--pure-white);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        /* Institutional Application View Dashboard styling */
+        #institutional-app {
+            background: var(--bg);
+        }
+
+        .inst-topbar {
+            background: var(--pure-white);
+            padding: 1.5rem 1.2rem 1.2rem;
+            border-bottom: 1px solid var(--light-grey);
+        }
+
+        .inst-topbar-eyebrow {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+            margin-bottom: 0.3rem;
+        }
+
+        .inst-topbar-title {
+            color: var(--near-black);
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .inst-body {
+            padding: 1.2rem;
+            overflow-y: auto;
+            height: calc(100% - 90px);
+        }
+
+        .search-wrap {
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.6rem;
+            border-radius: 50px;
+            border: 1px solid var(--light-grey);
+            background: var(--pure-white);
+            font-size: 0.9rem;
+            outline: none;
+            color: var(--near-black);
+        }
+
+        .search-wrap input:focus {
+            border-color: var(--medium-green);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted-text);
+            pointer-events: none;
+        }
+
+        .inst-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+            margin: 1.2rem 0 0.6rem;
+        }
+
+        .result-item {
+            background: var(--pure-white);
+            border-radius: var(--radius);
+            border: 1px solid var(--light-grey);
+            padding: 0.9rem 1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .result-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            background: var(--soft-sage);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .result-name {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--near-black);
+        }
+
+        .result-meta {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+            margin-top: 2px;
+        }
+
+        .inst-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 1.2rem;
+        }
+
+        .stat-card {
+            background: var(--pure-white);
+            border-radius: var(--radius);
+            border: 1px solid var(--light-grey);
+            padding: 1.1rem;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--deep-green);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--muted-text);
+            margin-top: 4px;
+        }
+
+        .inst-back {
+            margin-top: 1.5rem;
+            padding: 0.9rem;
+            background: var(--near-black);
+            color: var(--pure-white);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Person Details Bottom Modal Drawer styling */
+        .person-modal {
+            position: absolute;
+            inset: 0;
+            background: rgba(17, 28, 17, 0.3);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: flex-end;
+            flex-direction: column;
+            z-index: 60;
+        }
+
+        .person-modal.active {
+            display: flex;
+        }
+
+        .person-sheet {
+            background: var(--pure-white);
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem 1.5rem 2.5rem;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-top: 1px solid var(--light-grey);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .person-sheet-handle {
+            width: 36px;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--light-grey);
+            margin: 0 auto 1.2rem;
+        }
+
+        .person-sheet-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .person-sheet-icon {
+            font-size: 2.2rem;
+            width: 70px;
+            height: 70px;
+            border-radius: var(--radius);
+            background: var(--soft-sage);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.6rem;
+            border: 1px solid var(--light-grey);
+        }
+
+        .person-sheet-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--near-black);
+            letter-spacing: -0.01em;
+        }
+
+        .person-sheet-totem {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--muted-text);
+            margin-top: 2px;
+        }
+
+        .deceased-tag {
+            display: inline-block;
+            background: var(--near-black);
+            color: var(--pure-white);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-top: 6px;
+        }
+
+        .person-meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 1.2rem;
+        }
+
+        .meta-cell {
+            background: var(--near-white);
+            border-radius: var(--radius);
+            border: 1px solid var(--light-grey);
+            padding: 0.8rem;
+        }
+
+        .meta-cell-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted-text);
+            margin-bottom: 4px;
+        }
+
+        .meta-cell-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--near-black);
+        }
+
+        .person-sheet-close {
+            margin-top: 0.8rem;
+            padding: 0.9rem;
+            background: var(--light-grey);
+            color: var(--near-black);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .relation-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 1rem 0;
+        }
+
+        .rel-action-btn {
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--light-grey);
+            background: var(--pure-white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--near-black);
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+
+        .rel-action-btn:active {
+            background: var(--near-white);
+        }
+
+        .rel-action-btn.add {
+            border-color: var(--medium-green);
+            color: var(--deep-green);
+            background: var(--soft-sage);
+        }
+
+        .rel-action-btn.remove {
+            border-color: #d96b8a;
+            color: #d96b8a;
+        }
+
+        .existing-rel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--near-white);
+            font-size: 0.85rem;
+        }
+
+        .existing-rel .rel-type {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+            text-transform: capitalize;
+            font-weight: 600;
+        }
+
+        .existing-rel .remove-rel {
+            color: #d96b8a;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 50px;
+            border: 1px solid rgba(217, 107, 138, 0.2);
+            background: var(--pure-white);
+        }
+
+        @media (max-width: 360px) {
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+            .btn-role-primary,
+            .btn-role-secondary {
+                width: 220px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Minimal Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+            <div class="welcome-content">
+                <div class="welcome-eyebrow">Zimbabwe Genealogy Platform</div>
+                <!-- CSS Illustration-style stylized Vector tree -->
+                <svg class="welcome-tree-svg" viewBox="0 0 120 120">
+                    <rect x="57" y="70" width="6" height="35" fill="var(--deep-green)" rx="3"/>
+                    <path d="M 60 75 Q 40 60 35 50" stroke="var(--deep-green)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <path d="M 60 80 Q 80 65 85 55" stroke="var(--deep-green)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <circle cx="60" cy="40" r="18" fill="var(--soft-sage)" stroke="var(--medium-green)" stroke-width="2"/>
+                    <circle cx="35" cy="50" r="14" fill="var(--soft-sage)" stroke="var(--medium-green)" stroke-width="2"/>
+                    <circle cx="85" cy="55" r="14" fill="var(--soft-sage)" stroke="var(--medium-green)" stroke-width="2"/>
+                    <rect x="52" y="34" width="16" height="12" rx="2" fill="var(--pure-white)" stroke="var(--deep-green)" stroke-width="1.5" />
+                    <circle cx="60" cy="40" r="2" fill="var(--deep-green)" />
+                    <rect x="29" y="45" width="12" height="10" rx="2" fill="var(--pure-white)" stroke="var(--deep-green)" stroke-width="1.2" />
+                    <rect x="79" y="50" width="12" height="10" rx="2" fill="var(--pure-white)" stroke="var(--deep-green)" stroke-width="1.2" />
+                </svg>
+                <div class="welcome-title">FamilyRoots</div>
+                <div class="welcome-tagline">Preserve lineage. Share heritage.<br>Connect generations.</div>
+                <div class="welcome-buttons">
+                    <button class="btn-role-primary" onclick="App.navigate('regular')">👤 &nbsp;Regular User</button>
+                    <button class="btn-role-secondary" onclick="App.navigate('institutional')">🏛️ &nbsp;Institutional User</button>
+                </div>
+            </div>
+            <div class="welcome-footer">Demo Build · Offline-First</div>
+        </div>
+
+        <!-- Regular Application Screen Area -->
+        <div id="regular-app" class="screen">
+            <div class="app-topbar">
+                <span class="topbar-back" onclick="App.navigate('welcome')">‹</span>
+                <span class="topbar-title" id="topbarTitle">Family Tree</span>
+                <span class="topbar-action" onclick="App.toggleSettings()" id="settingsBtn">⚙️</span>
+            </div>
+            <div class="main-content">
+                <!-- Tree Workspace View (DOM Based Zoom/Pan) -->
+                <div id="tree-view" class="view active">
+                    <div id="tree-container">
+                        <div id="tree-workspace">
+                            <!-- SVG Connector lines dynamically overlayed -->
+                            <svg id="tree-connections-svg"></svg>
+                            <!-- Absolute layout DOM Cards injected here -->
+                        </div>
+                        <div class="tree-legend">
+                            <span><span class="legend-dot" style="background:var(--male-accent)"></span> Male</span>
+                            <span><span class="legend-dot" style="background:var(--female-accent)"></span> Female</span>
+                            <span><span class="legend-dot" style="background:var(--near-black)"></span> Deceased</span>
+                        </div>
+                        <div class="tree-hint">Drag workspace to scroll · Tap node for details · Tap + to add relations</div>
+                        <div class="tree-fab-container">
+                            <button class="tree-fab" onclick="App.showAddPerson()">＋</button>
+                            <button class="tree-fab secondary" onclick="App.centerOnRoot()">🎯</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed/Timeline View -->
+                <div id="timeline-view" class="view">
+                    <div class="timeline-header"><h2>Family Timeline</h2></div>
+                    <div id="timeline-content"></div>
+                </div>
+
+                <!-- Groups Tab View -->
+                <div id="groups-view" class="view">
+                    <div class="groups-header"><h2>My Groups</h2><button class="btn-sm" onclick="App.showNewGroup()">+ New</button></div>
+                    <div id="groups-content"></div>
+                </div>
+
+                <!-- Profile Tab View -->
+                <div id="profile-view" class="view">
+                    <div id="profile-content"></div>
+                </div>
+            </div>
+            
+            <!-- Navigation System -->
+            <div class="bottom-nav">
+                <div class="nav-item active" data-view="tree"><span class="nav-icon">🌳</span><span class="nav-label">Tree</span></div>
+                <div class="nav-item" data-view="timeline"><span class="nav-icon">🕊️</span><span class="nav-label">Timeline</span></div>
+                <div class="nav-item" data-view="groups"><span class="nav-icon">👥</span><span class="nav-label">Groups</span></div>
+                <div class="nav-item" data-view="profile"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></div>
+            </div>
+        </div>
+
+        <!-- Institutional Dashboard Screen Area -->
+        <div id="institutional-app" class="screen">
+            <div class="inst-topbar">
+                <div class="inst-topbar-eyebrow">Research Portal</div>
+                <div class="inst-topbar-title">🏛️ Institutional Dashboard</div>
+            </div>
+            <div class="inst-body">
+                <div class="inst-stats">
+                    <div class="stat-card"><div class="stat-num">70</div><div class="stat-label">Family Members</div></div>
+                    <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Generations</div></div>
+                    <div class="stat-card"><div class="stat-num">24</div><div class="stat-label">Totems Indexed</div></div>
+                    <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Ethnic Groups</div></div>
+                </div>
+                <div class="search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="instSearch" placeholder="Search tribes, totems, chidawo, regions…">
+                </div>
+                <div class="inst-section-title">Results</div>
+                <div id="instResults"></div>
+                <button class="export-btn" style="margin-top:10px;" onclick="App.exportData()">📤 Export Aggregated Data</button>
+                <button class="inst-back" onclick="App.navigate('welcome')">← Back to Home</button>
+            </div>
+        </div>
+
+        <!-- Settings Modal Panel Overlay -->
+        <div id="settings-overlay" class="panel-overlay">
+            <div class="settings-panel">
+                <div class="panel-handle"></div>
+                <div class="panel-title">Tree Display Settings</div>
+                <div class="setting-row">
+                    <div><div class="setting-label">Solid Background Elements</div><div class="setting-sub">Solid colors on cards based on gender</div></div>
+                    <div class="toggle" id="toggleSolid" onclick="App.toggleSetting('solid')"></div>
+                </div>
+                <div class="setting-row">
+                    <div><div class="setting-label">Accent Line Connections</div><div class="setting-sub">Colored lines on family lines</div></div>
+                    <div class="toggle on" id="toggleColorbranch" onclick="App.toggleSetting('colorbranch')"></div>
+                </div>
+                <div class="setting-row">
+                    <div><div class="setting-label">Display Relation Labels</div><div class="setting-sub">Show relation labels on connection lines</div></div>
+                    <div class="toggle on" id="toggleRellabels" onclick="App.toggleSetting('rellabels')"></div>
+                </div>
+                <div class="setting-row">
+                    <div><div class="setting-label">Hide Extended Cousins</div><div class="setting-sub">Only display direct line structures</div></div>
+                    <div class="toggle" id="toggleHidecousins" onclick="App.toggleSetting('hidecousins')"></div>
+                </div>
+                <div class="gen-row">
+                    <div class="gen-label"><span>Max Generations</span><strong id="genValue">5</strong></div>
+                    <input type="range" min="1" max="5" value="5" id="genSlider" oninput="App.updateGen(this.value)">
+                </div>
+                <button class="btn-done" onclick="App.closeSettings()">Done</button>
+            </div>
+        </div>
+
+        <!-- Detail Dialog Person Modal -->
+        <div id="person-modal" class="person-modal" onclick="if(event.target===this)App.closePersonModal()">
+            <div class="person-sheet" id="person-sheet-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const TRIBES = {
+            "Shona": { subgroups: { "Zezuru": { region: "Mashonaland East / West / Central", mitupo: [{ totem: "Shumba", chidawo: "Mhofu, Mhazi, Nyamuzihwa", icon: "🦁" }, { totem: "Mhofu", chidawo: "Shumba, Mwendamberi", icon: "🐃" }, { totem: "Soko", chidawo: "Murehwa, Makwiramiti", icon: "🐒" }, { totem: "Mbizi", chidawo: "Shato, Mhofu", icon: "🦓" }, { totem: "Nzou", chidawo: "Samanyanga, Nyamhondoro", icon: "🐘" }] }, "Manyika": { region: "Manicaland", mitupo: [{ totem: "Shumba", chidawo: "Nyamhamba, Chirasha", icon: "🦁" }, { totem: "Nzou", chidawo: "Samanyanga, Mhukahuru", icon: "🐘" }, { totem: "Shava", chidawo: "Mhofu, Chuma", icon: "🐆" }] }, "Ndau": { region: "Manicaland & Mozambique border", mitupo: [{ totem: "Moyo", chidawo: "Chirandu, Dhewa", icon: "❤️" }, { totem: "Shoko", chidawo: "Mukanya", icon: "🐒" }] }, "Karanga": { region: "Masvingo, Midlands", mitupo: [{ totem: "Moyo", chidawo: "Rozvi, Mzilikazi", icon: "❤️" }, { totem: "Shava", chidawo: "Mhofu, Chuma", icon: "🐆" }, { totem: "Shumba", chidawo: "Sipambi, Gutu", icon: "🦁" }] }, "Korekore": { region: "Mashonaland Central", mitupo: [{ totem: "Nzou", chidawo: "Samanyanga", icon: "🐘" }, { totem: "Gushungo", chidawo: "Mukonde, Hungwe", icon: "🦅" }] } } }, "Ndebele": { subgroups: { "Ndebele": { region: "Matabeleland North / South", mitupo: [{ totem: "Khumalo", chidawo: "Mntungwa, Mzilikazi", icon: "🦁" }, { totem: "Ndlovu", chidawo: "Gatsheni, Mthimkhulu", icon: "🐘" }, { totem: "Dube", chidawo: "Mnguni, Mbuyazwe", icon: "🦓" }, { totem: "Nyathi", chidawo: "Mashaba, Mvundla", icon: "🐃" }] } } }, "Tonga": { region: "Binga, Kariba", mitupo: [{ totem: "Inyati", chidawo: "Munsaka", icon: "🐃" }, { totem: "Siamungodi", chidawo: "Mukuli", icon: "🐊" }] }, "Venda": { region: "Beitbridge, southern Masvingo", mitupo: [{ totem: "Ndau", chidawo: "Mukondeleli", icon: "🐆" }, { totem: "Mbedzi", chidawo: "Tshivhula", icon: "🐊" }] }
+        };
+        const SEED_PERSONS = [{ id: 'p1', givenName: 'Alfonce Mambo', familyName: 'Chitate', gender: 'M', birthDate: '1914', deathDate: '2009', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Mashonaland East', totemIcon: '🐃' }, { id: 'p2', givenName: 'Ambuya Chipo', familyName: 'Chitate', gender: 'F', birthDate: '1920', deathDate: '2015', mitupo: 'Moyo', chidawo: 'Chirandu', tribe: 'Shona', region: 'Masvingo', totemIcon: '❤️' }, { id: 'p3', givenName: 'Sekuru Tendai', familyName: 'Chitate', gender: 'M', birthDate: '1938', deathDate: '2021', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p4', givenName: 'Gogo Thandeka', familyName: 'Chitate', gender: 'F', birthDate: '1942', mitupo: 'Khumalo', chidawo: 'Mntungwa', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🦁' }, { id: 'p5', givenName: 'Ambuya Rudo', familyName: 'Moyo', gender: 'F', birthDate: '1941', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Mashonaland East', totemIcon: '🐃' }, { id: 'p6', givenName: 'Sekuru Christopher', familyName: 'Moyo', gender: 'M', birthDate: '1939', deathDate: '2012', mitupo: 'Moyo', chidawo: 'Dhewa', tribe: 'Shona', region: 'Manicaland', totemIcon: '❤️' }, { id: 'p7', givenName: 'Sekuru Mthulisi', familyName: 'Chitate', gender: 'M', birthDate: '1945', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Matabeleland South', totemIcon: '🐃' }, { id: 'p8', givenName: 'Gogo Nomvula', familyName: 'Chitate', gender: 'F', birthDate: '1948', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Matabeleland North', totemIcon: '🐘' }, { id: 'p9', givenName: 'Sipho Farai', familyName: 'Chitate', gender: 'M', birthDate: '1962', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p10', givenName: 'Gugulethu', familyName: 'Chitate', gender: 'F', birthDate: '1965', mitupo: 'Dube', chidawo: 'Mnguni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🦓' }, { id: 'p11', givenName: 'Bongani Paul', familyName: 'Chitate', gender: 'M', birthDate: '1965', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Bulawayo', totemIcon: '🐃' }, { id: 'p12', givenName: 'Nomalanga', familyName: 'Chitate', gender: 'F', birthDate: '1968', mitupo: 'Nyathi', chidawo: 'Msophia', tribe: 'Ndebele', region: 'Matabeleland South', totemIcon: '🐃' }, { id: 'p13', givenName: 'Chidochemoyo', familyName: 'Sibanda', gender: 'F', birthDate: '1969', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p14', givenName: 'Makhosi', familyName: 'Sibanda', gender: 'M', birthDate: '1966', mitupo: 'Sibanda', chidawo: 'Mitshina', tribe: 'Ndebele', region: 'Matabeleland North', totemIcon: '🐆' }, { id: 'p15', givenName: 'Kumbirai John', familyName: 'Moyo', gender: 'M', birthDate: '1963', mitupo: 'Moyo', chidawo: 'Dhewa', tribe: 'Shona', region: 'Manicaland', totemIcon: '❤️' }, { id: 'p16', givenName: 'Tariro Mary', familyName: 'Moyo', gender: 'F', birthDate: '1966', mitupo: 'Shumba', chidawo: 'Mhazi', tribe: 'Shona', region: 'Mashonaland Central', totemIcon: '🦁' }, { id: 'p17', givenName: 'Nyasha Mercy', familyName: 'Nkomo', gender: 'F', birthDate: '1967', mitupo: 'Moyo', chidawo: 'Dhewa', tribe: 'Shona', region: 'Midlands', totemIcon: '❤️' }, { id: 'p18', givenName: 'Dumisani', familyName: 'Nkomo', gender: 'M', birthDate: '1964', mitupo: 'Mpofu', chidawo: 'Nyoni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐃' }, { id: 'p19', givenName: 'Busani', familyName: 'Chitate', gender: 'M', birthDate: '1970', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Matabeleland South', totemIcon: '🐃' }, { id: 'p20', givenName: 'Langelihle', familyName: 'Chitate', gender: 'F', birthDate: '1973', mitupo: 'Khumalo', chidawo: 'Mntungwa', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🦁' }, { id: 'p21', givenName: 'Sithandekile', familyName: 'Ndlovu', gender: 'F', birthDate: '1972', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Matabeleland North', totemIcon: '🐃' }, { id: 'p22', givenName: 'Ndodana', familyName: 'Ndlovu', gender: 'M', birthDate: '1969', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐘' }, { id: 'p23', givenName: 'Tinashe Vusumuzi', familyName: 'Chitate', gender: 'M', birthDate: '1975', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p24', givenName: 'Rutendo Anne', familyName: 'Chitate', gender: 'F', birthDate: '1977', mitupo: 'Soko', chidawo: 'Murehwa', tribe: 'Shona', region: 'Mashonaland West', totemIcon: '🐒' }, { id: 'p25', givenName: 'Kudzanai Paul', familyName: 'Chitate', gender: 'M', birthDate: '1987', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p26', givenName: 'Thandeka Nokuthula', familyName: 'Chitate', gender: 'F', birthDate: '1990', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐘' }, { id: 'p27', givenName: 'Tariro Blessing', familyName: 'Phiri', gender: 'F', birthDate: '1989', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p28', givenName: 'Mthokozisi', familyName: 'Phiri', gender: 'M', birthDate: '1986', mitupo: 'Dube', chidawo: 'Mnguni', tribe: 'Ndebele', region: 'Matabeleland North', totemIcon: '🦓' }, { id: 'p29', givenName: 'Menzisi', familyName: 'Chitate', gender: 'M', birthDate: '1988', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Bulawayo', totemIcon: '🐃' }, { id: 'p30', givenName: 'Senzile', familyName: 'Chitate', gender: 'F', birthDate: '1992', mitupo: 'Khumalo', chidawo: 'Mntungwa', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🦁' }, { id: 'p31', givenName: 'Takudzwa Albert', familyName: 'Chitate', gender: 'M', birthDate: '1991', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Midlands', totemIcon: '🐃' }, { id: 'p67', givenName: 'Chipo Sandra', familyName: 'Chitate', gender: 'F', birthDate: '1993', mitupo: 'Moyo', chidawo: 'Rozvi', tribe: 'Shona', region: 'Masvingo', totemIcon: '❤️' }, { id: 'p32', givenName: 'Gugulethu Chiedza', familyName: 'Mthethwa', gender: 'F', birthDate: '1992', mitupo: 'Sibanda', chidawo: 'Mitshina', tribe: 'Ndebele', region: 'Harare', totemIcon: '🐆' }, { id: 'p33', givenName: 'Sipho Nkosinathi', familyName: 'Mthethwa', gender: 'M', birthDate: '1989', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Matabeleland North', totemIcon: '🐘' }, { id: 'p34', givenName: 'Simbarashe', familyName: 'Sibanda', gender: 'M', birthDate: '1995', mitupo: 'Sibanda', chidawo: 'Mitshina', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐆' }, { id: 'p69', givenName: 'Nomsa Praise', familyName: 'Sibanda', gender: 'F', birthDate: '1996', mitupo: 'Dube', chidawo: 'Mnguni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🦓' }, { id: 'p35', givenName: 'Tatenda Kelvin', familyName: 'Moyo', gender: 'M', birthDate: '1988', mitupo: 'Moyo', chidawo: 'Dhewa', tribe: 'Shona', region: 'Manicaland', totemIcon: '❤️' }, { id: 'p36', givenName: 'Lindiwe Grace', familyName: 'Moyo', gender: 'F', birthDate: '1991', mitupo: 'Shumba', chidawo: 'Sipambi', tribe: 'Shona', region: 'Masvingo', totemIcon: '🦁' }, { id: 'p37', givenName: 'Kumbirai Shingai', familyName: 'Moyo', gender: 'M', birthDate: '1993', mitupo: 'Moyo', chidawo: 'Dhewa', tribe: 'Shona', region: 'Harare', totemIcon: '❤️' }, { id: 'p38', givenName: 'Nokuthula Hope', familyName: 'Chigumba', gender: 'F', birthDate: '1990', mitupo: 'Mpofu', chidawo: 'Nyoni', tribe: 'Ndebele', region: 'Midlands', totemIcon: '🐃' }, { id: 'p39', givenName: 'Tinashe Garikai', familyName: 'Chigumba', gender: 'M', birthDate: '1987', mitupo: 'Soko', chidawo: 'Makwiramiti', tribe: 'Shona', region: 'Mashonaland East', totemIcon: '🐒' }, { id: 'p40', givenName: 'Bongani Shona', familyName: 'Nkomo', gender: 'M', birthDate: '1994', mitupo: 'Mpofu', chidawo: 'Nyoni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐃' }, { id: 'p41', givenName: 'Mthulisi Junior', familyName: 'Chitate', gender: 'M', birthDate: '1993', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Matabeleland South', totemIcon: '🐃' }, { id: 'p42', givenName: 'Thandeka Nomvula', familyName: 'Chitate', gender: 'F', birthDate: '1995', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐘' }, { id: 'p43', givenName: 'Sihle Rudo', familyName: 'Chitate', gender: 'F', birthDate: '1997', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Matabeleland South', totemIcon: '🐃' }, { id: 'p44', givenName: 'Makhosi Makhurane', familyName: 'Ndlovu', gender: 'M', birthDate: '1992', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐘' }, { id: 'p45', givenName: 'Vimbai Precious', familyName: 'Ndlovu', gender: 'F', birthDate: '1994', mitupo: 'Nzou', chidawo: 'Samanyanga', tribe: 'Shona', region: 'Mashonaland Central', totemIcon: '🐘' }, { id: 'p46', givenName: 'Anesu Panashe', familyName: 'Chitate', gender: 'F', birthDate: '1998', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p47', givenName: 'Unathi Joshua', familyName: 'Chitate', gender: 'M', birthDate: '1999', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p48', givenName: 'Anashe Kudi', familyName: 'Chitate', gender: 'M', birthDate: '2011', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p49', givenName: 'Ruvarashe Chloe', familyName: 'Chitate', gender: 'F', birthDate: '2014', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p65', givenName: 'Thando Natalie', familyName: 'Chitate', gender: 'F', birthDate: '2019', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Harare', totemIcon: '🐃' }, { id: 'p50', givenName: 'Nomvula Tanaka', familyName: 'Phiri', gender: 'F', birthDate: '2013', mitupo: 'Dube', chidawo: 'Mnguni', tribe: 'Ndebele', region: 'Matabeleland North', totemIcon: '🦓' }, { id: 'p51', givenName: 'Sipho Isheanesu', familyName: 'Phiri', gender: 'M', birthDate: '2016', mitupo: 'Dube', chidawo: 'Mnguni', tribe: 'Ndebele', region: 'Harare', totemIcon: '🦓' }, { id: 'p52', givenName: 'Makhosi Sean', familyName: 'Chitate', gender: 'M', birthDate: '2015', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Bulawayo', totemIcon: '🐃' }, { id: 'p53', givenName: 'Bandile Ryan', familyName: 'Chitate', gender: 'M', birthDate: '2018', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Bulawayo', totemIcon: '🐃' }, { id: 'p66', givenName: 'Lwandle', familyName: 'Chitate', gender: 'M', birthDate: '2022', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Bulawayo', totemIcon: '🐃' }, { id: 'p68', givenName: 'Tinashe Junior', familyName: 'Chitate', gender: 'F', birthDate: '2021', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Midlands', totemIcon: '🐃' }, { id: 'p54', givenName: 'Thandeka Nicole', familyName: 'Mthethwa', gender: 'F', birthDate: '2017', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Harare', totemIcon: '🐘' }, { id: 'p55', givenName: 'Gugulethu Joy', familyName: 'Mthethwa', gender: 'F', birthDate: '2020', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Matabeleland North', totemIcon: '🐘' }, { id: 'p70', givenName: 'Lubalethu Nkosi', familyName: 'Sibanda', gender: 'M', birthDate: '2023', mitupo: 'Sibanda', chidawo: 'Mitshina', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐆' }, { id: 'p56', givenName: 'Munashe Nathan', familyName: 'Moyo', gender: 'M', birthDate: '2014', mitupo: 'Moyo', chidawo: 'Dhewa', tribe: 'Shona', region: 'Manicaland', totemIcon: '❤️' }, { id: 'p57', givenName: 'Tendai Nicole', familyName: 'Moyo', gender: 'F', birthDate: '2017', mitupo: 'Moyo', chidawo: 'Dhewa', tribe: 'Shona', region: 'Manicaland', totemIcon: '❤️' }, { id: 'p58', givenName: 'Shingai Jayden', familyName: 'Moyo', gender: 'M', birthDate: '2022', mitupo: 'Moyo', chidawo: 'Dhewa', tribe: 'Shona', region: 'Harare', totemIcon: '❤️' }, { id: 'p59', givenName: 'Chiedza Hope', familyName: 'Chigumba', gender: 'F', birthDate: '2013', mitupo: 'Soko', chidawo: 'Makwiramiti', tribe: 'Shona', region: 'Midlands', totemIcon: '🐒' }, { id: 'p60', givenName: 'Farai Christian', familyName: 'Chigumba', gender: 'M', birthDate: '2016', mitupo: 'Soko', chidawo: 'Makwiramiti', tribe: 'Shona', region: 'Mashonaland East', totemIcon: '🐒' }, { id: 'p61', givenName: 'Busani Junior', familyName: 'Chitate', gender: 'M', birthDate: '2019', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Matabeleland South', totemIcon: '🐃' }, { id: 'p62', givenName: 'Langelihle Chloe', familyName: 'Chitate', gender: 'F', birthDate: '2022', mitupo: 'Mhofu', chidawo: 'Museyamwa', tribe: 'Shona', region: 'Bulawayo', totemIcon: '🐃' }, { id: 'p63', givenName: 'Nomalanga Ruby', familyName: 'Ndlovu', gender: 'F', birthDate: '2018', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Bulawayo', totemIcon: '🐘' }, { id: 'p64', givenName: 'Makhosi Ethan', familyName: 'Ndlovu', gender: 'M', birthDate: '2021', mitupo: 'Ndlovu', chidawo: 'Gatsheni', tribe: 'Ndebele', region: 'Matabeleland North', totemIcon: '🐘' }];
+        const SEED_RELS = [{ id: 1, person1_id: 'p1', person2_id: 'p2', type: 'spouse' }, { id: 2, person1_id: 'p1', person2_id: 'p3', type: 'parent' }, { id: 3, person1_id: 'p2', person2_id: 'p3', type: 'parent' }, { id: 4, person1_id: 'p1', person2_id: 'p5', type: 'parent' }, { id: 5, person1_id: 'p2', person2_id: 'p5', type: 'parent' }, { id: 6, person1_id: 'p1', person2_id: 'p7', type: 'parent' }, { id: 7, person1_id: 'p2', person2_id: 'p7', type: 'parent' }, { id: 8, person1_id: 'p3', person2_id: 'p4', type: 'spouse' }, { id: 9, person1_id: 'p5', person2_id: 'p6', type: 'spouse' }, { id: 10, person1_id: 'p7', person2_id: 'p8', type: 'spouse' }, { id: 11, person1_id: 'p3', person2_id: 'p9', type: 'parent' }, { id: 12, person1_id: 'p4', person2_id: 'p9', type: 'parent' }, { id: 13, person1_id: 'p3', person2_id: 'p11', type: 'parent' }, { id: 14, person1_id: 'p4', person2_id: 'p11', type: 'parent' }, { id: 15, person1_id: 'p3', person2_id: 'p13', type: 'parent' }, { id: 16, person1_id: 'p4', person2_id: 'p13', type: 'parent' }, { id: 17, person1_id: 'p6', person2_id: 'p15', type: 'parent' }, { id: 18, person1_id: 'p5', person2_id: 'p15', type: 'parent' }, { id: 19, person1_id: 'p6', person2_id: 'p17', type: 'parent' }, { id: 20, person1_id: 'p5', person2_id: 'p17', type: 'parent' }, { id: 21, person1_id: 'p7', person2_id: 'p19', type: 'parent' }, { id: 22, person1_id: 'p8', person2_id: 'p19', type: 'parent' }, { id: 23, person1_id: 'p7', person2_id: 'p21', type: 'parent' }, { id: 24, person1_id: 'p8', person2_id: 'p21', type: 'parent' }, { id: 25, person1_id: 'p7', person2_id: 'p23', type: 'parent' }, { id: 26, person1_id: 'p8', person2_id: 'p23', type: 'parent' }, { id: 27, person1_id: 'p9', person2_id: 'p10', type: 'spouse' }, { id: 28, person1_id: 'p11', person2_id: 'p12', type: 'spouse' }, { id: 29, person1_id: 'p14', person2_id: 'p13', type: 'spouse' }, { id: 30, person1_id: 'p15', person2_id: 'p16', type: 'spouse' }, { id: 31, person1_id: 'p18', person2_id: 'p17', type: 'spouse' }, { id: 32, person1_id: 'p19', person2_id: 'p20', type: 'spouse' }, { id: 33, person1_id: 'p22', person2_id: 'p21', type: 'spouse' }, { id: 34, person1_id: 'p23', person2_id: 'p24', type: 'spouse' }, { id: 35, person1_id: 'p9', person2_id: 'p25', type: 'parent' }, { id: 36, person1_id: 'p10', person2_id: 'p25', type: 'parent' }, { id: 37, person1_id: 'p9', person2_id: 'p27', type: 'parent' }, { id: 38, person1_id: 'p10', person2_id: 'p27', type: 'parent' }, { id: 39, person1_id: 'p11', person2_id: 'p29', type: 'parent' }, { id: 40, person1_id: 'p12', person2_id: 'p29', type: 'parent' }, { id: 41, person1_id: 'p11', person2_id: 'p31', type: 'parent' }, { id: 42, person1_id: 'p12', person2_id: 'p31', type: 'parent' }, { id: 43, person1_id: 'p14', person2_id: 'p32', type: 'parent' }, { id: 44, person1_id: 'p13', person2_id: 'p32', type: 'parent' }, { id: 45, person1_id: 'p14', person2_id: 'p34', type: 'parent' }, { id: 46, person1_id: 'p13', person2_id: 'p34', type: 'parent' }, { id: 47, person1_id: 'p15', person2_id: 'p35', type: 'parent' }, { id: 48, person1_id: 'p16', person2_id: 'p35', type: 'parent' }, { id: 49, person1_id: 'p15', person2_id: 'p37', type: 'parent' }, { id: 50, person1_id: 'p16', person2_id: 'p37', type: 'parent' }, { id: 51, person1_id: 'p18', person2_id: 'p38', type: 'parent' }, { id: 52, person1_id: 'p17', person2_id: 'p38', type: 'parent' }, { id: 53, person1_id: 'p18', person2_id: 'p40', type: 'parent' }, { id: 54, person1_id: 'p17', person2_id: 'p40', type: 'parent' }, { id: 55, person1_id: 'p19', person2_id: 'p41', type: 'parent' }, { id: 56, person1_id: 'p20', person2_id: 'p41', type: 'parent' }, { id: 57, person1_id: 'p19', person2_id: 'p43', type: 'parent' }, { id: 58, person1_id: 'p20', person2_id: 'p43', type: 'parent' }, { id: 59, person1_id: 'p22', person2_id: 'p44', type: 'parent' }, { id: 60, person1_id: 'p21', person2_id: 'p44', type: 'parent' }, { id: 61, person1_id: 'p23', person2_id: 'p46', type: 'parent' }, { id: 62, person1_id: 'p24', person2_id: 'p46', type: 'parent' }, { id: 63, person1_id: 'p23', person2_id: 'p47', type: 'parent' }, { id: 64, person1_id: 'p24', person2_id: 'p47', type: 'parent' }, { id: 65, person1_id: 'p25', person2_id: 'p26', type: 'spouse' }, { id: 66, person1_id: 'p28', person2_id: 'p27', type: 'spouse' }, { id: 67, person1_id: 'p29', person2_id: 'p30', type: 'spouse' }, { id: 68, person1_id: 'p31', person2_id: 'p67', type: 'spouse' }, { id: 69, person1_id: 'p33', person2_id: 'p32', type: 'spouse' }, { id: 70, person1_id: 'p34', person2_id: 'p69', type: 'spouse' }, { id: 71, person1_id: 'p35', person2_id: 'p36', type: 'spouse' }, { id: 72, person1_id: 'p39', person2_id: 'p38', type: 'spouse' }, { id: 73, person1_id: 'p41', person2_id: 'p42', type: 'spouse' }, { id: 74, person1_id: 'p44', person2_id: 'p45', type: 'spouse' }, { id: 75, person1_id: 'p25', person2_id: 'p48', type: 'parent' }, { id: 76, person1_id: 'p26', person2_id: 'p48', type: 'parent' }, { id: 77, person1_id: 'p25', person2_id: 'p49', type: 'parent' }, { id: 78, person1_id: 'p26', person2_id: 'p49', type: 'parent' }, { id: 79, person1_id: 'p25', person2_id: 'p65', type: 'parent' }, { id: 80, person1_id: 'p26', person2_id: 'p65', type: 'parent' }, { id: 81, person1_id: 'p28', person2_id: 'p50', type: 'parent' }, { id: 82, person1_id: 'p27', person2_id: 'p50', type: 'parent' }, { id: 83, person1_id: 'p28', person2_id: 'p51', type: 'parent' }, { id: 84, person1_id: 'p27', person2_id: 'p51', type: 'parent' }, { id: 85, person1_id: 'p29', person2_id: 'p52', type: 'parent' }, { id: 86, person1_id: 'p30', person2_id: 'p52', type: 'parent' }, { id: 87, person1_id: 'p29', person2_id: 'p53', type: 'parent' }, { id: 88, person1_id: 'p30', person2_id: 'p53', type: 'parent' }, { id: 89, person1_id: 'p29', person2_id: 'p66', type: 'parent' }, { id: 90, person1_id: 'p30', person2_id: 'p66', type: 'parent' }, { id: 91, person1_id: 'p31', person2_id: 'p68', type: 'parent' }, { id: 92, person1_id: 'p67', person2_id: 'p68', type: 'parent' }, { id: 93, class: 'spouse', person1_id: 'p33', person2_id: 'p54', type: 'parent' }, { id: 94, person1_id: 'p32', person2_id: 'p54', type: 'parent' }, { id: 95, person1_id: 'p33', person2_id: 'p55', type: 'parent' }, { id: 96, person1_id: 'p32', person2_id: 'p55', type: 'parent' }, { id: 97, person1_id: 'p34', person2_id: 'p70', type: 'parent' }, { id: 98, person1_id: 'p69', person2_id: 'p70', type: 'parent' }, { id: 99, person1_id: 'p35', person2_id: 'p56', type: 'parent' }, { id: 100, person1_id: 'p36', person2_id: 'p56', type: 'parent' }, { id: 101, person1_id: 'p35', person2_id: 'p57', type: 'parent' }, { id: 102, person1_id: 'p36', person2_id: 'p57', type: 'parent' }, { id: 103, person1_id: 'p35', person2_id: 'p58', type: 'parent' }, { id: 104, person1_id: 'p36', person2_id: 'p58', type: 'parent' }, { id: 105, person1_id: 'p39', person2_id: 'p59', type: 'parent' }, { id: 106, person1_id: 'p38', person2_id: 'p59', type: 'parent' }, { id: 107, person1_id: 'p39', person2_id: 'p60', type: 'parent' }, { id: 108, person1_id: 'p38', person2_id: 'p60', type: 'parent' }, { id: 109, person1_id: 'p41', person2_id: 'p61', type: 'parent' }, { id: 110, person1_id: 'p42', person2_id: 'p61', type: 'parent' }, { id: 111, person1_id: 'p41', person2_id: 'p62', type: 'parent' }, { id: 112, person1_id: 'p42', person2_id: 'p62', type: 'parent' }, { id: 113, person1_id: 'p44', person2_id: 'p63', type: 'parent' }, { id: 114, person1_id: 'p45', person2_id: 'p63', type: 'parent' }, { id: 115, person1_id: 'p44', person2_id: 'p64', type: 'parent' }, { id: 116, person1_id: 'p45', person2_id: 'p64', type: 'parent' }];
+        const SEED_GROUPS = [{ id: 'g1', name: 'Chitate Clan', icon: '🏠', visibility: 'network', members: ['p1', 'p3', 'p7', 'p9', 'p11', 'p19', 'p23', 'p25', 'p29', 'p31', 'p41', 'p48', 'p52'] }, { id: 'g2', name: 'Siblings (Gen 4)', icon: '👫', visibility: 'private', members: ['p25', 'p27', 'p29', 'p31', 'p35', 'p37', 'p41'] }, { id: 'g3', name: 'Ndebele Connection', icon: '🌍', visibility: 'network', members: ['p4', 'p8', 'p10', 'p12', 'p18', 'p20', 'p22', 'p26', 'p28', 'p30', 'p33', 'p42', 'p44'] }];
+        const SEED_POSTS = [{ id: 1, authorId: 'p25', imageEmoji: '🏡', caption: 'Family gathering at the Chitate homestead in Harare. Five generations under one roof!', visibility: 'public_network', timestamp: Date.now() - 86400000 * 2 }, { id: 2, authorId: 'p26', imageEmoji: '🎓', caption: 'Anashe started Grade 7 this year. The Mhofu totem continues to rise! 🐃', visibility: 'public_network', timestamp: Date.now() - 86400000 * 5 }, { id: 3, authorId: 'p35', imageEmoji: '📸', caption: "Moyo family reunion in Manicaland. Honouring Sekuru Christopher's legacy.", visibility: 'groupIds', groupIds: ['g2'], timestamp: Date.now() - 86400000 * 12 }];
+        
+        const App = {
+            db: null,
+            persons: [],
+            relationships: [],
+            groups: [],
+            posts: [],
+            rootPersonId: 'p25',
+            settings: { solid: false, colorbranch: true, hidecousins: false, rellabels: true, generations: 5 },
+            
+            // Zoom/Pan Workspace Values
+            panX: 0,
+            panY: 0,
+            scale: 0.9,
+            isDragging: false,
+            nodeWidth: 175,
+            nodeHeight: 75,
+            vGap: 70,
+            hGap: 25,
+            nodeMap: new Map(),
+
+            initDB() { 
+                return new Promise((res, rej) => { 
+                    const r = indexedDB.open('FamilyRootsDB', 3);
+                    r.onupgradeneeded = e => { 
+                        const db = e.target.result;
+                        ['persons', 'relationships', 'groups', 'posts'].forEach(s => { 
+                            if (!db.objectStoreNames.contains(s)) db.createObjectStore(s, { keyPath: 'id', autoIncrement: s !== 'persons' && s !== 'groups' }); 
+                        }); 
+                    };
+                    r.onsuccess = e => { 
+                        this.db = e.target.result;
+                        res(); 
+                    };
+                    r.onerror = () => rej(); 
+                }); 
+            },
+
+            idbGetAll(store) { 
+                return new Promise((res, rej) => { 
+                    const tx = this.db.transaction(store, 'readonly');
+                    const req = tx.objectStore(store).getAll();
+                    req.onsuccess = () => res(req.result);
+                    req.onerror = () => rej(); 
+                }); 
+            },
+
+            idbCount(store) { 
+                return new Promise(res => { 
+                    const tx = this.db.transaction(store, 'readonly');
+                    const req = tx.objectStore(store).count();
+                    req.onsuccess = () => res(req.result); 
+                }); 
+            },
+
+            async loadAll() { 
+                this.persons = await this.idbGetAll('persons');
+                this.relationships = await this.idbGetAll('relationships');
+                this.groups = await this.idbGetAll('groups');
+                this.posts = await this.idbGetAll('posts'); 
+            },
+
+            async seedIfEmpty() { 
+                const c = await this.idbCount('persons'); 
+                if (c > 0) return; 
+                const tx = this.db.transaction(['persons', 'relationships', 'groups', 'posts'], 'readwrite');
+                SEED_PERSONS.forEach(p => tx.objectStore('persons').put(p));
+                SEED_RELS.forEach(r => tx.objectStore('relationships').put(r));
+                SEED_GROUPS.forEach(g => tx.objectStore('groups').put(g));
+                SEED_POSTS.forEach(p => tx.objectStore('posts').put(p)); 
+                return new Promise(res => { tx.oncomplete = res; }); 
+            },
+
+            navigate(role) { 
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
+                if (role === 'regular') { 
+                    document.getElementById('regular-app').classList.add('active');
+                    this.showView('tree'); 
+                } else if (role === 'institutional') { 
+                    document.getElementById('institutional-app').classList.add('active');
+                    this.initInstitutional(); 
+                } else { 
+                    document.getElementById('welcome-screen').classList.add('active'); 
+                } 
+            },
+
+            showView(name) { 
+                const titles = { tree: 'Family Tree', timeline: 'Timeline', groups: 'My Groups', profile: 'My Profile' };
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById(name + '-view').classList.add('active');
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
+                const nav = document.querySelector(`.nav-item[data-view="${name}"]`); 
+                if (nav) nav.classList.add('active');
+                document.getElementById('topbarTitle').textContent = titles[name] || name;
+                document.getElementById('settingsBtn').style.display = name === 'tree' ? '' : 'none'; 
+                
+                if (name === 'tree') { 
+                    this.renderTree(); 
+                    this.centerOnRoot();
+                } 
+                if (name === 'timeline') this.renderTimeline(); 
+                if (name === 'groups') this.renderGroups(); 
+                if (name === 'profile') this.renderProfile(); 
+            },
+
+            toggleSettings() { document.getElementById('settings-overlay').classList.add('active'); },
+            closeSettings() { 
+                document.getElementById('settings-overlay').classList.remove('active');
+                this.renderTree(); 
+            },
+
+            toggleSetting(key) { 
+                this.settings[key] = !this.settings[key]; 
+                const capKey = key.charAt(0).toUpperCase() + key.slice(1); 
+                const el = document.getElementById('toggle' + capKey); 
+                if (el) el.classList.toggle('on', this.settings[key]);
+                this.renderTree(); 
+            },
+
+            updateGen(v) { 
+                this.settings.generations = parseInt(v);
+                document.getElementById('genValue').textContent = v;
+                this.renderTree(); 
+            },
+
+            getParents(id) { return this.relationships.filter(r => r.type === 'parent' && r.person2_id === id).map(r => r.person1_id); },
+            getChildren(id) { return this.relationships.filter(r => r.type === 'parent' && r.person1_id === id).map(r => r.person2_id); },
+            getSpouse(id) { 
+                const rel = this.relationships.find(r => r.type === 'spouse' && (r.person1_id === id || r.person2_id === id)); 
+                if (!rel) return null; 
+                return rel.person1_id === id ? rel.person2_id : rel.person1_id; 
+            },
+
+            getSiblings(id) { 
+                const parents = this.getParents(id); 
+                if (!parents.length) return []; 
+                const sibs = new Set();
+                parents.forEach(pid => { this.getChildren(pid).forEach(cid => { if (cid !== id) sibs.add(cid); }); }); 
+                return [...sibs]; 
+            },
+
+            getRelationLabel(personId, otherId) { 
+                const person = this.persons.find(p => p.id === personId); 
+                const other = this.persons.find(p => p.id === otherId); 
+                if (!person || !other) return ''; 
+                const rel = this.relationships.find(r => (r.person1_id === personId && r.person2_id === otherId) || (r.person2_id === personId && r.person1_id === otherId)); 
+                if (!rel) { 
+                    const sibs = this.getSiblings(personId); 
+                    if (sibs.includes(otherId)) { 
+                        if (other.gender === 'M') return 'brother'; 
+                        if (other.gender === 'F') return 'sister'; 
+                        return 'sibling'; 
+                    } 
+                    return ''; 
+                } 
+                if (rel.type === 'spouse') { 
+                    if (other.gender === 'M') return 'husband'; 
+                    if (other.gender === 'F') return 'wife'; 
+                    return 'spouse'; 
+                } 
+                if (rel.type === 'parent') { 
+                    if (rel.person1_id === personId && rel.person2_id === otherId) { 
+                        if (person.gender === 'M') return 'father'; 
+                        if (person.gender === 'F') return 'mother'; 
+                        return 'parent'; 
+                    } 
+                    if (rel.person2_id === personId && rel.person1_id === otherId) { 
+                        if (other.gender === 'M') return 'father'; 
+                        if (other.gender === 'F') return 'mother'; 
+                        return 'parent'; 
+                    } 
+                } 
+                return rel.type; 
+            },
+
+            /* Pan and Zoom Engine */
+            initTreeGestures() { 
+                const container = document.getElementById('tree-container');
+                let startX, startY;
+
+                container.addEventListener('mousedown', e => { 
+                    if (e.target.closest('.tree-card') || e.target.closest('.tree-fab-container')) return;
+                    this.isDragging = true;
+                    startX = e.clientX - this.panX;
+                    startY = e.clientY - this.panY; 
+                });
+
+                window.addEventListener('mousemove', e => { 
+                    if (!this.isDragging) return; 
+                    this.panX = e.clientX - startX;
+                    this.panY = e.clientY - startY;
+                    this.updateTransform();
+                });
+
+                window.addEventListener('mouseup', () => { 
+                    this.isDragging = false; 
+                });
+
+                let touchStartX, touchStartY;
+                container.addEventListener('touchstart', e => { 
+                    if (e.target.closest('.tree-card') || e.target.closest('.tree-fab-container')) return;
+                    if (e.touches.length === 1) {
+                        this.isDragging = true;
+                        touchStartX = e.touches[0].clientX - this.panX;
+                        touchStartY = e.touches[0].clientY - this.panY;
+                    }
+                }, { passive: true });
+
+                container.addEventListener('touchmove', e => { 
+                    if (!this.isDragging) return; 
+                    if (e.touches.length === 1) {
+                        this.panX = e.touches[0].clientX - touchStartX;
+                        this.panY = e.touches[0].clientY - touchStartY;
+                        this.updateTransform();
+                    }
+                }, { passive: true });
+
+                container.addEventListener('touchend', () => { 
+                    this.isDragging = false; 
+                });
+
+                container.addEventListener('wheel', e => {
+                    e.preventDefault();
+                    const zoomFactor = 0.05;
+                    if (e.deltaY < 0) {
+                        this.scale = Math.min(this.scale + zoomFactor, 1.8);
+                    } else {
+                        this.scale = Math.max(this.scale - zoomFactor, 0.4);
+                    }
+                    this.updateTransform();
+                }, { passive: false });
+            },
+
+            updateTransform() {
+                const workspace = document.getElementById('tree-workspace');
+                workspace.style.transform = `translate(${this.panX}px, ${this.panY}px) scale(${this.scale})`;
+            },
+
+            centerOnRoot() {
+                const container = document.getElementById('tree-container');
+                const containerW = container.clientWidth;
+                const containerH = container.clientHeight;
+                
+                this.panX = (containerW / 2) - (2500 * this.scale);
+                this.panY = (containerH / 2) - (2500 * this.scale);
+                this.updateTransform();
+            },
+
+            /* Coordinate layout generation */
+            calculateLayout() {
+                this.nodeMap.clear();
+                const root = this.persons.find(p => p.id === this.rootPersonId);
+                if (!root) return;
+
+                const placedSet = new Set();
+                const s = this.settings;
+                const cx = 2500;
+                const cy = 2500;
+
+                const place = (id, x, y, gen, colorIdx) => {
+                    if (placedSet.has(id)) return;
+                    placedSet.add(id);
+
+                    const p = this.persons.find(pe => pe.id === id);
+                    if (!p) return;
+
+                    this.nodeMap.set(id, { x, y, gen, person: p });
+
+                    // Parent generation calculation
+                    if (gen < s.generations && gen >= 0) {
+                        const parents = this.getParents(id);
+                        if (parents.length > 0 && !s.hidecousins) {
+                            const pY = y - this.nodeHeight - this.vGap;
+                            const dadId = parents.find(pid => this.persons.find(pe => pe.id === pid)?.gender === 'M') || parents[0];
+                            const momId = parents.find(pid => pid !== dadId);
+
+                            if (dadId && momId) {
+                                place(dadId, x - (this.nodeWidth / 2 + this.hGap), pY, gen + 1, colorIdx + 1);
+                                place(momId, x + (this.nodeWidth / 2 + this.hGap), pY, gen + 1, colorIdx + 2);
+                            } else if (dadId) {
+                                place(dadId, x, pY, gen + 1, colorIdx + 1);
+                            }
+                        }
+                    }
+
+                    // Spouse placement
+                    const spouseId = this.getSpouse(id);
+                    if (spouseId && !placedSet.has(spouseId)) {
+                        place(spouseId, x + this.nodeWidth + this.hGap * 1.5, y, gen, colorIdx);
+                    }
+
+                    // Children layout
+                    if (gen === 0 || gen === -1) {
+                        const children = this.getChildren(id);
+                        if (children.length > 0 && !s.hidecousins) {
+                            const chY = y + this.nodeHeight + this.vGap;
+                            let centerX = x;
+                            if (spouseId) {
+                                centerX = (x + (x + this.nodeWidth + this.hGap * 1.5)) / 2;
+                            }
+                            const totalWidth = children.length * this.nodeWidth + (children.length - 1) * this.hGap;
+                            const startX = centerX - totalWidth / 2;
+
+                            children.forEach((cid, idx) => {
+                                place(cid, startX + idx * (this.nodeWidth + this.hGap), chY, gen <= 0 ? -1 : gen - 1, colorIdx);
+                            });
+                        }
+                    }
+                };
+
+                place(root.id, cx - this.nodeWidth / 2, cy - this.nodeHeight / 2, 0, 0);
+            },
+
+            renderTree() {
+                const workspace = document.getElementById('tree-workspace');
+                const svgContainer = document.getElementById('tree-connections-svg');
+
+                const oldNodes = workspace.querySelectorAll('.tree-node-wrapper');
+                oldNodes.forEach(n => n.remove());
+                svgContainer.innerHTML = '';
+
+                this.calculateLayout();
+
+                const s = this.settings;
+
+                // 1. Render modern line vectors inside responsive SVG
+                this.relationships.forEach(rel => {
+                    const a = this.nodeMap.get(rel.person1_id);
+                    const b = this.nodeMap.get(rel.person2_id);
+                    if (!a || !b) return;
+
+                    if (rel.type === 'parent') {
+                        const x1 = a.x + this.nodeWidth / 2;
+                        const y1 = a.y + this.nodeHeight;
+                        const x2 = b.x + this.nodeWidth / 2;
+                        const y2 = b.y;
+
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        const midY = (y1 + y2) / 2;
+                        
+                        path.setAttribute('d', `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`);
+                        path.setAttribute('stroke', s.colorbranch ? 'var(--deep-green)' : 'var(--light-grey)');
+                        path.setAttribute('stroke-width', '2.5');
+                        path.setAttribute('fill', 'none');
+                        svgContainer.appendChild(path);
+
+                        if (s.rellabels) {
+                            const labelText = this.getRelationLabel(rel.person2_id, rel.person1_id);
+                            if (labelText) {
+                                createSvgLabel((x1 + x2) / 2, midY, labelText);
+                            }
+                        }
+                    } else if (rel.type === 'spouse') {
+                        const x1 = a.x + this.nodeWidth;
+                        const y1 = a.y + this.nodeHeight / 2;
+                        const x2 = b.x;
+                        const y2 = b.y + this.nodeHeight / 2;
+
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`);
+                        path.setAttribute('stroke', 'var(--muted-text)');
+                        path.setAttribute('stroke-width', '2');
+                        path.setAttribute('stroke-dasharray', '5,4');
+                        path.setAttribute('fill', 'none');
+                        svgContainer.appendChild(path);
+
+                        if (s.rellabels) {
+                            const labelText = this.getRelationLabel(rel.person1_id, rel.person2_id);
+                            if (labelText) {
+                                createSvgLabel((x1 + x2) / 2, y1 - 8, labelText);
+                            }
+                        }
+                    }
+                });
+
+                function createSvgLabel(x, y, text) {
+                    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    
+                    txt.textContent = text;
+                    txt.setAttribute('fill', 'var(--near-black)');
+                    txt.setAttribute('font-size', '9px');
+                    txt.setAttribute('font-weight', '600');
+                    txt.setAttribute('font-family', 'system-ui');
+                    txt.setAttribute('text-anchor', 'middle');
+                    txt.setAttribute('dominant-baseline', 'middle');
+                    txt.setAttribute('x', x);
+                    txt.setAttribute('y', y);
+                    
+                    const labelWidth = text.length * 6 + 10;
+                    rect.setAttribute('x', x - labelWidth / 2);
+                    rect.setAttribute('y', y - 8);
+                    rect.setAttribute('width', labelWidth);
+                    rect.setAttribute('height', 16);
+                    rect.setAttribute('rx', '8');
+                    rect.setAttribute('fill', 'var(--soft-sage)');
+                    rect.setAttribute('stroke', 'var(--light-grey)');
+                    rect.setAttribute('stroke-width', '1');
+                    
+                    g.appendChild(rect);
+                    g.appendChild(txt);
+                    svgContainer.appendChild(g);
+                }
+
+                // 2. Render contact style DOM Nodes
+                this.nodeMap.forEach((pos, id) => {
+                    const person = pos.person;
+                    const isDeceased = !!person.deathDate;
+
+                    const nodeWrapper = document.createElement('div');
+                    nodeWrapper.className = 'tree-node-wrapper';
+                    nodeWrapper.style.left = `${pos.x}px`;
+                    nodeWrapper.style.top = `${pos.y}px`;
+
+                    let cardModifier = '';
+                    if (isDeceased) {
+                        cardModifier = 'deceased';
+                    } else if (person.gender === 'M') {
+                        cardModifier = 'gender-m';
+                    } else {
+                        cardModifier = 'gender-f';
+                    }
+
+                    if (s.solid && !isDeceased) {
+                        nodeWrapper.style.setProperty('--male-bg', '#dce8f2');
+                        nodeWrapper.style.setProperty('--female-bg', '#f5dce4');
+                    } else {
+                        nodeWrapper.style.removeProperty('--male-bg');
+                        nodeWrapper.style.removeProperty('--female-bg');
+                    }
+
+                    nodeWrapper.innerHTML = `
+                        <div class="tree-card ${cardModifier}" onclick="App.showPerson('${id}')">
+                            <div class="card-left-bar"></div>
+                            <div class="card-body">
+                                <div class="card-avatar">${person.totemIcon || '👤'}</div>
+                                <div class="card-details">
+                                    <div class="card-name">${person.givenName}</div>
+                                    <div class="card-pill">${person.chidawo || person.mitupo || 'No Totem'}</div>
+                                </div>
+                            </div>
+                            <button class="card-plus-btn" onclick="event.stopPropagation(); App.showAddRelationMenu('${id}')">+</button>
+                        </div>
+                    `;
+                    workspace.appendChild(nodeWrapper);
+                });
+            },
+
+            showAddRelationMenu(personId) { 
+                const person = this.persons.find(p => p.id === personId); 
+                if (!person) return; 
+                const options = [
+                    { label: 'Add Spouse', action: 'addSpouse', icon: '💍' }, 
+                    { label: 'Add Child', action: '👶' + ' Add Child', isSimple: true, actionType: 'addChild' }, 
+                    { label: 'Add Parent', action: '👆' + ' Add Parent', isSimple: true, actionType: 'addParent' }, 
+                    { label: 'Add Sibling', action: '👫' + ' Add Sibling', isSimple: true, actionType: 'addSibling' }, 
+                    { label: 'Edit Person', action: 'editPerson', icon: '✏️' }, 
+                    { label: 'Remove Person', action: 'removePerson', icon: '🗑️' }
+                ]; 
+                
+                const menuHTML = options.map(o => {
+                    if (o.isSimple) {
+                        return `<button class="rel-action-btn add" onclick="App.handleRelationAction('${o.actionType}','${personId}')">${o.action}</button>`;
+                    }
+                    return `<button class="rel-action-btn add" onclick="App.handleRelationAction('${o.action}','${personId}')">${o.icon} ${o.label}</button>`;
+                }).join(''); 
+
+                const sheet = document.getElementById('person-sheet-content');
+                sheet.innerHTML = `
+                    <div class="person-sheet-handle"></div>
+                    <div class="person-sheet-header">
+                        <div class="person-sheet-icon">${person.totemIcon||'👤'}</div>
+                        <div class="person-sheet-name">${person.givenName} ${person.familyName}</div>
+                        <div class="person-sheet-totem">${person.mitupo} · ${person.chidawo}</div>
+                    </div>
+                    <div style="font-weight:800;font-size:0.9rem;margin-bottom:0.5rem; letter-spacing: -0.01em;">Manage Relations</div>
+                    <div class="relation-actions">${menuHTML}</div>
+                    <button class="person-sheet-close" onclick="App.closePersonModal()">Close</button>
+                `;
+                document.getElementById('person-modal').classList.add('active'); 
+            },
+
+            handleRelationAction(action, personId) { 
+                const person = this.persons.find(p => p.id === personId); 
+                if (!person) return; 
+                switch (action) { 
+                    case 'addSpouse': this.promptAddPerson('spouse', personId); break; 
+                    case 'addChild': this.promptAddPerson('child', personId); break; 
+                    case 'addParent': this.promptAddPerson('parent', personId); break; 
+                    case 'addSibling': this.promptAddPerson('sibling', personId); break; 
+                    case 'editPerson': this.editPersonInline(personId); break; 
+                    case 'removePerson': 
+                        if (confirm(`Remove ${person.givenName} ${person.familyName} and all their relationships? This cannot be undone.`)) { 
+                            this.removePerson(personId); 
+                        } 
+                        break; 
+                } 
+            },
+
+            promptAddPerson(relationType, personId) { 
+                const person = this.persons.find(p => p.id === personId); 
+                const relLabels = { spouse: 'spouse', child: 'child', parent: 'parent', sibling: 'sibling' }; 
+                const name = prompt(`Enter the full name of ${person.givenName}'s new ${relLabels[relationType]}:\n(e.g., "GivenName FamilyName")`); 
+                if (!name || !name.trim()) return; 
+                const parts = name.trim().split(' '); 
+                const givenName = parts[0]; 
+                const familyName = parts.length > 1 ? parts.slice(1).join(' ') : person.familyName; 
+                const gender = confirm(`Is ${givenName} male? (OK=Male, Cancel=Female)`) ? 'M' : 'F'; 
+                const newId = 'p' + Date.now(); 
+                
+                const newPerson = { id: newId, givenName, familyName, gender, birthDate: '', mitupo: person.mitupo, chidawo: person.chidawo, tribe: person.tribe, region: person.region, totemIcon: person.totemIcon, phone: '' };
+                this.persons.push(newPerson); 
+                
+                const tx = this.db.transaction('persons', 'readwrite');
+                tx.objectStore('persons').put(newPerson); 
+                
+                const relTx = this.db.transaction('relationships', 'readwrite'); 
+                const relStore = relTx.objectStore('relationships'); 
+                
+                if (relationType === 'spouse') { 
+                    const rel = { id: Date.now(), person1_id: personId, person2_id: newId, type: 'spouse' };
+                    this.relationships.push(rel);
+                    relStore.put(rel); 
+                } else if (relationType === 'child') { 
+                    const rel = { id: Date.now(), person1_id: personId, person2_id: newId, type: 'parent' };
+                    this.relationships.push(rel);
+                    relStore.put(rel); 
+                    const spouse = this.getSpouse(personId); 
+                    if (spouse) { 
+                        const rel2 = { id: Date.now() + 1, person1_id: spouse, person2_id: newId, type: 'parent' };
+                        this.relationships.push(rel2);
+                        relStore.put(rel2); 
+                    } 
+                } else if (relationType === 'parent') { 
+                    const rel = { id: Date.now(), person1_id: newId, person2_id: personId, type: 'parent' };
+                    this.relationships.push(rel);
+                    relStore.put(rel); 
+                } else if (relationType === 'sibling') { 
+                    const parents = this.getParents(personId);
+                    parents.forEach(pid => { 
+                        const rel = { id: Date.now() + Math.random(), person1_id: pid, person2_id: newId, type: 'parent' };
+                        this.relationships.push(rel);
+                        relStore.put(rel); 
+                    }); 
+                }
+                this.closePersonModal();
+                this.renderTree();
+                alert(`✅ ${givenName} added as ${relLabels[relationType]}!`); 
+            },
+
+            editPersonInline(personId) { 
+                const person = this.persons.find(p => p.id === personId); 
+                if (!person) return; 
+                const newName = prompt('Edit name:', person.givenName + ' ' + person.familyName); 
+                if (newName && newName.trim()) { 
+                    const parts = newName.trim().split(' ');
+                    person.givenName = parts[0];
+                    person.familyName = parts.slice(1).join(' ') || ''; 
+                    const tx = this.db.transaction('persons', 'readwrite');
+                    tx.objectStore('persons').put(person);
+                    this.closePersonModal();
+                    this.renderTree(); 
+                } 
+            },
+
+            removePerson(personId) { 
+                this.relationships = this.relationships.filter(r => r.person1_id !== personId && r.person2_id !== personId);
+                this.persons = this.persons.filter(p => p.id !== personId); 
+                const tx = this.db.transaction(['persons', 'relationships'], 'readwrite');
+                tx.objectStore('persons').delete(personId);
+                
+                const relStore = tx.objectStore('relationships');
+                relStore.clear();
+                this.relationships.forEach(r => relStore.put(r));
+                
+                this.closePersonModal();
+                this.renderTree(); 
+            },
+
+            renderTimeline() { 
+                const c = document.getElementById('timeline-content');
+                c.innerHTML = '';
+                [...this.posts].sort((a, b) => b.timestamp - a.timestamp).forEach(post => { 
+                    const author = this.persons.find(p => p.id === post.authorId); 
+                    const daysAgo = Math.round((Date.now() - post.timestamp) / 86400000); 
+                    const timeStr = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : `${daysAgo}d ago`; 
+                    const div = document.createElement('div');
+                    div.className = 'post';
+                    div.innerHTML = `
+                        <div class="post-header">
+                            <div class="post-avatar">${author?.givenName?.[0]||'?'}</div>
+                            <div class="post-meta">
+                                <strong>${author?.givenName||'Unknown'} ${author?.familyName||''}<span class="privacy-badge">${post.visibility==='public_network'?'🌍 Network':'👥 Group'}</span></strong>
+                                <span class="post-time">${timeStr}</span>
+                            </div>
+                        </div>
+                        <div class="post-image">${post.imageEmoji||'🖼️'}</div>
+                        <div class="post-caption">${post.caption}</div>
+                        <div class="post-totem">${author?.totemIcon||''} ${author?.mitupo||''} · ${author?.chidawo||''}</div>
+                    `;
+                    c.appendChild(div); 
+                }); 
+            },
+
+            renderGroups() { 
+                const c = document.getElementById('groups-content');
+                c.innerHTML = '';
+                this.groups.forEach(g => { 
+                    const div = document.createElement('div');
+                    div.className = 'group-card';
+                    div.innerHTML = `
+                        <div>
+                            <div class="group-icon">${g.icon||'👥'}</div>
+                            <div class="group-name">${g.name}<span class="badge-vis">${g.visibility==='private'?'🔒 Private':'🌍 Network'}</span></div>
+                            <div class="group-meta">${g.members.length} member${g.members.length!==1?'s':''}</div>
+                        </div>
+                        <button class="btn-sm" onclick="App.openGroup('${g.id}')">View</button>
+                    `;
+                    c.appendChild(div); 
+                }); 
+            },
+
+            openGroup(id) { 
+                const g = this.groups.find(x => x.id === id); 
+                if (!g) return; 
+                const members = g.members.map(mid => this.persons.find(p => p.id === mid)).filter(Boolean);
+                alert(`${g.icon} ${g.name}\n\nMembers:\n${members.map(m=>m.givenName+' '+m.familyName).join('\n')}`); 
+            },
+
+            showNewGroup() { alert('Group creation would be available in the full release.'); },
+
+            showAddPerson() { 
+                const name = prompt('Enter new person name:\n(e.g., "GivenName FamilyName")'); 
+                if (!name || !name.trim()) return; 
+                const parts = name.trim().split(' '); 
+                const givenName = parts[0]; 
+                const familyName = parts.length > 1 ? parts.slice(1).join(' ') : ''; 
+                const gender = confirm('Male? (OK=Male, Cancel=Female)') ? 'M' : 'F'; 
+                const newId = 'p' + Date.now(); 
+                
+                const newPerson = { id: newId, givenName, familyName, gender, birthDate: '', mitupo: '', chidawo: '', tribe: '', region: '', totemIcon: '👤', phone: '' };
+                this.persons.push(newPerson); 
+                
+                const tx = this.db.transaction('persons', 'readwrite');
+                tx.objectStore('persons').put(newPerson);
+                this.renderTree();
+                alert(`✅ ${givenName} added! Tap their + to add relations.`); 
+            },
+
+            renderProfile() { 
+                const c = document.getElementById('profile-content'); 
+                const person = this.persons.find(p => p.id === this.rootPersonId); 
+                if (!person) { 
+                    c.innerHTML = '<p style="padding:2rem;">No profile data found.</p>'; 
+                    return; 
+                }
+                c.innerHTML = `
+                    <div class="profile-hero">
+                        <div class="profile-avatar">${person.givenName[0]||'?'}</div>
+                        <div class="profile-name">${person.givenName} ${person.familyName}</div>
+                        <div class="profile-totem">${person.totemIcon} ${person.mitupo} · ${person.chidawo}</div>
+                    </div>
+                    <div class="profile-body">
+                        <div class="profile-card">
+                            <h4>Personal Details</h4>
+                            <div class="info-row"><span class="info-label">Born</span><span class="info-value">${person.birthDate||'—'}</span></div>
+                            <div class="info-row"><span class="info-label">Tribe</span><span class="info-value">${person.tribe||'—'}</span></div>
+                            <div class="info-row"><span class="info-label">Region</span><span class="info-value">${person.region||'—'}</span></div>
+                            <div class="info-row"><span class="info-label">Mitupo</span><span class="info-value">${person.mitupo||'—'}</span></div>
+                            <div class="info-row" style="border:none;"><span class="info-label">Chidawo</span><span class="info-value">${person.chidawo||'—'}</span></div>
+                        </div>
+                        <div class="profile-card">
+                            <h4>Contact & Share</h4>
+                            <a class="wa-btn" href="https://wa.me/${person.phone||'263700000000'}" target="_blank">💬 &nbsp;Message on WhatsApp</a>
+                            <button class="export-btn" onclick="App.exportData()">📤 &nbsp;Export My Tree</button>
+                            <div style="text-align:center;margin-top:0.3rem;">
+                                <span style="font-size:0.85rem;color:var(--muted-text);cursor:pointer;text-decoration:underline; font-weight:600;" onclick="document.getElementById('importSection').style.display='block';this.style.display='none'">Import a shared tree</span>
+                            </div>
+                            <div class="import-area" id="importSection" style="display:none;">
+                                <textarea id="importJson" rows="3" placeholder="Paste FAMTREE::... snippet here"></textarea>
+                                <button class="btn-import" onclick="App.importData()">Import</button>
+                            </div>
+                        </div>
+                    </div>
+                `; 
+            },
+
+            initInstitutional() { 
+                const input = document.getElementById('instSearch'); 
+                const results = document.getElementById('instResults'); 
+                const render = (query = '') => { 
+                    const q = query.toLowerCase(); 
+                    let html = ''; 
+                    for (const [mainName, main] of Object.entries(TRIBES)) { 
+                        if (main.subgroups) { 
+                            for (const [subName, sub] of Object.entries(main.subgroups)) { 
+                                sub.mitupo.forEach(t => { 
+                                    if (!q || t.totem.toLowerCase().includes(q) || t.chidawo.toLowerCase().includes(q) || subName.toLowerCase().includes(q) || mainName.toLowerCase().includes(q) || sub.region.toLowerCase().includes(q)) { 
+                                        html += `
+                                            <div class="result-item">
+                                                <span class="result-icon">${t.icon}</span>
+                                                <div>
+                                                    <div class="result-name">${t.totem}</div>
+                                                    <div class="result-meta">${t.chidawo} · ${subName}, ${mainName} · ${sub.region}</div>
+                                                </div>
+                                            </div>
+                                        `; 
+                                    } 
+                                }); 
+                            } 
+                        } else { 
+                            main.mitupo.forEach(t => { 
+                                if (!q || t.totem.toLowerCase().includes(q) || t.chidawo.toLowerCase().includes(q) || mainName.toLowerCase().includes(q) || main.region.toLowerCase().includes(q)) { 
+                                    html += `
+                                        <div class="result-item">
+                                            <span class="result-icon">${t.icon}</span>
+                                            <div>
+                                                <div class="result-name">${t.totem}</div>
+                                                <div class="result-meta">${t.chidawo} · ${mainName} · ${main.region}</div>
+                                            </div>
+                                        </div>
+                                    `; 
+                                } 
+                            }); 
+                        } 
+                    }
+                    results.innerHTML = html || '<div style="padding:1rem;color:var(--muted-text);font-size:0.9rem;">No matches found.</div>'; 
+                };
+                render();
+                input.oninput = e => render(e.target.value); 
+            },
+
+            exportData() { 
+                const data = { persons: this.persons, relationships: this.relationships, groups: this.groups, posts: this.posts }; 
+                const json = JSON.stringify(data); 
+                const b64 = btoa(unescape(encodeURIComponent(json))); 
+                const snippet = 'FAMTREE::' + b64; 
+                if (navigator.clipboard) { 
+                    navigator.clipboard.writeText(snippet).then(() => alert('✅ Copied! Paste into WhatsApp to share.')).catch(() => prompt('Copy:', snippet)); 
+                } else { 
+                    prompt('Copy:', snippet); 
+                } 
+            },
+
+            async importData() { 
+                const text = (document.getElementById('importJson').value || '').trim(); 
+                if (!text.startsWith('FAMTREE::')) { 
+                    alert('❌ Invalid format.'); 
+                    return; 
+                } 
+                try { 
+                    const b64 = text.replace('FAMTREE::', ''); 
+                    const json = decodeURIComponent(escape(atob(b64))); 
+                    const data = JSON.parse(json); 
+                    const tx = this.db.transaction(['persons', 'relationships', 'groups', 'posts'], 'readwrite');
+                    (data.persons || []).forEach(p => tx.objectStore('persons').put(p));
+                    (data.relationships || []).forEach(r => tx.objectStore('relationships').put(r));
+                    (data.groups || []).forEach(g => tx.objectStore('groups').put(g));
+                    (data.posts || []).forEach(p => tx.objectStore('posts').put(p)); 
+                    await new Promise(res => tx.oncomplete = res); 
+                    await this.loadAll();
+                    alert('✅ Tree imported!');
+                    this.renderTree(); 
+                } catch (e) { 
+                    alert('❌ Failed: ' + e.message); 
+                } 
+            },
+
+            showPerson(id) { 
+                const person = this.persons.find(p => p.id === id); 
+                if (!person) return; 
+                const rels = [];
+                this.relationships.forEach(r => { 
+                    if (r.person1_id === id || r.person2_id === id) { 
+                        const otherId = r.person1_id === id ? r.person2_id : r.person1_id; 
+                        const other = this.persons.find(p => p.id === otherId); 
+                        if (other) { 
+                            const label = this.getRelationLabel(id, otherId);
+                            rels.push({ type: r.type, label: label || r.type, name: other.givenName + ' ' + other.familyName, icon: other.totemIcon, otherId }); 
+                        } 
+                    } 
+                }); 
+                const sheet = document.getElementById('person-sheet-content');
+                sheet.innerHTML = `
+                    <div class="person-sheet-handle"></div>
+                    <div class="person-sheet-header">
+                        <div class="person-sheet-icon">${person.totemIcon||'👤'}</div>
+                        <div class="person-sheet-name">${person.givenName} ${person.familyName}</div>
+                        <div class="person-sheet-totem">${person.mitupo} · ${person.chidawo}</div>
+                        ${person.deathDate?`<span class="deceased-tag">✝ Deceased (${person.deathDate})</span>`:''}
+                    </div>
+                    <div class="person-meta-grid">
+                        <div class="meta-cell"><div class="meta-cell-label">Tribe</div><div class="meta-cell-value">${person.tribe||'—'}</div></div>
+                        <div class="meta-cell"><div class="meta-cell-label">Region</div><div class="meta-cell-value">${person.region||'—'}</div></div>
+                        <div class="meta-cell"><div class="meta-cell-label">Born</div><div class="meta-cell-value">${person.birthDate||'—'}</div></div>
+                        <div class="meta-cell"><div class="meta-cell-label">Gender</div><div class="meta-cell-value">${person.gender==='M'?'Male':'Female'}</div></div>
+                    </div>
+                    ${rels.length?`
+                        <div style="margin-bottom:1rem;">
+                            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted-text);margin-bottom:0.5rem;font-weight:800;">Relations</div>
+                            ${rels.map(r=>`<div class="existing-rel"><span>${r.icon} ${r.name}</span><span class="rel-type">${r.label}</span></div>`).join('')}
+                        </div>
+                    `:''}
+                    <div class="relation-actions">
+                        <button class="rel-action-btn add" onclick="App.handleRelationAction('addSpouse','${id}');App.closePersonModal();">💍 Add Spouse</button>
+                        <button class="rel-action-btn add" onclick="App.handleRelationAction('addChild','${id}');App.closePersonModal();">👶 Add Child</button>
+                        <button class="rel-action-btn add" onclick="App.handleRelationAction('addParent','${id}');App.closePersonModal();">👆 Add Parent</button>
+                        <button class="rel-action-btn add" onclick="App.handleRelationAction('addSibling','${id}');App.closePersonModal();">👫 Add Sibling</button>
+                        <button class="rel-action-btn" onclick="App.handleRelationAction('editPerson','${id}');App.closePersonModal();">✏️ Edit Details</button>
+                    </div>
+                    ${person.phone?`<a class="wa-btn" href="https://wa.me/${person.phone}" target="_blank">💬 &nbsp;WhatsApp ${person.givenName}</a>`:''}
+                    <button class="person-sheet-close" onclick="App.closePersonModal()">Close</button>
+                `;
+                document.getElementById('person-modal').classList.add('active'); 
+            },
+
+            closePersonModal() { document.getElementById('person-modal').classList.remove('active'); }
+        };
+
+        window.onload = async () => { 
+            await App.initDB(); 
+            await App.seedIfEmpty(); 
+            await App.loadAll();
+            App.initTreeGestures();
+            
+            document.querySelectorAll('.nav-item').forEach(item => { 
+                item.addEventListener('click', () => App.showView(item.dataset.view)); 
+            });
+            
+            document.getElementById('settings-overlay').addEventListener('click', e => { 
+                if (e.target.id === 'settings-overlay') App.closeSettings(); 
+            }); 
+            
+            if ('serviceWorker' in navigator) { 
+                const sw = `self.addEventListener('install',e=>e.waitUntil(caches.open('famroots-v2').then(c=>c.add('/'))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`; 
+                const blob = new Blob([sw], { type: 'application/javascript' });
+                navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {}); 
+            } 
+        };
+    </script>
+</body>
+</html>

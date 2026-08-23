@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#161421">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<title>Roots — Zimbabwe Genealogy</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ WELCOME SCREEN ============ -->
+  <div id="welcome-screen" class="screen active">
+    <div class="welcome-content">
+      <div class="welcome-logo">
+        <svg viewBox="0 0 100 100" width="100" height="100">
+          <circle cx="50" cy="38" r="18" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+          <circle cx="22" cy="52" r="13" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="78" cy="52" r="13" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M50 56 L50 90" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M50 62 L30 52" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M50 62 L70 52" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="50" cy="38" r="4" fill="var(--accent)"/>
+        </svg>
+      </div>
+      <div class="welcome-sub">Zimbabwe Genealogy Platform</div>
+      <div class="welcome-title">Roots</div>
+      <div class="welcome-tagline">Preserve lineage. Share heritage.<br>Connect generations.</div>
+      <div class="welcome-buttons">
+        <button class="btn-gate primary" id="btnRegular">👤 Regular User</button>
+        <button class="btn-gate secondary" id="btnInstitutional">🏛️ Institutional User</button>
+      </div>
+    </div>
+    <div class="welcome-footer">Offline-First · v1.0</div>
+  </div>
+
+  <!-- ============ REGULAR USER APP ============ -->
+  <div id="regular-app" class="screen">
+    <div class="app-topbar">
+      <span class="topbar-back" id="topbarBack">‹</span>
+      <span class="topbar-title" id="topbarTitle">Timeline</span>
+      <div id="bloodlineIndicator" style="display:none;font-size:0.65rem;background:var(--lime);color:var(--text);padding:2px 8px;border-radius:999px;font-weight:700;white-space:nowrap;margin-left:auto;cursor:pointer;"></div>
+      <span class="topbar-action" id="settingsBtn">⚙️</span>
+    </div>
+    <div class="main-content">
+
+      <!-- TIMELINE VIEW — Instagram-style -->
+      <div id="timeline-view" class="view active">
+        <div class="ig-topbar">
+          <h2 class="ig-title">Roots</h2>
+          <span class="ig-notif-btn" id="igNotifBtn">♥</span>
+        </div>
+        <div class="ig-stories" id="igStories"></div>
+        <div class="ig-divider"></div>
+        <div id="timelineFeed"></div>
+      </div>
+
+      <!-- TREE VIEW — Temporal Cascade Matrix -->
+      <div id="tree-view" class="view">
+        <div id="stats-strip">
+          <div class="stat-cell"><div class="stat-label">Total People</div><div class="stat-value" id="stat-total">—</div></div>
+          <div class="stat-cell"><div class="stat-label">Blood Line</div><div class="stat-value" id="stat-blood">—</div></div>
+          <div class="stat-cell"><div class="stat-label">Married In</div><div class="stat-value" id="stat-married">—</div></div>
+          <div class="stat-cell"><div class="stat-label">Living</div><div class="stat-value" id="stat-living">—</div></div>
+          <div class="stat-cell"><div class="stat-label">Generations</div><div class="stat-value" id="stat-gens">—</div></div>
+        </div>
+        <div id="search-bar-wrap">
+          <input type="text" id="search-input" placeholder="Search by name or surname…">
+          <button class="top-text-btn" id="legend-toggle-btn-top">Legend</button>
+        </div>
+        <div id="main-row">
+          <div id="decade-rail"></div>
+          <div id="viewport">
+            <div id="canvas">
+              <svg id="connector-svg"></svg>
+            </div>
+          </div>
+        </div>
+        <div id="controls">
+          <button id="ego-switch-btn" class="ctrl-btn">View as: You</button>
+          <div class="zoom-group">
+            <button id="zoom-out" class="ctrl-btn zoom-btn">−</button>
+            <button id="zoom-fit" class="ctrl-btn zoom-btn" style="width:auto;padding:0 10px;font-size:10px;">FIT</button>
+            <button id="zoom-in" class="ctrl-btn zoom-btn">+</button>
+          </div>
+        </div>
+        <div id="legend-panel">
+          <div class="legend-title">Legend</div>
+          <div class="legend-group">
+            <div class="legend-group-label">Spouse Status</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:#1C1C1C;background:#fff;"></div>Civil marriage</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:#3E7D4C;background:#fff;"></div>Customary union (Roora paid)</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:#9A9A93;border-style:dashed;background:#fff;"></div>Cohabiting / unregistered</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:#C0392B;border-style:dotted;background:#fff;"></div>Severed / divorced</div>
+            <div class="legend-row"><div class="legend-swatch" style="border-color:#C8C8C2;background:#eee;"></div>Deceased</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GROUPS VIEW -->
+      <div id="groups-view" class="view">
+        <div class="groups-top">
+          <h2>My Groups</h2>
+          <button class="btn-sm" id="newGroupBtn">+ New</button>
+        </div>
+        <div id="groupsList"></div>
+      </div>
+
+      <!-- PROFILE VIEW -->
+      <div id="profile-view" class="view">
+        <div class="profile-hero">
+          <div class="profile-avatar" id="myAvatar">👤</div>
+          <div class="profile-name" id="myName">—</div>
+          <div class="profile-totem" id="myTotem"></div>
+        </div>
+        <button class="profile-groups-btn" id="goGroupsBtn">
+          <img src="assets/icons/people.svg" alt="">
+          <span>My Groups</span>
+        </button>
+        <div class="profile-body" id="myProfileBody"></div>
+      </div>
+
+      <!-- CULTURAL LIBRARY VIEW -->
+      <div id="library-view" class="view">
+        <div class="lib-topbar">
+          <h2 class="lib-topbar-title">📚 Cultural Library</h2>
+        </div>
+        <div class="library-tabs" id="libraryTabs">
+          <button class="lib-tab active" data-libtab="totems">Totems</button>
+          <button class="lib-tab" data-libtab="proverbs">Proverbs</button>
+          <button class="lib-tab" data-libtab="greetings">Greetings</button>
+          <button class="lib-tab" data-libtab="poems">Poems</button>
+          <button class="lib-tab" data-libtab="regions">Regions</button>
+          <button class="lib-tab" data-libtab="glossary">📖 Glossary</button>
+          <button class="lib-tab" data-libtab="shonaRoora">💍 Shona Roora</button>
+          <button class="lib-tab" data-libtab="ndebeleRoora">💍 Ndebele Roora</button>
+        </div>
+        <div id="libraryBody"></div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM NAV (4 white icons) -->
+    <div class="bottom-nav">
+      <div class="nav-item active" data-view="timeline"><img src="assets/icons/clock.svg" alt="Timeline"></div>
+      <div class="nav-item" data-view="tree"><img src="assets/icons/tree.svg" alt="Family Tree"></div>
+      <div class="nav-item" data-view="library"><img src="assets/icons/read-book.svg" alt="Library"></div>
+      <div class="nav-item" data-view="profile"><img src="assets/icons/profile-picture.svg" alt="Profile"></div>
+    </div>
+  </div>
+
+  <!-- ============ INSTITUTIONAL USER ============ -->
+  <div id="institutional-app" class="screen">
+    <div class="inst-topbar">
+      <div class="inst-eyebrow">Research Portal</div>
+      <div class="inst-title">🏛️ Institutional Dashboard</div>
+    </div>
+    <div class="inst-body" id="instBody">
+      <div class="inst-stats" id="instStats"></div>
+      <div class="inst-view-toggles">
+        <button class="inst-view-toggle active" data-view="profiles">👤 Profiles</button>
+        <button class="inst-view-toggle" data-view="totems">📜 Totem Directory</button>
+        <button class="inst-view-toggle" data-view="auditor">🔍 Lineage Auditor</button>
+        <button class="inst-view-toggle" data-view="dispute">⚖️ Dispute Queue</button>
+      </div>
+      <div class="inst-search">
+        <span class="inst-search-icon">🔍</span>
+        <input type="text" id="instSearch" placeholder="Search name, totem, chidawo…">
+      </div>
+      <div class="inst-filter-row" id="instFilters"></div>
+      <div id="instTotemList"></div>
+      <div id="instAuditor" style="display:none;"></div>
+      <div id="instDispute" style="display:none;"></div>
+      <div class="inst-export-row" id="instExportRow">
+        <select id="instExportFormat" style="background:var(--bg);color:var(--text);border:1px solid var(--divider);border-radius:6px;padding:4px 8px;font-size:0.78rem;">
+          <option value="json">JSON</option>
+          <option value="csv">CSV</option>
+          <option value="ead3">ISAD(G) / EAD3 XML</option>
+        </select>
+        <button class="btn-export" id="instExport">📤 Export</button>
+      </div>
+      <button class="inst-back" id="instBack">← Back to Home</button>
+    </div>
+  </div>
+
+  <!-- ============ PROFILE PANEL (tree node overlay) ============ -->
+  <div id="profilePanelOverlay"></div>
+  <div id="profilePanel">
+    <div class="panelHeader">
+      <div class="panelTopRow">
+        <button class="panelIconBtn" id="panelClose">✕</button>
+      </div>
+      <div class="panelIdentity">
+        <div class="panelThumb" id="panelThumb">
+          <div id="panelThumbInner"></div>
+          <div class="camBadge">📷</div>
+        </div>
+        <div>
+          <div class="panelName" id="panelName">—</div>
+          <div class="panelMeta" id="panelMeta"></div>
+        </div>
+      </div>
+    </div>
+    <div class="tabBar">
+      <button class="tabBtn active" data-tab="lifestory">Lifestory</button>
+      <button class="tabBtn" data-tab="info">Info</button>
+      <button class="tabBtn" data-tab="kinship">Kinship</button>
+      <button class="tabBtn" data-tab="family">Family</button>
+      <button class="tabBtn" data-tab="gallery">Gallery</button>
+    </div>
+    <div class="panelContent">
+      <div class="tabPane active" id="pane-lifestory"></div>
+      <div class="tabPane" id="pane-info"></div>
+      <div class="tabPane" id="pane-kinship"></div>
+      <div class="tabPane" id="pane-family"></div>
+      <div class="tabPane" id="pane-gallery"></div>
+    </div>
+  </div>
+
+  <!-- ============ TCM3 PROFILE OVERLAY ============ -->
+  <div id="overlay-backdrop">
+    <div class="profile-modal" id="profile-modal-content"></div>
+  </div>
+
+  <!-- ============ TCM3 EGO PICKER ============ -->
+  <div id="ego-picker-backdrop">
+    <div class="ego-picker-modal">
+      <div class="ego-picker-title">View tree as —</div>
+      <div id="ego-picker-list"></div>
+    </div>
+  </div>
+
+  <!-- ============ TCM3 SELECTION MODAL ============ -->
+  <div id="select-modal-backdrop">
+    <div class="select-modal">
+      <div class="select-modal-title" id="select-modal-title">Select</div>
+      <input type="text" class="select-modal-search" id="select-modal-search" placeholder="Filter…">
+      <div class="select-modal-list" id="select-modal-list"></div>
+    </div>
+  </div>
+
+  <!-- ============ SETTINGS OVERLAY ============ -->
+  <div class="panel-overlay" id="settingsOverlay">
+    <div class="settings-panel" id="settingsPanel">
+      <div class="panel-handle"></div>
+      <div class="settings-title">Tree Display Settings</div>
+      <div class="setting-row">
+        <div><div class="setting-label">Thumbnail photos</div><div class="setting-sub">Show uploaded photos on tree cards</div></div>
+        <div class="toggle on" id="toggleThumbs"></div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Deceased ribbon</div><div class="setting-sub">Dark ribbon on deceased members</div></div>
+        <div class="toggle on" id="toggleRibbon"></div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Hide extended cousins</div><div class="setting-sub">Show direct line only</div></div>
+        <div class="toggle" id="toggleCousins"></div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Quick-add parents</div><div class="setting-sub">Ghost cards for missing parents</div></div>
+        <div class="toggle on" id="toggleQuickAdd"></div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Card color style</div><div class="setting-sub">Gender color vs thin frame</div></div>
+        <select id="cardColorStyle" style="background:var(--bg);color:var(--text);border:1px solid var(--divider);border-radius:6px;padding:4px 8px;font-size:0.78rem;">
+          <option value="gender">Solid gender</option>
+          <option value="frame">Thin frame</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Card orientation</div><div class="setting-sub">Vertical vs horizontal</div></div>
+        <select id="cardOrientation" style="background:var(--bg);color:var(--text);border:1px solid var(--divider);border-radius:6px;padding:4px 8px;font-size:0.78rem;">
+          <option value="vertical">Vertical</option>
+          <option value="horizontal">Horizontal</option>
+        </select>
+      </div>
+      <div class="gen-row">
+        <div class="gen-label"><span>Max generations</span><strong id="genValue">5</strong></div>
+        <input type="range" min="1" max="7" value="5" id="genSlider">
+      </div>
+      <div style="border-top:1px solid var(--divider);margin-top:14px;padding-top:10px;">
+        <div class="setting-label" style="margin-bottom:4px;">🌟 Premium Features</div>
+        <div class="setting-sub" style="margin-bottom:8px;">Enter an EcoCash payment reference code to unlock features ($10/yr each). Codes are stored locally — no network call.</div>
+        <div id="premiumStatus"></div>
+        <div style="display:flex;gap:6px;">
+          <input id="ecocashInput" placeholder="EcoCash ref code (e.g. EC12345678)" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--divider);background:var(--bg);color:var(--text);font-size:0.78rem;">
+          <select id="ecocashFeature" style="padding:8px;border-radius:8px;border:1px solid var(--divider);background:var(--bg);color:var(--text);font-size:0.78rem;">
+            <option value="bloodline">Bloodline Switch</option>
+            <option value="pdfExport">PDF Export</option>
+            <option value="sdBackup">SD Backup</option>
+            <option value="audioLibrary">Audio Library</option>
+          </select>
+          <button class="btn-sm" id="ecocashVerifyBtn" style="background:var(--accent);color:var(--text);font-weight:700;">Verify</button>
+        </div>
+        <div id="premiumList" style="margin-top:8px;"></div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:10px;border-top:1px solid var(--divider);padding-top:10px;">
+        <button class="btn-sm" id="pdfExportBtn" style="flex:1;background:var(--accent);color:var(--text);font-weight:600;">🖨️ PDF Export</button>
+        <button class="btn-sm" id="backupExportBtn" style="flex:1;background:var(--accent);color:var(--text);font-weight:600;">💾 Backup</button>
+        <button class="btn-sm" id="backupImportBtn" style="flex:1;background:var(--bg-alt);color:var(--text);font-weight:600;">📂 Restore</button>
+      </div>
+      <div style="border-top:1px solid var(--divider);margin-top:14px;padding-top:10px;">
+        <div class="setting-label" style="margin-bottom:4px;">📲 Sync Import</div>
+        <div class="setting-sub" style="margin-bottom:8px;">Paste a ROOTS_SYNC payload received via WhatsApp</div>
+        <textarea id="syncPayload" placeholder="Paste ROOTS_SYNC:base64 payload here…" style="width:100%;height:60px;padding:8px;border-radius:8px;border:1px solid var(--divider);background:var(--bg);color:var(--text);font-size:0.78rem;resize:none;box-sizing:border-box;"></textarea>
+        <button class="btn-sm" id="syncImportBtn" style="background:var(--lime);color:var(--text);font-weight:700;width:100%;margin-top:6px;">Import Sync Data</button>
+      </div>
+      <button class="btn-done" id="settingsDone">Done</button>
+    </div>
+  </div>
+
+  <!-- ============ DEATH & SUCCESSION PANEL ============ -->
+  <div class="panel-overlay" id="deathOverlay">
+    <div class="settings-panel" id="deathPanel" style="max-height:92vh;">
+      <div class="panel-handle"></div>
+      <div class="settings-title" id="deathTitle">⚰️ Death & Succession</div>
+      <div class="library-tabs" id="deathTabs">
+        <button class="lib-tab active" data-deathtab="funeral">🕯️ Funeral</button>
+        <button class="lib-tab" data-deathtab="ritual">🙏 Ritual</button>
+        <button class="lib-tab" data-deathtab="estate">🏠 Estate</button>
+      </div>
+      <div id="deathBody" style="flex:1;overflow-y:auto;margin-top:10px;"></div>
+      <button class="btn-done" id="deathDone">Done</button>
+    </div>
+  </div>
+
+  <!-- ============ MARRIAGE (ROORA) PANEL ============ -->
+  <div class="panel-overlay" id="marriageOverlay">
+    <div class="settings-panel" id="marriagePanel" style="max-height:92vh;">
+      <div class="panel-handle"></div>
+      <div class="settings-title" id="marriageTitle">💍 Roora / Lobola</div>
+      <div id="marriageBody" style="flex:1;overflow-y:auto;margin-top:10px;"></div>
+      <button class="btn-done" id="marriageDone">Done</button>
+    </div>
+  </div>
+
+  <!-- ============ MODAL (add post / group) ============ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-sheet" id="modalSheet">
+      <div class="panel-handle"></div>
+      <div class="modal-title" id="modalTitle">New Post</div>
+      <div id="modalBody"></div>
+      <button class="modal-btn secondary" id="modalCancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toast"></div>
+
+  <!-- ============ HIDDEN FILE INPUT ============ -->
+  <input type="file" id="hiddenFileInput" class="hiddenFileInput" accept="image/*">
+</div>
+
+<script src="data.js"></script>
+<script src="lookups.js"></script>
+<script src="customary.js"></script>
+<script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>

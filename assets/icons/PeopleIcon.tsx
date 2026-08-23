@@ -1,0 +1,35 @@
+import React from 'react';
+
+export interface PeopleIconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+  color?: string;
+}
+
+export const PeopleIcon: React.FC<PeopleIconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+  ...props
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
+      fill={color}
+      color={color}
+      className={className}
+      {...props}
+    >
+      <path d="M32 15 A8 8 0 1 1 32 31 A8 8 0 1 1 32 15 Z" />
+      <path d="M16.5 50 C16.5 40.5 23.4 34.5 32 34.5 C40.6 34.5 47.5 40.5 47.5 50 C47.5 53 43.5 54 32 54 C20.5 54 16.5 53 16.5 50 Z" />
+      <path d="M16 21 A6 6 0 1 1 16 33 A6 6 0 1 1 16 21 Z" />
+      <path d="M5 49 C5 42.5 9.5 38 14.5 38 C16.5 38 18.2 38.6 19.8 39.8 C17.8 42.5 16.8 45.8 16.8 49.5 C16.8 50.4 17 51.3 17.2 52.2 C12 52 5 51.2 5 49 Z" />
+      <path d="M48 21 A6 6 0 1 1 48 33 A6 6 0 1 1 48 21 Z" />
+      <path d="M49.5 38 C54.5 38 59 42.5 59 49 C59 51.2 52 52 46.8 52.2 C47 51.3 47.2 50.4 47.2 49.5 C47.2 45.8 46.2 42.5 44.2 39.8 C45.8 38.6 47.5 38 49.5 38 Z" />
+    </svg>
+  );
+};
+
+export default PeopleIcon;

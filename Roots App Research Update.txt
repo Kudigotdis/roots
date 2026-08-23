@@ -1,0 +1,2082 @@
+Family Tree App planning. 
+
+I am working on a family tree html app thay we're going to turn into an android app later. i am based in zimbabwe so the app needs to be offline first becasue we never have access to data so you and i are going to discuss features. 
+
+*************
+Institutional Monetization Models and Financial Sustainability
+​A localized, structurally accurate genealogical database provides significant value for academic, legal, and commercial institutions in Zimbabwe. By structuring profiles around official civil registration codes and traditional administrative units, the app serves as a validated, institutional-grade lineage registry. This alignment opens up several long-term monetization channels that do not rely on standard app store purchases or active mobile data.
+​1. B2B and Institutional Partnerships
+• ​National Archives and Museums (NAZ): Partnering with the National Archives of Zimbabwe to digitize oral histories and rural lineages. The app's offline-first architecture allows community workers to log lineage data in remote areas, which is then imported into NAZ's central archives via local JSON exports.
+
+• ​Traditional Governance Support: Traditional courts (Matare) can use verified genealogical trees to resolve disputes over chieftainship successions and communal land borders, reducing litigation costs for rural district councils.
+• ​International Cultural Grants: The platform's ability to document minority languages and endangered oral histories aligns directly with digital preservation initiatives funded by UNESCO, the Prince Claus Fund, and the African World Heritage Fund.
+
+• ​Academic and Linguistic Research: Aggregated, anonymized demographic and migration data can be licensed to academic institutions researching Bantu migration patterns, linguistic evolution, and historical settlement trends.
+
+​2. Hyper-Local and Pre-Bundled Advertising
+​Standard, real-time programmatic ad networks do not work on offline devices. Instead, the app uses pre-bundled, static sponsorship modules embedded directly in the source code.
+• ​Funeral and Estate Services: Partnering with prominent local providers (e.g., Nyaradzo, EcoSure) to display pre-loaded informational screens and service directories within the app.
+
+• ​Update-Driven Campaigns: Ad creatives are updated when users install standard application updates via Google Play, or share the installation package locally using offline file-sharing utilities like Xender or WhatsApp Web.
+
+​3. Direct-to-Consumer Freemium Utilities
+​While the core tree-building tools remain free, advanced local features can be unlocked via one-time EcoCash payments verified entirely offline: 
+• ​High-Quality PDF Exports: Generating print-ready, high-resolution vector PDFs of family trees, optimized for local printing shops or sharing via WhatsApp.
+• ​Local SD Card Backups: Unlocking the utility to export or import secure JSON databases to external SD cards, making it simple to transfer family trees when switching devices.
+• ​Totemic Praise Audio Library: Access to pre-loaded, high-fidelity audio recordings of traditional clan praise poetry (Detembo / Izithakazelo), matching the user's specific totem.
+
+• ​Physical Product Merchandising: Leveraging the platform as a direct-to-consumer lead generator for customized family lineage canvases, framed trees, and custom apparel featuring the user's primary totem.
+
+​By combining structurally accurate cultural data with an optimized, local-first technical architecture, the platform balances heritage preservation with commercial viability in the regional market. 
+of features I do not want complicating my app*
+
+*************
+
+*************
+
+Let us look into developing:
+1. Total number of pages needed to make a complete app keeping in mid there is a version for te Regular Users to input information, the institution/business users who have access to information for their research and work purposes SO whenever app opens, since we are working on a demo I want the first page to have 2 buttons for Regular User and Institutional User (we'll sort out specifics later) because right now the app we're designing s a single html that I need to be able to open on my phone and send to potential investors. / 
+2. The app piggy backs off of WhatsApp (not the api) on the user's phone to send messages and make calls so there is no inbuilt messaging system for the app which means when users contact one another their WhatsApp opens. 
+3. Regarding design this app shoud be optimised for the mobile device and in portrait mode so it should NEVER use any kind of horizontal scroll, never use scroll bars (horizontal or vertical because it is an app and apps don't need scroll bars), all the tabs are at the bottom and use icons not text (for tabs i need an Instagram like timeline where family members can upload images (only) that can only be viewed depending on whether the user as made the image public to people within there network or for specific family members within the groups (so we'll need a system where users can create groups for Siblings, 1st Cousins (and 2nd, 3rd etc etc) plus any other special groups they can select who is in and public (but only public to people who are connected to them or other family members). / another tab needs to have a mobile friendly family tree Here is the cleaned-up breakdown of the new features and settings introduced to the MyHeritage mobile app family tree, stripping away the intro text and promotional filler. ----- Core Visual & Navigation Updates.  ---- Vertical Profile Cards (New Default):** Cards are now oriented vertically so more of them fit on smaller mobile screens. This creates a more condensed display and reduces the amount of panning you have to do. --- Touch Gestures:** Fully supports swiping to pan the tree in any direction (up, down, sideways) and pinching to zoom in or out. ---- // New Tree Settings & Customization --- A new Settings (cogwheel) icon in the upper-right corner allows you to customize the following display options directly from your phone: --- Orientation Toggle:** Uncheck the vertical card option to switch back to traditional horizontal cards (changing this on the app won't affect your web view). ---- Solid Card Colors:** Switch back to solid blue and pink cards if you prefer them over the new default layout, which uses a subtle, thin color frame to differentiate gender. ---- Black Ribbons for Deceased:** Toggle a black ribbon on profile cards to instantly tell living and deceased family members apart. --- Confirmed Match Icons:** Choose to keep Smart Match™ and Record Match icons visible on a profile even after you have already confirmed them. --- Quick-Add Parent Cards:** Toggle the shortcut cards that prompt you to quickly add a missing mother or father. ---- Relationship & Viewing Tools --- Color Coding in Family View:** Now enabled for the "Family view" (previously only available on the web and Pedigree view). It assigns a distinct color to each ancestral branch so you can map out relationships at a glance. ---- Generations Slider:** A tool in the upper-right corner that lets you choose exactly how many generations to show at once (from 1 up to 5+) to control how crowded the screen feels. --- Hide/Show Cousins:** A simple checkbox within the generation settings that lets you completely hide cousins of the main person to clean up the view.
+4. Design an offline-first local database structure (like SQLite or IndexedDB) for your HTML app.
+5. Plan a text-based file sharing method (like exporting small JSON/text files via WhatsApp).
+6. Outline the minimum viable UI that keeps memory usage low. 
+7. Write the JavaScript object structure containing these exact regions, tribes, and totems for your app's offline lookup database.
+8. Design the user interface layout to display complex Mitupo and Chidawo combinations elegantly on small mobile screens.
+9. Formulate a data-sharing format layout that fits into small text snippets for easy transmission over WhatsApp.
+
+Genealogy
+Historical Records
+Family History
+DNA
+Photos
+News
+Events and Webinars
+History (Rhodesian / Zimbabwean)
+
+----------------
+
+Now that the headache is out of the way (though I'm afraid it came from too much pc time with the way I was sitting) I'm getting a couple of ideas for how I want go clean the app.
+
+For instance (and these are ideas i've never seen on other family tree apps):
+- on the family tree I want settings for *THUMNAILS* to show photos.
+- on the left I want to show *YEARS* so I'm thinking of a grid where let's say you and your 2 brothers are on the aligned in the same generation *BUT* you're high, Lloyd is slightly lower and the youngest is lowest coz he's the youngest. 
+- I need to fit in some kind of *SWITCH* system so that user can switch between viewing their Bloodline then let's say they are married, they tap their wife and view her *BLOODLINE* and her Siblings and family tree. Maybe this can be *PAID* feature? (I've got a couple of monetisation tactics but none of them charge users so this would be one that charges users....$10USD for 1 year?) 
+- 🤔 I'll get a.i to design for me a MASSIVE network of relations that connected maybe 500 people to make it "realistic" 
+- I'm thinking of having the app *START* with the *TIMELINE* Tab coz you mentioned you wanted an I.G (I'm assuming instagram) section where you scroll down and see media f people within your network. 
+
+With regards to *VALIDATION* and marketing the app could be pitched to these history/culture societies especially if let's say there's an institution at UZ. I can imagine let's say a grant is approved and we get a sponsor (NetOne or TelOne - *NOT ECONET BECAUSE STRIVE STEALS)* we'd be going on a *ZIMBABWE TOUR* going around the country and encouraging *CHIEFS* and showcasing at schools and teaching school children to join and use it learn about culture (also kids would be easier to convince to add information since older people start hiding relation and babies 🤣🤣🤣) - if you open the *INSTITUTIONAL USER* Dashboard at the beginning it shows you a list of totems so this is where people can learn about different totem poems and culture etc. 
+
+*ESSENTIALLY* the kind of data gathered by the app is what the UN and institutiona *BUY* so I need the institution section to be have a dashboard that allows them to gather or quickly view that kind of data (filter by age, race, region, village/town/city, totem, mutemo etc (everything from my research including what you suggest)
+
+To build a family tree application that the Zimbabwean government, the Ministry of Local Government and Public Works, the National Archives of Zimbabwe (NAZ), and international heritage agencies like UNESCO will invest in, your data structure must mirror the exact cultural and administrative architecture of the country. [1] 
+In Zimbabwe, identity is structural, tracking from provincial boundaries down to specific village code books, traditional leadership lineages, and strictly bound totem (Mutupo) and praise name (Chidawo) dynamics. [2, 3] 
+The following comprehensive blueprint outlines the required regional data nodes, tribal breakdowns, totem mechanics, and institutional data requirements needed to make your app robust and commercially investment-ready.
+
+1. Administrative & Geolocation Data Structure
+The app must map exactly to Zimbabwe's statutory and traditional boundary systems. When data is captured, it should follow this strict hierarchy: [2] 
+• Level 1: Provinces (10): Bulawayo, Harare, Manicaland, Mashonaland Central, Mashonaland East, Mashonaland West, Masvingo, Matabeleland North, Matabeleland South, and Midlands. [4, 5] 
+• Level 2: Districts (59+): Administrative units within provinces (e.g., Goromonzi, Chivi, Tsholotsho, Chipinge). [2, 6] 
+• Level 3: Wards: Local government subdivisions represented by local councillors. [2] 
+• Level 4: Traditional Chieftainship (Umambo): The specific boundary ruled by one of Zimbabwe's roughly 272 recognized Chiefs (e.g., Chief Chinamora, Chief Marange). [2, 4] 
+• Level 5: Headman (Isiduna / Sadunhu): The intermediary traditional jurisdiction under a Chief. [2, 7] 
+• Level 6: Village Head (Sabhuku / Ushabhuku): The lowest, most critical local node. Your app must include a field for the Sabhuku's name and Village Registration Book Number. This is the key piece of data the Ministry of Local Government uses to verify land rights and local lineage. [7, 8, 9] 
+2. Tribal and Ethno-Linguistic Classifications
+Your application's backend architecture must reflect Zimbabwe's 16 official languages. Rather than using an oversimplified single dropdown, categorize ethnic communities into their distinct linguistic and historical clusters: [10, 11] 
+Shona Language & Cultural Clusters (~75% of population) [11, 12] 
+• Karanga: Dominant in Masvingo and parts of Midlands.
+• Zezuru: Centered around Mashonaland East, Central, West, and Harare.
+• Manyika: Primarily based in Manicaland.
+• Korekore: Settled in northern areas of Mashonaland Central and West.
+• Ndau: Centered in southern Manicaland (Chipinge/Chimanimani districts). [11, 13, 14, 15, 16] 
+Ndebele and Nguni-Linked Clusters (~17-20% of population) [11, 12] 
+• Ndebele: Primarily in Matabeleland North, Matabeleland South, and Bulawayo.
+• Kalanga: Historically linked, prominent in western Matabeleland districts (e.g., Bulilima, Mangwe). [4, 11, 17, 18, 19] 
+Minority Ethno-Linguistic Groups (Highly sought after by cultural preservation grants)
+• Tonga: Centered around the Zambezi Valley and Binga district.
+• Venda: Settled along the southern border in the Beitbridge district.
+• Shangani (Tsonga): Based in the southeastern lowveld, including Chiredzi.
+• Sotho: Found in pockets of southwestern Matabeleland South.
+• Sena: Centered around the northern and eastern border zones.
+• Tshwa San: Located primarily in Tsholotsho and Bulalima-Mangwe.
+• Doma (Vadema): Based in the Kanyemba and Mbire regions of the Zambezi Valley.
+• Barwe, Chewa, Tonga (Mudzi), and Xhosa. [6, 11, 13, 20, 21] 
+3. Kinship Architecture: Totems (Mitupo) and Praise Names (Zvidawo/Izithakazelo) [22] 
+An interactive family tree in Zimbabwe is contextually incomplete without a dual-tier identity lookup. Every profile node needs a field for both the primary totem animal/organ and its lineage descriptor. [3, 23, 24] 
+Primary Shona Totems (Mitupo) & Praise Names (Zvidawo) [23] 
+The system must link specific Mitupo to their corresponding Zvidawo to properly trace deep lineages: [3, 22] 
+• Moyo (Heart): Must include sub-lineage variations such as Moyondizvo, Chirandu, Dhewa, and Sinyoro (Vachinjanja).
+• Shumba (Lion): Pairs with Murambwi, Mhazi, and Sibanda.
+• Soko / Shoko (Monkey): Pairs with Mukanya, Murehwa, Vhudzijena, and Ncube.
+• Mbizi / Tembo (Zebra): Pairs with Samaita, Dhuve, and Mazvimbakupa.
+• Nzou / Zhou (Elephant): Pairs with Samanyanga and Mhukahuru.
+• Shava (Eland): Pairs with Mhofu, Museyamwa, and Mutenhesanwa.
+• Gumbo (Leg): Pairs with Madyirapasi, Chitova, and Madyarapanze.
+• Dziva / Hove (Pool/Fish): Pairs with Mbedzi, Sambiri, and Mlambo.
+• Other major Shona totems to include: Ngara (Porcupine), Garwe (Crocodile), Nyati (Buffalo), Humba/Nguruve (Wild Boar), Beta/Ishwa (Termite), and Tsiwo (Gushungo). [3, 13, 20, 22, 23, 24, 25, 26, 27] 
+Ndebele Clan Names & Praise Names (Isibongo & Izithakazelo) [27, 28] 
+The Ndebele system functions similarly, matching the Isibongo (surname/totem) directly with Izithakazelo (clan praises): [29] 
+• Khumalo: Associated with the historical royal house (Praises: Mzilikazi, Lobengula, Mntungwa).
+• Moyo: (Nkazana, Dandane, Mhlanga).
+• Sibanda: Lion totem equivalents (Shumba, Thambo).
+• Dube: Zebra totem equivalents (Zephania, Mpunzi).
+• Ndlovu: Elephant totem equivalents (Gatsheni, Boyikazi).
+• Ncube: Monkey totem equivalents (Mzilankatha).
+• Ngwenya: Crocodile totem equivalents (Mambo, Mtimande). [23, 26, 27, 30, 31] 
+4. Technical Engine Features Needed for Institutional Backing
+To successfully secure a government contract or a multi-thousand-dollar UNESCO grant, your offline-first application should move beyond a simple visual chart and solve specific institutional problems.
++---------------------------------------------------------------------------------+ | INSTITUTIONAL METADATA MODULE | +---------------------------------------------------------------------------------+ | [ National ID: 63-XXXXXX-X-27 ] [ Village Book ID: V-GORO-042 ] | | [ Totem/Mutupo: Moyo ] [ Praise/Chidawo: Chirandu ] | | [ Current Sabhuku: Headman X ] [ Traditional Chief: Chief Y ] | +---------------------------------------------------------------------------------+ | v +---------------------------------------------------------------------------------+ | OFFLINE INCEST PREVENTION LOGIC | +---------------------------------------------------------------------------------+ | Compare: Node_A (Moyo/Chirandu) <====== MARRIAGE PROHIBITED ======> Node_B | | Check: Shared ancestral lineages via underlying database rules. | +---------------------------------------------------------------------------------+ 
+• Offline Incest Prevention Logic: In Shona and Ndebele custom, individuals sharing the same totem and praise name are strictly prohibited from marrying. Build a client-side algorithm that triggers an automatic warning if a user attempts to input a marriage branch between two nodes with matching Mutupo and Chidawo. Institutions focused on cultural ethics heavily value this mechanism. [3, 24, 26] 
+• Chieftainship Succession Tracking: Succession disputes over local chieftainships cost local rural district councils time and money. Your app should offer a "Succession View" that calculates lineages based on alternating collateral lines (where leadership passes from brother to brother before returning to the eldest son's line), which is standard in Shona customary law. [2] 
+• National ID Data Standardisation: Structure your text input fields to mirror the format of Zimbabwean National Identity documents (e.g., 63-1234567-X-27). This allows your locally saved JSON/CSV tables to align with national census and civil registration systems whenever data needs to be compiled.
+• The "Guruuswa" / Origin Node: Add an option for an ultimate ancestral root node labeled "Origin/Historical Home." For many Shona lineages, this maps to Guruuswa (the historical grassy region of the north), while for Ndebele lineages, it maps back to locations in Zululand or specific waves of historical migration. This functionality is essential for academic research utility. [27] 
+
+Locked in — I’ll treat this as your `Roots` Cultural Compliance Bible for Zimbabwe 🇿🇼
+
+You’re right: if you only do “name + birthday” you’ll fail with NAZ, Ministry of Local Gov, and UNESCO. Zimbabwean identity is totemic, oral, and administrative.
+
+Here’s the *full tally = 47 core items* you must account for in `Roots`. I’ve broken it into 7 modules so your devs can build against it.
+
+*ROOTS ZIMBABWE CULTURAL DATA TALLY: 47 Items*
+
+*MODULE 1: ADMINISTRATIVE & LEGAL IDENTITY [6 items]*
+The “government layer” NAZ + Ministry require for verification.
+1. *Province* : Bulawayo, Harare, Manicaland, Mashonaland Central/East/West, Masvingo, Matabeleland North/South, Midlands
+2. *District* [59+]: e.g. Goromonzi, Chivi, Tsholotsho, Chipinge
+3. *Ward*: Local councillor jurisdiction
+4. *Chief/Umambo* [∼272 recognized]: e.g. Chief Chinamora, Chief Marange
+5. *Headman/Sadunhu*: Sub-chief jurisdiction
+6. *Village/Sabhuku + Village Book ID*: The lowest node. `Sabhuku name + V-GORO-042` format is what verifies land & lineage[10]
+
+*MODULE 2: ETHNO-LINGUISTIC FRAMEWORK [16 items]*
+Zim has 16 official languages. Use clusters, not 1 dropdown.
+*Shona Clusters ∼75%* [5 items]
+7. *Zezuru*: Harare, Mash Central/East/West
+8. *Karanga*: Masvingo, Midlands
+9. *Manyika*: Manicaland
+10. *Korekore*: North Mash Central/West
+11. *Ndau*: Chipinge/Chimanimani
+
+*Ndebele/Nguni ∼17-20%* [2 items]
+12. *Ndebele*: Mat North/South, Bulawayo
+13. *Kalanga*: Bulilima, Mangwe
+
+*Minority Grant-Magnet Groups* [9 items]
+14. *Tonga*: Zambezi Valley, Binga
+15. *Venda*: Beitbridge border
+16. *Shangani/Tsonga*: Chiredzi lowveld
+17. *Sotho*: SW Mat South
+18. *Sena*: Northern/Eastern border
+19. *Tshwa San*: Tsholotsho, Bulilima-Mangwe
+20. *Doma/Vadema*: Kanyemba, Mbire Zambezi Valley
+21. *Chewa/Barwe*: Eastern border zones
+22. *Xhosa*: Bulawayo/Mat South pockets
+
+*MODULE 3: KINSHIP ARCHITECTURE [18 items]*
+This is the non-negotiable heart of `Roots`. Every person node needs both.
+*Shona Totems Mitupo + Zvidawo* [12 core pairs]
+23. *Moyo Heart* → Chirandu, Dhewa, Moyondizvo, Sinyoro/Vachinjanja
+24. *Shumba Lion* → Murambwi, Mhazi, Sibanda
+25. *Soko/Shoko Monkey* → Mukanya, Murehwa, Vhudzijena, Ncube
+26. *Mbizi/Tembo Zebra* → Samaita, Dhuve, Mazvimbakupa
+27. *Nzou/Zhou Elephant* → Samanyanga, Mhukahuru
+28. *Shava Eland* → Mhofu, Museyamwa, Mutenhesanwa
+29. *Gumbo Leg* → Madyirapasi, Chitova, Madyarapanze
+30. *Dziva/Hove Fish* → Mbedzi, Sambiri, Mlambo
+31. *Ngara Porcupine*
+32. *Garwe Crocodile*
+33. *Nyati Buffalo*
+34. *Tsiwo/Gushungo*
+
+*Ndebele Isibongo + Izithakazelo* [6 core pairs]
+35. *Khumalo* → Mzilikazi, Lobengula, Mntungwa [Royal House]
+36. *Moyo* → Nkazana, Dandane, Mhlanga
+37. *Sibanda* → Shumba, Thambo
+38. *Dube* → Zephania, Mpunzi [Zebra equiv]
+39. *Ndlovu* → Gatsheni, Boyikazi [Elephant equiv]
+40. *Ngwenya* → Mambo, Mtimande [Crocodile equiv]
+
+*MODULE 4: ORAL CULTURE DATA FIELDS [4 items]*
+UNESCO funds projects that preserve intangible heritage. Build fields for these.
+41. *Tsumo/Phrase/Proverb*: e.g. Shona: `Mutoro unorumbidzwa watinaya` = A rain you praise only after it falls. Used in greetings/advice
+42. *Chidawo/Izithakazelo Poems*: The praise poem linked to the totem. E.g. `Moyo Chirandu` praises: `Moyo weva, moyo wezvipfuyo...`
+43. *Traditional Greetings by Totem*: E.g. Shumba: `Mhoro Murambwi` | Moyo: `Mhoroi Chirandu` | Ndlovu: `Sawubona Gatsheni`
+44. *Origin Narrative/Guruuswa*: Root node field. Shona = `Guruuswa` northern grasslands. Ndebele = `Zuland` migration waves
+
+*MODULE 5: CUSTOMARY LAW LOGIC [3 items]*
+These are your “institutional features” that make it fundable.
+45. *Offline Incest Prevention*: Block marriage if `Mutupo + Chidawo` match exactly. Shona/Ndebele exogamy rule. Trigger: `if A.Mutupo==B.Mutupo AND A.Chidawo==B.Chidawo → WARNING`
+46. *Chieftainship Succession View*: Algorithm for `collateral line` succession: Brother → Brother → Eldest son’s line
+47. *National ID Standardization*: Input mask `63-XXXXXXX-X-XX` to match Zim ID cards for census alignment
+
+---
+
+*How to build this in `Roots` DB schema:*
+Person {
+  admin: {province, district, ward, chief, headman, sabhuku, village_book_id}
+  ethnicity: {language_cluster, specific_group}
+  kinship: {mutupo, chidawo, isibongo, izithakazelo}
+  oral: {tsumo[], praise_poem, greeting, guruuswa_origin}
+  legal: {national_id, dob, gender}
+  relations: {parents[], spouse[], children[]}
+*Critical note*: Totem is inherited patrilineally in Shona/Ndebele. Children take father’s `Mutupo`. Women keep birth totem but children are father’s. Your marriage logic must enforce this.
+
+This is the minimum bar to look “institutionally credible” vs “Ancestry.com clone”.
+
+Which module do you want me to expand first into full lookup tables for `Roots`? I can give you the 50+ full totem→praise lists, or the complete 16-language greeting + tsumo library next.
+
+For `Roots` you need the full master list — not just the “big 10”.
+
+There are *∼28-30 recognized Shona totems* `Mitupo` in Zimbabwe today. Different districts have variants, but these are the ones documented by NAZ, heritage orgs, and oral records. fa2fd643
+
+### *COMPLETE SHONA TOTEM LIST FOR `ROOTS` DB [28 Core Mitupo]*
+
+Format: `Mutupo (Animal/Object) → Main Chidawo/Praise Names`
+
+#### *Tier 1: The 12 Major Animal Totems*
+These cover ∼80% of Shona people. Critical for marriage logic.
+1. *Moyo* `Heart` → Chirandu, Dhewa, Moyondizvo, Sinyoro/Vachinjanja, Nematombo, Wadyegora, Muzukuru
+2. *Shumba* `Lion` → Murambwi, Mhazi, Nyamuzihwa, Gurundoro, Samaita, Sipambi
+3. *Soko/Shoko* `Monkey` → Mukanya, Murehwa, Vhudzijena/Bvudzijena, Chirongo, Mbire, Jena
+4. *Shava/Mhofu* `Eland` → Shava, Mhofu, Museyamwa, Mutenhesanwa, Mwendamberi, Mufakose
+5. *Nzou/Zhou* `Elephant` → Samanyanga, Mhukahuru, Matemai
+6. *Mbizi/Tembo* `Zebra` → Dhuve, Samaita, Mazvimbakupa, Chiota, Mubaiwa
+7. *Dziva/Hove/Mvuu* `Pool/Fish/Hippo` → Mbedzi, Sambiri, Musaigwa, Muyambo, Dziriro
+8. *Gumbo* `Leg` → Madyirapasi/Madyirapazhe, Chitova, Mukuvapasi, Mhizha
+9. *Ngara/Nungu* `Porcupine` → Chivasa, Zimuto, Wamambo
+10. *Nyati* `Buffalo` → Chirombowe
+11. *Garwe* `Crocodile` → _Chidawo varies by clan_
+12. *Gwai/Kamba* `Sheep/Tortoise` → Mukuruwambwa, Kota, Chuma, Gumbi 73ba68364d3995e255fa
+
+#### *Tier 2: The Other 16 Documented Totems*
+Smaller clans, but UNESCO/NAZ expect them in the system.
+13. *Mbeva* `Mouse` → Zungunde, Mukundwa, Tovakare, Warerwa
+14. *Tsivo/Gushungo* `Male Genitalia` → Gushungo
+15. *Mhara* `Antelope/Impala` → Chikonan’ombe
+16. *Humba/Nguruve* `Wild Boar` → Makombe
+17. *Shiri/Hungwe* `Bird/Fish Eagle` → Nyoni, Chasura, Hungwe, Mawuruka
+18. *Beta/Ishwa* `Termite` → Dhliwayo
+19. *Nkomo* `Cattle` → Mupamombe
+20. *Mheta* → Saunyama
+21. *Bepe* `Lung` → _Chidawo varies_
+22. *Chuma* `Tortoise` → Machuma
+23. *Nhewa/Ingwe* `Leopard` → Simboti
+24. *Nhire/Gwizo* `Spring Hare` → Mugombi, Matutu, Muwariwa, Vhenya
+25. *Shato* `Python` → _Chidawo varies_
+26. *Twiza/Ndudza* `Giraffe` → Nondo
+27. *Bonga* `?` → _Chidawo varies_
+28. *Nhari* → _Chidawo varies_ 4d3995e255fa73ba
+
+*Note on duplicates/variants*: `Shava` and `Mhofu` are the same Eland totem with different praise strands. `Mbizi` and `Tembo` are both Zebra. `Dziva` covers Hippo, Fish, Pool. 68364d39
+
+### *3 Critical Rules for `Roots` Implementation*
+
+1. *Patrilineal Inheritance*: Children take father’s `Mutupo`. Women keep birth totem, but children are father’s totem.
+2. *Exogamy Block*: Marriage is prohibited if `Mutupo + Chidawo` match exactly. `Moyo Chirandu` cannot marry `Moyo Chirandu`. This is your offline algorithm.
+3. *Sub-clan Matters*: Same `Mutupo` but different `Chidawo` = allowed. E.g. `Soko Mukanya` can marry `Soko Murehwa`. fa2f
+
+*Total count for your spec sheet*: 28 core totems, with 60+ principal praise names `zvidawo`. fa2f
+
+Welcome to the deep, beautiful waters of Zimbabwean anthropology. Starting completely from scratch is totally fine—honestly, it's a massive advantage because you can build your database fields around pure cultural facts rather than trying to fix a pre-existing Western model later.
+In Zimbabwe, culture isn't decorative; it's **structural law**. To make *Roots* ready for institutional backing from organizations like the National Archives of Zimbabwe (NAZ) or UNESCO, your software backend needs to know exactly how these components interact.
+Here is your full, data-ready research blueprint.
+## The Quantitative Asset Tally (For Database Scaling)
+When designing your database tables, you must create relational nodes capable of handling at least these core numbers:
+ * **16 Statutory Languages:** Constitutionally recognized options.
+ * **5 Core Shona Sub-Dialects:** Crucial for tracking localized family origins.
+ * **25+ Major Totem Lines (*Mitupo / Isibongo*):** Each branching into hundreds of specific praise name variations (*Zvidawo / Izithakazelo*).
+ * **2 Primary Gendered Clapping Protocols (*Kuwuchira*):** Dictates how interactive or audio features should prompt traditional respect.
+ * **Hundreds of Traditional Proverbs (*Tsumo / Izaga*):** Used in local dispute resolution and kinship logic.
+## Detailed Numbered Cultural Breakdown
+### 1. The 16 Official Languages & Dialect Architecture
+You cannot just use a single dropdown labeled "Shona" or "Ndebele." Your app must capture the specific linguistic cluster because vocabulary, inheritance rules, and local family geography change between them.
+ * **The 16 Constitutional Languages:** Shona, Ndebele, Chewa, Chibarwe, Kalanga, Koisan (Tshwa San), Nambya, Ndau, Shangani, Sotho, Tonga, Tswana, Venda, Xhosa, English, and Sign Language.
+ * **Shona Dialect Trees (~75% of the country):**
+   1. **Zezuru:** Centered around Harare and the Mashonaland provinces. This forms the baseline for standard written Shona.
+   2. **Karanga:** Based in Masvingo and the Midlands. Historically the largest cluster with deep connections to the Great Zimbabwe kingdom.
+   3. **Manyika:** Centered in Manicaland (the eastern Highlands). Features unique vocal intonations and specific regional naming traits.
+   4. **Korekore:** Found in northern Zimbabwe (Mashonaland Central/West, stretching down to the Zambezi Valley).
+   5. **Ndau:** Located in southeastern Manicaland (Chipinge/Chimanimani). It has highly distinct linguistic structures influenced by Nguni migrations.
+ * **The Matabeleland & Western Clusters:**
+   6.  **Ndebele:** Driven by the historical 19th-century Khumalo migration from the Zulu kingdom, settling across western and central Zimbabwe.
+   7.  **Kalanga:** An ancient group in western Zimbabwe that predates the Ndebele arrival but shares heavy geographic and cultural ties today.
+### 2. The Totem Identity Infrastructure
+A totem is an unalterable spiritual and biological identification card inherited from the father's side. It prevents inner-clan marriage and traces ancestry back a thousand years.
+ * **Shona Mechanics (*Mutupo* + *Chidawo*):**
+   * The **Mutupo** is the main category (usually an animal, bird, or organ, like *Moyo* / Heart, *Shumba* / Lion, *Soko* / Monkey).
+   * The **Chidawo** is the sub-clan praise name that isolates the specific lineage branch.
+   * *App Logic:* If a user inputs *Moyo*, the app must prompt a second mandatory field for their *Chidawo* (e.g., *Moyondizvo*, *Chirandu*, *Sinyoro*). Two *Moyondizvo* cannot marry, but a *Moyo Sinyoro* and a *Moyo Chirandu* might have historical clearance depending on the region.
+ * **Ndebele Mechanics (*Isibongo* + *Izithakazelo*):**
+   * The **Isibongo** functions as the modern surname (e.g., *Khumalo*, *Ndlovu*, *Dube*).
+   * The **Izithakazelo** are the specific ancestral praise names used to address someone with deep respect.
+### 3. Clan Praise Poems (*Detembo Remutupo* / *Izithakazelo* Recitations)
+When a Zimbabwean does something honorable, finishes a task, or greets an elder, they aren't just told "thank you." They are thanked with a rhythmic, spoken-word recitation of their entire clan history.
+```
+[User Selects: Shava Mhofu] ──> [App Displays: "Maita Shava, Mutenhesanwa, Museyamwa..."]
+
+```
+ * **Why your app needs this:** Including a text or audio recitation of these poems within a profile turns *Roots* from a sterile utility into an emotional preservation tool. Elders will trust it instantly.
+ * **Shona Example (*Shava/Mhofu* - Eland Totem):** *“Maita Shava, Mhofu yomukono, Museyamwa, Vanhu veChidavarume...”* (Thank you Eland, the great bull, the pillar, people of the masculine devotion...).
+ * **Ndebele Example (*Khumalo* - Royal House):** Address them using their *Izithakazelo*: *“Mntungwa, Khumalo, Mzilankatha kaXaba, Lobengula!”*
+### 4. Traditional Etiquette & Greetings (*Kwaziso* & *Kuwuchira*)
+In Zimbabwean culture, you cannot simply demand information from an elder. There is a strict, time-sensitive greeting protocol based on physical gestures and hierarchy. Your app’s user interface can actively mirror this workflow.
+ * **Shona Clapping Protocols (*Kuwuchira*):**
+   1. **Men:** Flat hands, fingers aligned straight, clapped rhythmically straight on (*"Maita zvenyu"* style).
+   2. **Women:** Cupped hands, cross-aligned at an angle to create a distinct hollow sound, usually accompanied by a slight knee bend (*Kutyora ibvi*).
+ * **Time-of-Day Prompts for UI Customization:**
+   * *Morning:* **Mangwanani** (Shona) / **Livuke njani?** (Ndebele)
+   * *Afternoon:* **Masikati** (Shona) / **Litshone njani?** (Ndebele)
+   * *Evening:* **Manheru** (Shona)
+### 5. Customary Proverbs (*Tsumo* & *Izaga*)
+Traditional courts (*Matare*) run completely on proverbs. They are used by village heads (*Sabhuku*) and chiefs to resolve land, inheritance, and marriage disputes without causing permanent fractures in the family tree.
+ * **Shona *Tsumo* Example:** *"Chara chimwe hachitswanyi hinda."* (One thumb cannot crush a louse).
+   * *App Relevance:* This is the ultimate family tree motto. It means an individual cannot survive in isolation; identity requires a collective network.
+ * **Ndebele *Izaga* Example:** *"Kakho mfula ungabo gubha."* (There is no river that does not dig its own channel).
+   * *App Relevance:* Every ancestral line carves out its own distinct historical footprint.
+### 6. Totem Taboos (*Miko* / *Izila*)
+This is the operational safety logic of the entire kinship network. Every single totem comes with a strict dietary restriction: **you are strictly forbidden from eating your totem animal.**
+ * **The Consequence:** Breaking a taboo (*Kutyora miko*) is traditionally believed to bring spiritual bad luck, physical illness, or cause your teeth to fall out.
+ * **How to implement this in *Roots*:** When a user updates their profile to a specific totem (e.g., *Nzou / Zhou* - Elephant), the app should automatically generate a beautifully designed "Customary Rule Card" inside their dashboard outlining their specific clan taboos and responsibilities.
+> **Where to start first:** Build your database schema around the **Languages** and the **Dual-Tier Totem/Praise Name fields** first. Once those relations are locked down, adding the poems, proverbs, and custom greeting logic becomes a straightforward data-mapping exercise.
+> 
+While there are thousands of *tsumos* (proverbs) in Shona culture, they are not just random sayings—they are the traditional legal, ethical, and relational rules that govern family systems. For your **Roots** app database, the best way to organize them is by **functional categories** so you can map them to specific user milestones or database triggers.
+Here is a curated, highly comprehensive dataset of core Shona *tsumos*, complete with their literal translations, actual cultural meanings, and how you can use them as context-aware tooltips or system messages in your software.
+## Category 1: Family, Kinship, and Community (*Mhuri neNzanga*)
+These proverbs emphasize unity, shared responsibility, and the unbreakable nature of bloodlines. They are perfect for family tree dashboards or landing pages.
+| Tsumo (Shona) | Literal Translation | Cultural Meaning & App Context |
+|---|---|---|
+| **Chara chimwe hachitswanyi hinda.** | One thumb cannot crush a louse. | **Unity is strength.** No individual can stand entirely alone without their lineage. *Great for a family tree invite screen.* |
+| **Rume rimwe harikambi pfurwa.** | One man cannot surround an elephant. | Complex problems or heavy burdens require a collective family effort to solve. |
+| **Nhowo yemwana ndiyo iri mumaoko aamai.** | The child's safe resting place is in the mother's hands. | Celebrates maternal security, structural nurture, and foundational lineage. |
+| **Kandiro kanoenda kunobva kamwe.** | A small dish goes to where another small dish comes from. | **Reciprocity.** True community thrives on mutual support and ongoing family gift exchanges. |
+| **Kugara nhaka huona dzevamwe.** | To inherit successfully is to observe how others did it before you. | Respecting historical precedent and learning from ancestral patterns. |
+| **Mwana washe muranda kumwe.** | A chief’s child is a servant/subject in another territory. | Humility. Outside your protected family ecosystem, you must earn respect on your merits. |
+| **Musha mukadzi.** | A home is defined by the presence of a woman. | Recognizes the structural role of women/mothers as the anchors of a household's stability. |
+## Category 2: Wisdom, Guidance, and Respect for Elders (*Zivo neChiremerera*)
+In Zimbabwe, elders are considered living archives. These proverbs serve as built-in reminders of why historical preservation matters.
+| Tsumo (Shona) | Literal Translation | Cultural Meaning & App Context |
+|---|---|---|
+| **Ndambakuudzwa akaonekwa nembonje pamhanza.** | The one who refused advice was later spotted with a permanent scar on their forehead. | **Listen to elders.** Disregarding ancestral or parental wisdom leads to preventable life scars. |
+| **Gungwo rakaramba revana richiti mafuta ari mberi.** | The crow rejected its chicks, claiming better ones lay ahead. | Do not abandon your current family or biological roots in pursuit of speculative, shallow fortunes. |
+| **Kure kwegava ndokusina musungusungu.** | The only place far for a jackal is where there are no wild berries. | People will travel any distance to reconnect with what they love—such as their home village or lineage. |
+| **Mviromviro dzembanje dzinotanga nemashizha.** | The onset of a wild smoking habit starts simply with the leaves. | Major family disputes or systemic breakdowns always trace back to small, unaddressed roots. |
+| **Pasi pomoto pane madota.** | Beneath the active fire lies the quiet ash. | Appearances can be deceiving; great wisdom or quiet power often hides beneath an unassuming exterior. |
+| **Zano ndega akasiya jira mumvura.** | The "know-it-all" left his blanket soaking in the river. | Isolationism causes failure. Relying completely on your own isolated intellect leads to avoidable losses. |
+## Category 3: Time, Patience, and Consequence (*Nguva neMhedzisiro*)
+These are ideal for administrative features, dispute resolution modules, or alerting users to long-tail database impacts.
+| Tsumo (Shona) | Literal Translation | Cultural Meaning & App Context |
+|---|---|---|
+| **Mhosva hairovi.** | A crime/guilt never rots or fades away with time. | **Accountability.** Past actions and ancestral responsibilities must eventually be settled, no matter how much time passes. |
+| **Aiva madziva ava mazambuko.** | What used to be deep pools have now become shallow crossing points. | **Change is inevitable.** Great family empires shift, and landscapes evolve; preservation is necessary to remember the deep pools. |
+| **Chura kugara mumvura haasi hove.** | A frog living in the water does not make it a fish. | Proximity does not equal identity. True lineage is determined by deep-rooted identity (*Mutupo*), not just temporary location. |
+| **Gonzo kugarisa mumatsire rinoti ndava muna mambo.** | A rat that stays too long in the granary eventually fancies itself a king. | Warning against unearned complacency or arrogance born out of temporary privilege. |
+| **Kupfuma kune zvacho, kurova imbwa nemukaka.** | Extreme wealth comes with strange habits, like beating a dog with fresh milk. | A commentary on how structural prosperity can alter behavior, prompting unique family eccentricities. |
+| **Sabhuku ndiye musimboti wemusha.** | The village head is the true central pillar of the village. | Validation for your Level 6 database tier. It reinforces that without the *Sabhuku*, local administrative data lacks its true structural anchor. |
+## How to Implement These as Software Features in 'Roots'
+Instead of just listing these as text, you can embed them into the UX to make the app feel deeply custom-tailored to Zimbabwean users:
+ 1. **The "Tsumo of the Day" Widget:** Place a clean, minimalist text card on the main dashboard that cycles through these proverbs to encourage daily cultural reflection.
+ 2. **Validation Tooltips:** When a user fills out their *Sabhuku* (Village Head) information or historical *Guruuswa* (Origin Node), show a relevant proverb like *“Sabhuku ndiye musimboti wemusha”* to affirm their data entry.
+ 3. **Conflict & Warning Screens:** If your **Offline Incest Prevention Logic** flags a marriage error between identical totems, display *“Mhosva hairovi”* or *“Mviromviro dzembanje dzinotanga nemashizha”* to elegantly frame the cultural weight of the warning.
+
+While there are thousands of *tsumos* (proverbs) in Shona culture, they are not just random sayings—they are the traditional legal, ethical, and relational rules that govern family systems. For your **Roots** app database, the best way to organize them is by **functional categories** so you can map them to specific user milestones or database triggers.
+Here is a curated, highly comprehensive dataset of core Shona *tsumos*, complete with their literal translations, actual cultural meanings, and how you can use them as context-aware tooltips or system messages in your software.
+## Category 1: Family, Kinship, and Community (*Mhuri neNzanga*)
+These proverbs emphasize unity, shared responsibility, and the unbreakable nature of bloodlines. They are perfect for family tree dashboards or landing pages.
+| Tsumo (Shona) | Literal Translation | Cultural Meaning & App Context |
+|---|---|---|
+| **Chara chimwe hachitswanyi hinda.** | One thumb cannot crush a louse. | **Unity is strength.** No individual can stand entirely alone without their lineage. *Great for a family tree invite screen.* |
+| **Rume rimwe harikambi pfurwa.** | One man cannot surround an elephant. | Complex problems or heavy burdens require a collective family effort to solve. |
+| **Nhowo yemwana ndiyo iri mumaoko aamai.** | The child's safe resting place is in the mother's hands. | Celebrates maternal security, structural nurture, and foundational lineage. |
+| **Kandiro kanoenda kunobva kamwe.** | A small dish goes to where another small dish comes from. | **Reciprocity.** True community thrives on mutual support and ongoing family gift exchanges. |
+| **Kugara nhaka huona dzevamwe.** | To inherit successfully is to observe how others did it before you. | Respecting historical precedent and learning from ancestral patterns. |
+| **Mwana washe muranda kumwe.** | A chief’s child is a servant/subject in another territory. | Humility. Outside your protected family ecosystem, you must earn respect on your merits. |
+| **Musha mukadzi.** | A home is defined by the presence of a woman. | Recognizes the structural role of women/mothers as the anchors of a household's stability. |
+## Category 2: Wisdom, Guidance, and Respect for Elders (*Zivo neChiremerera*)
+In Zimbabwe, elders are considered living archives. These proverbs serve as built-in reminders of why historical preservation matters.
+| Tsumo (Shona) | Literal Translation | Cultural Meaning & App Context |
+|---|---|---|
+| **Ndambakuudzwa akaonekwa nembonje pamhanza.** | The one who refused advice was later spotted with a permanent scar on their forehead. | **Listen to elders.** Disregarding ancestral or parental wisdom leads to preventable life scars. |
+| **Gungwo rakaramba revana richiti mafuta ari mberi.** | The crow rejected its chicks, claiming better ones lay ahead. | Do not abandon your current family or biological roots in pursuit of speculative, shallow fortunes. |
+| **Kure kwegava ndokusina musungusungu.** | The only place far for a jackal is where there are no wild berries. | People will travel any distance to reconnect with what they love—such as their home village or lineage. |
+| **Mviromviro dzembanje dzinotanga nemashizha.** | The onset of a wild smoking habit starts simply with the leaves. | Major family disputes or systemic breakdowns always trace back to small, unaddressed roots. |
+| **Pasi pomoto pane madota.** | Beneath the active fire lies the quiet ash. | Appearances can be deceiving; great wisdom or quiet power often hides beneath an unassuming exterior. |
+| **Zano ndega akasiya jira mumvura.** | The "know-it-all" left his blanket soaking in the river. | Isolationism causes failure. Relying completely on your own isolated intellect leads to avoidable losses. |
+## Category 3: Time, Patience, and Consequence (*Nguva neMhedzisiro*)
+These are ideal for administrative features, dispute resolution modules, or alerting users to long-tail database impacts.
+| Tsumo (Shona) | Literal Translation | Cultural Meaning & App Context |
+|---|---|---|
+| **Mhosva hairovi.** | A crime/guilt never rots or fades away with time. | **Accountability.** Past actions and ancestral responsibilities must eventually be settled, no matter how much time passes. |
+| **Aiva madziva ava mazambuko.** | What used to be deep pools have now become shallow crossing points. | **Change is inevitable.** Great family empires shift, and landscapes evolve; preservation is necessary to remember the deep pools. |
+| **Chura kugara mumvura haasi hove.** | A frog living in the water does not make it a fish. | Proximity does not equal identity. True lineage is determined by deep-rooted identity (*Mutupo*), not just temporary location. |
+| **Gonzo kugarisa mumatsire rinoti ndava muna mambo.** | A rat that stays too long in the granary eventually fancies itself a king. | Warning against unearned complacency or arrogance born out of temporary privilege. |
+| **Kupfuma kune zvacho, kurova imbwa nemukaka.** | Extreme wealth comes with strange habits, like beating a dog with fresh milk. | A commentary on how structural prosperity can alter behavior, prompting unique family eccentricities. |
+| **Sabhuku ndiye musimboti wemusha.** | The village head is the true central pillar of the village. | Validation for your Level 6 database tier. It reinforces that without the *Sabhuku*, local administrative data lacks its true structural anchor. |
+## How to Implement These as Software Features in 'Roots'
+Instead of just listing these as text, you can embed them into the UX to make the app feel deeply custom-tailored to Zimbabwean users:
+ 1. **The "Tsumo of the Day" Widget:** Place a clean, minimalist text card on the main dashboard that cycles through these proverbs to encourage daily cultural reflection.
+ 2. **Validation Tooltips:** When a user fills out their *Sabhuku* (Village Head) information or historical *Guruuswa* (Origin Node), show a relevant proverb like *“Sabhuku ndiye musimboti wemusha”* to affirm their data entry.
+ 3. **Conflict & Warning Screens:** If your **Offline Incest Prevention Logic** flags a marriage error between identical totems, display *“Mhosva hairovi”* or *“Mviromviro dzembanje dzinotanga nemashizha”* to elegantly frame the cultural weight of the warning.
+
+ Having this entire index fully expanded is exactly what you need to populate the database seed files or lookup tables for the Praise Name, Greeting, and Tsumo/Izaga fields in **Roots**.
+Here is the definitive, 28-node relational dictionary covering the primary Shona *Mitupo* and Ndebele *Izibongo* lineages across Zimbabwe.
+| # | Totem (Mutupo / Isibongo) | Full Sub-Clan Praise Names (Zvidawo / Izithakazelo) | Core Traditional Greeting Line | Associated Proverb (Tsumo / Izaga) |
+|---|---|---|---|---|
+| **1** | **Moyo (Moyondizvo)** | Moyondizvo, Dehwa, Bvumavaranda, Mithasa | Maita Moyondizvo, Changamire. | Moyo muti, unomera paunoda. |
+| **2** | **Moyo (Chirandu)** | Chirandu, Muzukuru, Machuma, Monomotapa | Maita Chirandu, vari munaSvosve. | Kandiro kanoenda kunobva kamwe. |
+| **3** | **Moyo (Sinyoro)** | Sinyoro, Vachinjanja, Donzvambeva | Maita Sinyoro, maita zvenyu. | Kure kwegava ndokusina musungusungu. |
+| **4** | **Shumba (Murambwi)** | Murambwi, Chibi, Sipambi, Nyamuzihwa | Maita Shumba, vari Chibi, Murambwi. | Shumba inodya inofamba. |
+| **5** | **Shumba (Mhazi)** | Mhazi, Nyamuzihwa, Mukatayi, Chinamhora | Maita Mhazi, vari Chishawasha. | Pasi pomoto pane madota. |
+| **6** | **Soko / Shoko (Mukanya)** | Mukanya, Chinamora, Vhudzijena, Soko | Maita Mukanya, Soko Mukanya. | Tsoko kana yoti tsvo, yaona bako. |
+| **7** | **Soko / Shoko (Murehwa)** | Murehwa, Mutasa, Mwari, Mbire | Maita Murehwa, vari muMbire. | Chara chimwe hachitswanyi hinda. |
+| **8** | **Mbizi (Samaita)** | Samaita, Mutasa, Dhuve, Wakapiwa | Maita Samaita, heri Mbizi. | Mbizi ikaswera mumatope inofana nembongoro. |
+| **9** | **Tembo (Mazvimbakupa)** | Mazvimbakupa, Wandishona, Chitehwe | Maita Tembo, Mazvimbakupa. | Ndambakuudzwa akaonekwa nembonje pamhanza. |
+| **10** | **Nzou (Samanyanga)** | Samanyanga, Marange, Katasa | Maita Samanyanga, vari muBocha. | Nzou hairemerwi nenyanga dzayo. |
+| **11** | **Zhou (Mhukahuru)** | Mhukahuru, Divaremvura, Sukumani | Maita Zhou, vari muMberengwa. | Mviromviro dzembanje dzinotanga nemashizha. |
+| **12** | **Shava (Mhofu)** | Mhofu, Museyamwa, Chisvi, Nhuka | Maita Mhofu, Museyamwa. | Mhofu yomukono haina danga. |
+| **13** | **Shava (Chihera)** | Chihera, Mutenhesanwa, Nyakudirwa | Maita Chihera, Chidavarume. | Mukadzi anofamba haashayi mapfihwa. |
+| **14** | **Gumbo (Madyirapasi)** | Madyirapasi, Chitova, Gutu, Madyarapanze | Maita Gumbo, Madyirapasi, vari muGutu. | Gumbo rine mhanza rinotsika pane rine rombe. |
+| **15** | **Dziva (Mbedzi)** | Mbedzi, Sambiri, Mlambo, Kwandu | Maita Dziva, vari muMatonjeni. | Hove dzinofamba nemvura. |
+| **16** | **Ngara (Chipunza)** | Chipunza, Mukanyairi, Mafuzi, Nungu | Maita Ngara, Chipunza. | Nungu haisweli musaga. |
+| **17** | **Garwe (Nyamasvisva)** | Nyamasvisva, Mamba, Chiwawa | Maita Garwe, Nyamasvisva. | Garwe haridyi chebamba. |
+| **18** | **Nyati (Chidawanyika)** | Chidawanyika, Muchenje, Shanyai | Maita Nyati, Chidawanyika. | Nyati haityi vana vaduku. |
+| **19** | **Humba (Nyakuvimba)** | Nyakuvimba, Makombe, Chingowo, Nguruve | Maita Humba, vari muMakombe. | Humba inotenda panyoro. |
+| **20** | **Beta (Mazviona)** | Mazviona, Muchena, Chikonamombe, Ishwa | Maita Beta, Mazviona. | Ishwa inobuda mumwena une mvura. |
+| **21** | **Tsiwo (Gushungo)** | Gushungo, Mukanya, Zvimba | Maita Gushungo, vari muZvimba. | Gushungo rinoruma nenzara. |
+| **22** | **Shiri (Hungwe)** | Hungwe, Nyajena, Chirongamabwe | Maita Hungwe, Shiri yomudenga. | Shiri inovururuka nemapapiro ayo. |
+| **23** | **Khumalo** | Mntungwa, Lobengula, Mzilikazi, Zwide | Bayethe Mntungwa, Khumalo! | Imbila yaswela umsila ngokuyalezela. |
+| **24** | **領 Sibanda** | Shumba, Thambo, Gwaza, Ncindela | Ngiabonga Sibanda, lina bakwaChibi. | Inkunzi isematholeni. |
+| **25** | **Dube** | Zephania, Mpunzi, Mbizi, Khanye | Dube, Mbombela, lina elimitshatshazi. | Kakho mfula ungabo gubha. |
+| **26** | **Ndlovu** | Gatsheni, Boyikazi, Mpofu, Msopho | Gatsheni, lina elisenga inkomo zokusisela. | Indlovu ayisindwa ngumbhoko wayo. |
+| **27** | **Ncube** | Mzilankatha, Phathokoza, Ntabeni | Ncube, lina elikhwela emithini. | Indlela ibuzwa kwabaphambili. |
+| **28** | **Ngwenya** | Mambo, Mtimande, Libazi, Malandela | Ngwenya, lina elihlala emanzini amanyama. | Izandla sihlamba esinye. |
+### Implementation Note for Your JSON Seed
+This flat data structure directly isolates user inputs. If a user selects **ID #23 (Khumalo)**, your front-end text rendering layer can immediately bind the fallback placeholder greeting to "Bayethe Mntungwa, Khumalo!" and assign the empty-state motivation card to the Ndebele proverb "Imbila yaswela umsila ngokuyalezela" (The rock hyrax missed out on getting a tail because they relied on sending others instead of going themselves—a call to action for users to personally map out their family line).
+
+----------------------------
+
+Shona Marriage:
+The confusion during Shona marriage negotiations (*Roora / Lobola*) almost always stems from two things: families mixing up the **chronological order** of the steps, or failing to separate **what belongs to the mother (*Ambuya*)** versus **what belongs to the father (*Tezvara*)**.
+In Shona custom, *Roora* is a legalistic process. If the groom’s family (*Vakwasha*) does step 4 before step 2, or speaks out of turn, they are slapped with immediate fines (*Zvirehwa*).
+Here is the complete, chronological breakdown of how a Shona *Roora* day is structured, who gets what, and the modern financial expectations.
+## The Key Players
+Before anyone sits down, you must understand the structural roles:
+ * **The Munyai (Go-Between):** The most important person. The groom never speaks; the *Munyai* (negotiator representing the groom) does all the talking and handles the money.
+ * **The Vatete (Paternal Aunt):** Represents the bride. She sits with the bride's family but acts as the ultimate mediator, protecting the bride’s interests and confirming consent.
+ * **The Groomsmen/Delegation:** Sit quietly behind the *Munyai*. They only speak if the *Munyai* explicitly asks them to help count money or carry items.
+## The Chronological Step-by-Step Process
+Because doing these steps out of order results in steep financial penalties, your app must enforce this exact sequence:
+ 1. Kunyora Tsamba & Vhuramuromo
+   Weeks Before the Event
+   The groom's side sends a formal letter requesting a negotiation date. This is accompanied by a small fee called Vhuramuromo ("mouth opener" to allow the bride's family to open and read the letter).
+ 2. Zvirango / Entry Protocol Fees
+   The Morning of the Roora
+   The Vakwasha arrive at the homestead but cannot just walk in. They sit outside or in a designated room and pay small incremental cash fees through the Vatete to proceed: Ndinoreva muromo (permission to speak), Kupinda mumusha (gate entry), and Makadiniko (greeting the elders).
+ 3. Zvamai (Satisfying the Mother)
+   Mid-Morning Phase
+   Custom dictates that the mother must be honored and compensated for raising the bride before the father says a single word. This includes Mbonano (fee to physically see the mother), Mafuta eAmbuya (money for body lotion), and Matwiro (compensating her for pounding grain for the bride).
+ 4. Rusambo (The Core Dowry)
+   The Main Negotiation
+   This is the most critical structural node. Rusambo is the actual price paid to the father's side that legally binds the marriage. It is negotiated heavily in cash and traditionally signifies the transfer of marital rights.
+ 5. Danga (The Cattle Portion)
+   Afternoon Phase
+   The father demands a specific number of cattle (traditionally 5 to 9 cows). One must be a live dairy cow for the mother (Mombe yeHumai). The rest can be charged as a cash equivalent per beast based on local market rates.
+ 6. Zvatezvara neMbatya (Parental Wardrobes)
+   Late Afternoon Phase
+   The final material demands. The groom's family must provide complete, brand-new outfits (suits, shoes, hats for the father; dresses, wraps, blankets for the mother and Vatete), or the cash equivalent to buy them.
+ 7. Madyo / Majaka (The Welcoming Feast)
+   Evening Celebration
+   Once all primary fees are accepted, the bride's family cooks a massive feast funded by a small fee paid by the groom (Mari yemafuta / cooking gas/oil fee). The groom is officially introduced, and the two families eat together as one.
+## The Roora Financial Ledger & Pricing Matrix
+To help your users figure out *what* to charge and *who* keeps it, here is the baseline valuation matrix used across Zimbabwe today (denominated in USD, which is the standard currency for *Roora* negotiations).
+| Phase / Item Name | Primary Recipient | Traditional Meaning / Purpose | Modern Estimated Range (USD) |
+|---|---|---|---|
+| **Vhuramuromo** | Bride's Brothers / Youth | "Mouth opener" to initiate the talks. | $20 – $100 |
+| **Kupinda Mumusha** | The Household | Entry fee to walk onto the property. | $20 – $50 |
+| **Mbonano yeAmbuya** | The Mother (*Ambuya*) | Token given to the mother to allow her to greet the delegation. | $100 – $300 |
+| **Pasi weMhazi** | The Father's Lineage | Respect paid to the ground/ancestors of the home. | $50 – $100 |
+| **Rusambo** | The Father (*Tezvara*) | The foundational bride price; marks marriage validity. | $1,500 – $5,000+ *(Varies by education/status)* |
+| **Danga (Cattle)** | The Father / Family Herd | Building the wealth of the family lineage. | 4 – 8 cows *(Charged at $400 - $600 per head cash equivalent)* |
+| **Mombe yeHumai** | The Mother (*Ambuya*) | **Mandatory live cow** given to the mother; cannot be substituted entirely for cash. | 1 actual live heifer/cow |
+| **Majuzi / Mbatya** | Father & Mother | Formal clothes for the parents to wear to the future wedding. | Full outfits or $300 – $600 cash |
+| **Kunhonga / Kunonga** | The Bride | A small pile of cash the bride picks up to show she consents to the final figures. | $50 – $200 |
+## Important Customary Nuances to Account For
+ 1. **The "Mombe yeHumai" Rule:** If your app features a digital checklist, the **Mombe yeHumai** (Mother's cow) must have a special status indicator. Under Shona custom, this cow belongs exclusively to the mother’s maternal ancestors. If the couple divorces later, this cow can *never* be refunded or taken back by the groom.
+ 2. **Zvirehwa (Fines):** The bride's family will actively look for mistakes to fine the *Vakwasha*. Common fines include:
+   * *Kutsika mbeu:* Arriving late and "stepping on the crops."
+   * *Kugona mukanwa:* Speaking directly to the elders instead of through the *Munyai*.
+   * *Kupinda nemukanwa*: Entering the room through the wrong door or sitting on chairs instead of the floor before being permitted.
+ 3. **The Ndau / Manyika Variations:** While the structure above is predominantly Zezuru and Karanga, if the bride is **Manyika**, they often place a heavy emphasis on **Saga reMunyu** (bags of salt) and firewood as part of the initial entry items. If she is **Ndau**, the pricing structure historically incorporates *Zvikwambo* tokens or variations in specific beadwork and currency expectations.
+
+Ndebeke marriage:
+Just like the Shona *Roora* process, the Ndebele marriage system (*Amalobolo*) is deeply structured and procedural. However, the internal logic shifts dramatically in terms of **who holds the real negotiating power** and **how cattle are calculated**.
+If you try to negotiate an Ndebele marriage using Shona protocols, the talks will stall immediately. The biggest structural difference is that in Ndebele custom, the maternal side of the family holds massive veto power, and the negotiations are heavily centered around the physical or symbolic transfer of a herd (*Ikhazi*).
+## The Key Players
+The table setup looks similar to a Shona negotiation, but the titles and underlying authorities are entirely distinct:
+ * **Ukhula (The Go-Between):** The equivalent of the Shona *Munyai*. He is the diplomat representing the groom's family (*Abayeni*). He must know the bride's family history and *Izithakazelo* (praise names) perfectly.
+ * **Omalume (The Maternal Uncles):** **This is the most critical structural shift.** In Shona custom, the father and paternal aunts (*Vatete*) run the show. In Ndebele custom, your maternal uncle (*Umalume*) must be present. He represents the bloodline that birthed the bride, and he has a dedicated share of the dowry that cannot be negotiated away.
+ * **Abomama (The Mothers/Aunts):** They sit in an adjacent room or section, receiving specific gifts and checking the quality of physical goods brought by the groom's side.
+## The Chronological Step-by-Step Process
+Ndebele negotiations move through a strict legal timeline. Doing these out of order or failing to complete a stage can void the customary validity of the union.
+ 1. Isicelo (The Formal Request)
+   Months Before Negotiations
+   The groom's family sends an official letter to the bride's father requesting a date to sit down. This letter is accompanied by Isivulamulomo ("mouth opener" cash) so the family will agree to host the delegation.
+ 2. Ukungena (Gate Entry Protocols)
+   Arrival Morning
+   The groom's delegation (Abayeni) arrives at the gate. They do not enter until they pay a small fee to clear the pathway. Once inside the yard, they pay Ikhangaziwe ("let me be known"), which introduces the groom's family to the household ancestors.
+ 3. Ukubona Amehlo (Meeting the Parents)
+   Mid-Morning Phase
+   Before discussing cattle, the groom's side must pay a direct cash fee to look the parents in the eyes and state their intentions clearly. This is accompanied by small respect tokens for the bride's father.
+ 4. Amalobolo / Ikhazi (The Cattle Count)
+   The Core Negotiation
+   The main architectural node. The bride's family charges a specific number of cattle (the Ikhazi), typically ranging from 5 to 10 beasts. The value is discussed in terms of actual live cows, but settled using a mixed matrix of live animals and cash equivalents based on current regional livestock markets.
+ 5. Inkomo kaMama (The Mother's Cow)
+   The Maternal Anchor
+   A mandatory, non-negotiable live heifer or dairy cow is set aside specifically for the bride's mother. This matches the Shona Mombe yeHumai and represents the mother's role in raising and breastfeeding the bride.
+ 6. Izibizo (The Family Wardrobe & Demands)
+   Afternoon Phase
+   Once the cattle count is locked down, the bride’s family presents a physical manifest of required material gifts. This includes complete outfits for the parents, heavy blankets (Amacansi), and a very specific fee or coat for the Umalume (Maternal Uncle).
+ 7. Ukwamukelwa (The Welcoming Feast)
+   Evening Conclusion
+   The final cash token is paid to allow the families to mix. A beast or goat is slaughtered to seal the contract, and the groom is formally brought into the room to be introduced to his new in-laws over a shared traditional meal.
+## The Amalobolo Financial Ledger & Pricing Matrix
+Ndebele pricing relies on a clear division between **cash-clearing fees** and **the core cattle ledger (*Ikhazi*)**. Values below reflect current standard custom baselines across Zimbabwe (denominated in USD).
+| Phase / Item Name | Primary Recipient | Traditional Meaning / Purpose | Modern Estimated Range (USD) |
+|---|---|---|---|
+| **Isivulamulomo** | Bride's Father / Elders | Token to allow the family to open the letter and speak. | $50 – $150 |
+| **Ikhangaziwe** | The Homestead / Ancestors | Introduction fee to alert the home that suitors have arrived. | $50 – $100 |
+| **Ukubona Amehlo** | Father & Mother | "Seeing the eyes" fee to initiate formal dialogue. | $100 – $300 |
+| **Ikhazi (Cattle Base)** | Paternal Family Herd | The legal baseline of the marriage network. | 5 – 10 Cows *(Charged at $500 - $700 per head cash equivalent)* |
+| **Inkomo kaMama** | The Mother | **Mandatory live cow** representing the mother’s breast. | 1 actual live heifer/cow |
+| **Inkomo kaMalume** | Maternal Uncle (*Umalume*) | Standardized animal or heavy cash equivalent for maternal line blessing. | $400 – $600 or 1 beast |
+| **Izibizo / Amacansi** | Extended Family / Aunts | Physical manifest of blankets, winter shawls, and clothing. | Outfits or $400 – $800 cash |
+| **Umsindo / Isitshwala** | Cooking Crew / Youth | Token to thank the women cooking the celebration feast. | $50 – $150 |
+## Important Customary Nuances for Your App Engine
+ 1. **The Umalume Veto:** If your app is tracking a dispute or validation flow for an Ndebele wedding, **the maternal uncle's node must have sign-off status.** If a father accepts *Amalobolo* without informing or paying the *Umalume*, the marriage is considered culturally incomplete, and the maternal side can disrupt future family events or funeral protocols.
+ 2. **No Direct Refund on Divorce:** Just like Shona custom, the **Inkomo kaMama** (Mother's Cow) is legally separate from the husband’s assets. If the marriage dissolves, the husband can sue to get a portion of his *Ikhazi* (base cattle) back depending on whether children were born, but the mother’s cow can *never* be touched or returned.
+ 3. **The "Fine" Matrix (*Izigo*):** Ndebele negotiations punish arrogance heavily. If the groom's side dresses inappropriately (e.g., shorts, no jacket), leaves the room without permission, or counters an elder's statement aggressively, the *Ukhula* is immediately hit with an *Isigo* (fine) that must be cleared in cash before the main cattle talks can resume.
+
+To support an offline-first architecture (ideal for local SQLite or local JSON storage on mobile devices running in low-connectivity areas), the schema must be highly dynamic. Instead of hardcoding hard-to-change columns like vhuramuromo_paid or isivulamulomo_amount, we will use a polymorphic ledger pattern.
+This approach allows a single set of tables to store any Zimbabwean marriage transaction by breaking down the event into a parent execution record, a dynamic ledger line, and an asset tracking registry.
+## 1. The Entity-Relationship Architecture
+```
+ [marriages] 
+      └── [marriage_participants] (Links profiles to roles like Umalume or Vatete)
+      └── [marriage_ledger] (Tracks dynamic payment definitions)
+               └── [livestock_ledger] (Strict tracking for mandatory live beasts)
+
+```
+## 2. SQL Schema Blueprint (SQLite/PostgreSQL Compliant)
+Here is the data structure optimized for low legibility overhead and straightforward local storage compiling.
+```sql
+-- 1. PARENT MARRIAGE RECORD
+CREATE TABLE marriages (
+    id TEXT PRIMARY KEY, -- UUID or standard unique local string
+    bride_profile_id TEXT NOT NULL, -- References main individuals table
+    groom_profile_id TEXT NOT NULL, -- References main individuals table
+    cultural_system TEXT CHECK(cultural_system IN ('SHONA', 'NDEBELE')) NOT NULL,
+    date_initiated TEXT NOT NULL, -- ISO8601 String for offline dates
+    negotiation_status TEXT CHECK(negotiation_status IN ('INITIATED', 'IN_PROGRESS', 'SETTLED', 'DISPUTED')) DEFAULT 'INITIATED',
+    village_book_verification_id TEXT, -- Level 6 Geo-Anchor link for institutional validity
+    notes TEXT
+);
+
+-- 2. TRADITIONAL ROLES REGISTRY
+-- Maps specific relatives to their legal obligations and veto powers for this event
+CREATE TABLE marriage_participants (
+    id TEXT PRIMARY KEY,
+    marriage_id TEXT NOT NULL,
+    profile_id TEXT, -- Can be NULL if profile doesn't exist yet in local DB
+    fallback_name TEXT NOT NULL, -- Direct text fallback if profile isn't onboarded yet
+    customary_role TEXT CHECK(customary_role IN ('MUNYAI_UKHULA', 'VATETE', 'UMALUME', 'TEZVARA_FATHER', 'AMBUYA_MOTHER', 'BROTHER_YOUTH')) NOT NULL,
+    FOREIGN KEY (marriage_id) REFERENCES marriages(id) ON DELETE CASCADE
+);
+
+-- 3. THE UNIFIED LEDGER
+-- Stores both Shona Roora and Ndebele Amalobolo line items dynamically
+CREATE TABLE marriage_ledger (
+    id TEXT PRIMARY KEY,
+    marriage_id TEXT NOT NULL,
+    phase_sequence_order INTEGER NOT NULL, -- Enforces the chronological UI steps
+    local_term_name TEXT NOT NULL, -- e.g., 'Vhuramuromo', 'Isivulamulomo', 'Rusambo', 'Ikhazi'
+    recipient_role_target TEXT CHECK(recipient_role_target IN ('MATERNAL_LINE', 'PATvThis is an exceptional production blueprint. By bypassing heavy web frameworks, avoiding the programmatic data trap of the big telecom networks, and designing directly for the structural realities of Zimbabwean traditional administration, you are setting up an incredibly clean, high-performance product.
+Let's flesh out the remaining technical gaps and build the complete frontend engine structure for your single-HTML prototype.
+## 1. Single-HTML Architecture & State Machine (View Tally)
+To ensure this entire application remains a single, lightning-fast index.html file that you can instantly share via Xender or WhatsApp Web to an investor's phone, you must avoid traditional routers. Instead, use a lightweight JavaScript State Machine that toggles visibility classes on semantic HTML wrapper elements.
+To keep memory overhead extremely lean, your app requires exactly **2 Core Hubs** split into **7 Distinct View States**.
+```
+[Boot View: Role Selection]
+   ├──> [Regular User Hub]
+   │       ├── View 1: Timeline / Media Feed (Default Landing)
+   │       ├── View 2: Staggered Generation Tree Canvas
+   │       ├── View 3: Cultural Lookup & Totem Library
+   │       ├── View 4: Offline Export & Settings
+   └──> [Institutional Hub]
+           ├── View 1: Macro Data Aggregation Dashboard
+           ├── View 2: Advanced Search & Lineage Audit Filters
+
+```
+### Minimalist CSS Blueprint for App Wrappers
+To enforce your rules of **portrait-only mode, zero horizontal scrolling, and completely hidden native scrollbars**, embed these core utility styles directly inside your main document head:
+```css
+/* Zero-Friction Application Shell */
+html, body {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Disables native browser bouncing */
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #ffffff;
+}
+
+/* Base View Layer Container */
+.view-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Hide Scrollbars completely while retaining touch-inertia behavior */
+.scrollable-content {
+  flex: 1;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollable-content::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Minimalist 1px Soft Corner Identity Card Design */
+.cultural-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 2px; /* Soft 1px appearance corner */
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #fafafa;
+}
+
+```
+## 2. The Staggered-Age Generation Grid (Tree UI Engineering)
+Placing siblings on a single, rigid horizontal row fails to capture the core reality of African families, where a 15-year age gap between the first-born (*Dangwe*) and last-born (*Chigupawanga*) creates distinctly separate lived eras.
+To map this in portrait view without horizontal panning anomalies, we cross-reference a **Left-Anchored Timeline Axis** with a **Relative Age Shift Offset**.
+```
+[YEARS AXIS]       [GENERATION VIEW CANVAS (PORTRAIT)]
+  1980 ─────────┐  ┌────────────────────────────────────────┐
+                │  │ [Card: Tinashe (Dangwe)]               │ -> Rank 1 (Top)
+  1984 ─────────┼──┤                                        │
+                │  │            [Card: Lloyd (Maviri)]      │ -> Rank 2 (Offset)
+  1989 ─────────┼──┤                                        │
+                │  │                        [Card: Farai]   │ -> Rank 3 (Bottom)
+  1995 ─────────┘  └────────────────────────────────────────┘
+
+```
+### Layout Calculation Logic
+Each profile card evaluates its sibling order rank. Instead of complex absolute positioning coordinates, use CSS Flexbox with an incremental top-margin modifier based directly on birth proximity:
+```javascript
+// Calculate dynamic card vertical drop based on seniority ranking
+function renderSiblingNode(personObject, siblingRankIndex) {
+  const baseOffsetPixels = 24; 
+  const computedTopMargin = siblingRankIndex * baseOffsetPixels;
+
+  return `
+    <div class="cultural-card" style="margin-top: ${computedTopMargin}px; width: 85%;">
+      <span style="font-size: 11px; color: #757575;">${personObject.birthYear || 'Unknown Year'}</span>
+      <div style="font-size: 18px; font-weight: bold; margin-top: 4px;">${personObject.fullName}</div>
+      <div style="font-size: 13px; color: #424242;">${personObject.chidawo}</div>
+    </div>
+  `;
+}
+
+```
+## 3. High-Density WhatsApp Text-Snippet Engine
+Since you are entirely cutting out expensive real-time API syncs to save users from heavy data charges, data exchange must be achieved via ultra-dense text snippets manually sent over standard WhatsApp.
+When a user triggers an export, the application packs their local records into a single, highly compressed, pipe-delimited string layout designed to maximize transmission efficiency over SMS or plain text chat.
+### Data Compression Specification Layout
+```
+ROOTS_V1|[PROVINCE_CODE]|[DISTRICT_CODE]|[SABHUKU_BOOK_ID]|[MUTUPO_ID]|[CHIDAWO_ID]|[ID_MASK]|[HASH]
+
+```
+| Field Segment | Data Example | Allocation Purpose |
+|---|---|---|
+| **Header Token** | ROOTS_V1 | Tells the importing application how to parse the payload logic. |
+| **Geo-Code** | ZW-MS-CHV | Masvingo Province, Chivi District mapping. |
+| **Village ID** | V-CHIV-089 | Sabhuku Registration identifier for institutional tracing. |
+| **Lineage Keys** | M01-C03 | Totem key map: M01 (Moyo) matched to C03 (Chirandu). |
+| **Legal Anchor** | 63114258X27 | Strict alphanumeric compression of Zimbabwean National Identification string. |
+### Practical JS Native Share String Generator
+```javascript
+function generateWhatsAppPayload(personData) {
+  const payloadSegments = [
+    "ROOTS_V1",
+    personData.provinceCode,
+    personData.districtCode,
+    personData.villageBookId,
+    personData.mutupoId,
+    personData.chidawoId,
+    personData.nationalId.replace(/-/g, '')
+  ];
+  
+  const packedString = encodeURIComponent(payloadSegments.join('|'));
+  
+  // Launches native device intent directly to WhatsApp without background data use
+  window.location.href = `whatsapp://send?text=${packedString}`;
+}
+
+```
+## 4. Local Database Schema & Customary Law Enforcement
+For a reliable, zero-internet system, use a flat, structured IndexedDB wrapper or raw, highly structured JavaScript objects saved straight to local storage.
+This schema handles your 47 cultural data points while actively hard-coding deep-rooted traditional laws directly into the data submission engine.
+### Core Architecture Object Schema
+```javascript
+const RootsOfflineSchema = {
+  metadata: {
+    schemaVersion: "1.0.0",
+    lastLocallyUpdated: "2026-07-02"
+  },
+  lookups: {
+    // 16 Constitutional languages mapped natively
+    languages: ["Shona", "Ndebele", "Chewa", "Chibarwe", "Kalanga", "Koisan", "Nambya", "Ndau", "Shangani", "Sotho", "Tonga", "Tswana", "Venda", "Xhosa", "English", "Sign Language"],
+    
+    // Core database map of the 28 Shona Mitupo and ancestral arrays
+    shonaMitupo: {
+      "Moyo": { zvidawo: ["Chirandu", "Dhewa", "Moyondizvo", "Sinyoro", "Nematombo"], taboo: "Mwoyo weMhuka (Heart of any animal)" },
+      "Shumba": { zvidawo: ["Murambwi", "Mhazi", "Nyamuzihwa", "Gurundoro"], taboo: "Nyama yeShumba (Lion Flesh)" },
+      "Soko": { zvidawo: ["Mukanya", "Murehwa", "Vhudzijena", "Chirongo"], taboo: "Tsoko (Monkey)" },
+      "Shava": { zvidawo: ["Mhofu", "Museyamwa", "Mutenhesanwa", "Mwendamberi"], taboo: "Mhofu (Eland)" }
+    }
+  }
+};
+
+```
+### Customary Law Implementation Engine
+#### 1. Customary Exogamy & Incest Prevention Check
+This system cross-references genetic and spiritual lineages prior to committing a marriage branch connection node to the local database file.
+```javascript
+function validateMarriageFeasibility(partnerA, partnerB) {
+  // If the primary totems and specific sub-clan praise codes match exactly, raise a strict customary barrier
+  if (partnerA.mutupo.trim().toLowerCase() === partnerB.mutupo.trim().toLowerCase()) {
+    if (partnerA.chidawo.trim().toLowerCase() === partnerB.chidawo.trim().toLowerCase()) {
+      return {
+        allowed: false,
+        warningMessage: "MUTUPO VEKUBEREKANA: Marriage strictly prohibited by traditional customary law. Nodes share identical ancestral Totem and Praise Name branches."
+      };
+    }
+  }
+  return { allowed: true, warningMessage: "" };
+}
+
+```
+#### 2. The Patrilineal Lineage Rule Enforcer
+In both Shona and Ndebele custom, child nodes automatically inherit the exact patrilineal totem profile.
+```javascript
+function inheritPatrilinealLineage(fatherNode, childNodeInput) {
+  let processedChild = { ...childNodeInput };
+  
+  // Strict patrilineal inheritance mapping
+  processedChild.mutupo = fatherNode.mutupo;
+  processedChild.chidawo = fatherNode.chidawo;
+  processedChild.isibongo = fatherNode.isibongo;
+  processedChild.izithakazelo = fatherNode.izithakazelo;
+  
+  return processedChild;
+}
+
+```
+## 5. Peer-to-Peer Visibility Groups Logic (The Offline Trust Graph)
+Because this app works without an online server to manage content permissions, privacy filtering for the **Timeline Media Tab** depends on an offline, degrees-of-separation lookup calculation run entirely on the local device's database.
+```javascript
+function evaluateMediaVisibility(mediaPostObject, activeUserNode, localDatabaseGraph) {
+  // Option 1: Expressly marked public to connected family lines
+  if (mediaPostObject.visibilityScope === "PUBLIC_CONNECTED") {
+    return true;
+  }
+  
+  // Option 2: Sibling Ring Verification
+  if (mediaPostObject.visibilityScope === "SIBLINGS") {
+    return (activeUserNode.fatherId === mediaPostObject.authorFatherId && activeUserNode.fatherId !== null);
+  }
+  
+  // Option 3: First Cousins Evaluation Loop
+  if (mediaPostObject.visibilityScope === "FIRST_COUSINS") {
+    const userFather = localDatabaseGraph.find(p => p.id === activeUserNode.fatherId);
+    const authorFather = localDatabaseGraph.find(p => p.id === mediaPostObject.authorFatherId);
+    
+    if (userFather && authorFather) {
+      // Check if fathers share the same paternal origin (Grandfather)
+      return (userFather.fatherId === authorFather.fatherId && userFather.fatherId !== null);
+    }
+  }
+  
+  return false;
+}
+
+```
+## 6. The Multi-Tier Institutional Analytics Dashboard
+For institutional users—such as researchers from the University of Zimbabwe (UZ), administrative officers from the Ministry of Local Government, or grant officers from UNESCO—the app switches into a rich **Demographic Aggregation Hub**.
+This interface focuses entirely on high-legibility data tables and text readouts, completely cutting out heavy visual charting scripts to keep memory footprint exceptionally low.
+### Minimalist Institutional Data Interface Layout
+```
++---------------------------------------------------------------------------------+
+| INSTITUTIONAL DATA LEDGER - REGIONAL ANCESTRAL METRICS                         |
++---------------------------------------------------------------------------------+
+| Filter Criteria: [ Province: Masvingo ] [ Totem: Moyo ] [ District: Chivi ]     |
++---------------------------------------------------------------------------------+
+| Total Audited Records: 14,205 Profiles                                          |
++---------------------------------------------------------------------------------+
+| Active Sabhuku Nodes Registered: 184 Distinct Books                            |
++---------------------------------------------------------------------------------+
+
+  LINEAGE DENSITY TRACKING TABLE:
+  -------------------------------------------------------------------------------
+  CHIEFTAINSHIP   | SUB-DIALECT   | DOMINANT CLAN PRAISE   | SAMPLE MATRIX SIZE
+  -------------------------------------------------------------------------------
+  Chief Chivi     | Karanga       | Chirandu               | 4,201 Nodes
+  Chief Gororo    | Karanga       | Dhewa                  | 3,110 Nodes
+  Chief Madyangove| Karanga       | Moyondizvo             | 6,894 Nodes
+  -------------------------------------------------------------------------------
+
+> SYSTEM NOTICE: All data records strictly match the statutory Zimbabwean National ID formatting rules for seamless integration with census systems.
+
+```
+This clean layout keeps your prototype incredibly lean. It operates with standard HTML inputs and native arrays, fitting perfectly within the hardware performance budget of an entry-level test phone like your Samsung A14, while delivering exactly what institutional investors need to see.
+TERNAL_LINE', 'YOUTH', 'MOTHER_DIRECT', 'COMMUNITY')) NOT NULL,
+    asset_type TEXT CHECK(asset_type IN ('CASH', 'LIVESTOCK', 'MATERIAL_GOOD')) NOT NULL,
+    
+    -- Financial Tracking
+    amount_demanded_usd REAL NOT NULL DEFAULT 0.0,
+    amount_paid_usd REAL NOT NULL DEFAULT 0.0,
+    
+    payment_status TEXT CHECK(payment_status IN ('UNPAID', 'PARTIAL', 'PAID')) DEFAULT 'UNPAID',
+    last_updated TEXT NOT NULL,
+    FOREIGN KEY (marriage_id) REFERENCES marriages(id) ON DELETE CASCADE
+);
+
+-- 4. LIVESTOCK REGISTRY EXTENSION
+-- Specifically validates physical beasts (like Mombe yeHumai / Inkomo kaMama)
+CREATE TABLE livestock_ledger (
+    id TEXT PRIMARY KEY,
+    ledger_item_id TEXT NOT NULL,
+    beast_type TEXT CHECK(beast_type IN ('HEIFER', 'DAIRY_COW', 'BULL', 'GOAT')) NOT NULL,
+    is_live_beast_mandatory INTEGER CHECK(is_live_beast_mandatory IN (0, 1)) DEFAULT 0, -- 1 means cash cannot substitute it
+    physical_delivery_status TEXT CHECK(physical_delivery_status IN ('PENDING_DELIVERY', 'DELIVERED_TO_KRAAL')) DEFAULT 'PENDING_DELIVERY',
+    FOREIGN KEY (ledger_item_id) REFERENCES marriage_ledger(id) ON DELETE CASCADE
+);
+
+```
+## 3. How the Data Seeds Dynamically (JSON Example)
+When a user kicks off a new negotiation in the app, your frontend UI won't change its underlying schema. It will simply look at the selected cultural_system and inject the correct chronological array rows into the local database instance.
+### Case A: Shona Roora Injection Profile
+```json
+{
+  "marriage_id": "m_shona_9982",
+  "cultural_system": "SHONA",
+  "ledger_entries": [
+    {
+      "phase_sequence_order": 1,
+      "local_term_name": "Vhuramuromo",
+      "recipient_role_target": "YOUTH",
+      "asset_type": "CASH",
+      "amount_demanded_usd": 50.0
+    },
+    {
+      "phase_sequence_order": 3,
+      "local_term_name": "Mbonano yeAmbuya",
+      "recipient_role_target": "MOTHER_DIRECT",
+      "asset_type": "CASH",
+      "amount_demanded_usd": 200.0
+    },
+    {
+      "phase_sequence_order": 5,
+      "local_term_name": "Mombe yeHumai",
+      "recipient_role_target": "MATERNAL_LINE",
+      "asset_type": "LIVESTOCK",
+      "livestock_extension": {
+        "beast_type": "DAIRY_COW",
+        "is_live_beast_mandatory": 1
+      }
+    }
+  ]
+}
+
+```
+### Case B: Ndebele Amalobolo Injection Profile
+```json
+{
+  "marriage_id": "m_ndebele_4412",
+  "cultural_system": "NDEBELE",
+  "ledger_entries": [
+    {
+      "phase_sequence_order": 1,
+      "local_term_name": "Isivulamulomo",
+      "recipient_role_target": "PATERNAL_LINE",
+      "asset_type": "CASH",
+      "amount_demanded_usd": 100.0
+    },
+    {
+      "phase_sequence_order": 4,
+      "local_term_name": "Ikhazi (Base Herd)",
+      "recipient_role_target": "PATERNAL_LINE",
+      "asset_type": "LIVESTOCK",
+      "amount_demanded_usd": 3500.0,
+      "livestock_extension": {
+        "beast_type": "BULL",
+        "is_live_beast_mandatory": 0
+      }
+    },
+    {
+      "phase_sequence_order": 6,
+      "local_term_name": "Inkomo kaMalume",
+      "recipient_role_target": "MATERNAL_LINE",
+      "asset_type": "LIVESTOCK",
+      "livestock_extension": {
+        "beast_type": "HEIFER",
+        "is_live_beast_mandatory": 1
+      }
+    }
+  ]
+}
+
+```
+## 4. Key Architectural Wins for the App
+ * **Offline Data Resilience:** Using independent line entries inside marriage_ledger allows families to update partial payments down to the exact dollar directly out in the rural areas, without needing an active server connection to process complex multi-table structures.
+ * **Audit-Ready Ledger Syncing:** By mapping individual line items to institutional target classifications (MATERNAL_LINE, PATERNAL_LINE), the National Archives or local community magistrates can run clean data validation exports to settle real-world family inheritance disputes instantly.
+
+-----------------
+
+Death and funeral customs:
+
+Shona:
+In Shona custom, death (*Rufu*) is not treated as a sudden full stop to an individual's existence. Instead, it is a profound, legally binding **state transition** for a family tree node. When a person dies, their profile within the kinship network transforms from a physical living node into an ancestral spiritual node (*Mudzimu*).
+For your **Roots** app, tracking this transition is incredibly valuable. In Zimbabwe, inheritance disputes, land reallocations, and lineage successions cannot legally execute until a highly specific timeline of customary funeral phases is completed.
+Here is the full structural breakdown of Shona death and funeral customs.
+## The Quantitative Asset Tally (For Backend Event Tracking)
+To support a comprehensive "Deceased Node Lifecycle" module, your system must account for:
+ * **3 Distinct Event Phases:** Spanning from the day of death to over twelve months later.
+ * **3 Mandatory Ritual Roles:** Structural actors who possess legal and executive authority over the body and estate.
+ * **The *Bhuku reChemo* Ledger:** A required data sub-table tracking multi-party communal financial contributions.
+ * **2 Spiritual Node States:** "Unanchored/Wandering" (*Mweya weMubvebve*) vs. "Anchored Ancestor" (*Mudzimu*).
+## The Chronological Lifecycle of a Shona Deceased Node
+The timeline of a Shona funeral moves through rigid, mandatory stages. Performing these out of order or neglecting a stage creates immense family friction and freezes estate distributions.
+ 1. Kuchema neChiziviso (The Announcement & Gathering)
+   Days 1 to 3
+   The moment death occurs, formal wailing (Mhere) or localized messaging alerts the village. The family gathers at the homestead (Parufu). Crucially, the village head (Sabhuku) must be formally notified with a token fee to clear land allocation in the community graveyard.
+ 2. Kuvigwa (The Burial Protocol)
+   Days 2 to 4
+   The body is brought to the rural homestead (Kumusha). Ritual handlers prepare the grave. Before interment, the family holds a viewing where final respects are paid. Specific personal items of the deceased are designated to be buried with them or cast away (Kurasira) to prevent spiritual lingering.
+ 3. Nyaradzo (The Consolation Service)
+   Month 1 to 3
+   A gathering held weeks or months post-burial to comfort the immediate family. In modern Christian-Shona hybrids, this features a memorial service. Culturally, it acts as the official clearinghouse where outstanding external debts (Mhosva) owed by or to the deceased are publicly declared.
+ 4. Kugovera Mbatya (Distribution of Personal Effects)
+   Month 6 to 12
+   The formal distribution of the deceased’s clothing and intimate material belongings. Overseas diaspora nodes or local branches must be present. The items are spread out on traditional mats (Masawo) and allocated to specific bloodline relatives under the strict supervision of the Paternal Aunt (Vatete).
+ 5. Kurova Makuva / Magadzira (The Spiritual Anchoring)
+   Year 1+
+   The final transformation milestone. A major traditional ceremony featuring home-brewed millet beer (Bira). This ritual legally "brings home" the spirit of the deceased from the wilderness, elevating the node state in the family tree from a wandering ghost to a protective guardian ancestor (Mudzimu).
+## The Core Ritual Roles
+Your schema must allow these temporary or permanent roles to be mapped to relative nodes during a funeral event:
+### 1. The Sahwira (The Ritual Friend / Ritual Undertaker)
+The *Sahwira* is a non-bloodline friend of the family who holds absolute executive power over the funeral logistics.
+ * **The Logic:** Because blood relatives are paralyzed by grief, the *Sahwira* steps in to handle the intimate, painful tasks: washing the body, guiding the grave diggers, and managing the timeline.
+ * **App Feature:** They use dark comedy and mock-insults (*Chiramu*) during the mourning period to break the tension of grief. No blood relative can overrule a *Sahwira's* funeral directive.
+### 2. The Muzukuru (The Nephew / Paternal Grandchild)
+The *Muzukuru* serves as the operational foreman of the funeral. They coordinate the slaughtering of livestock to feed the mourners, allocate tasks to the youth, and work directly alongside the *Sahwira* to safeguard the family assets from being looted before the official distribution phase.
+### 3. The Vatete (The Paternal Aunt)
+The *Vatete* holds absolute structural authority over the female aspects of the mourning workspace. If the deceased is a married woman, the *Vatete* negotiates directly with the maternal in-laws (*Vabereki*) to clear any outstanding structural payments before burial is permitted.
+## The Bhuku reChemo Ledger Architecture
+During a Shona funeral, every single visitor contributes a small token of cash or foodstuff to support the host family. This is called **Chemo**. It is never treated as a casual tip; it is meticulously recorded in an exercise book called the **Bhuku reChemo**.
+*Why this is an institutional data requirement:* If Family A contributes $20 to Family B's funeral in 2026, Family B is culturally and legally obligated to return an equal or greater amount when Family A experiences a loss in 2028. It is a system of communal insurance.
+| Data Field | Input Type | Customary Validation Purpose |
+|---|---|---|
+| **Gutsaruzhinji / Contributor Name** | Text / Node Link | Identifies the family branch making the deposit. |
+| **Mupiro / Contribution Type** | Dropdown | CASH_USD, CASH_ZIG, MEALIE_MEAL_KG, GOAT, FIREWOOD |
+| **Ukama / Relationship Tier** | Dropdown | Vakwasha (In-laws), Vazukuru (Nephews), Vagari (Neighbors) |
+| **Uwandu / Value Metric** | Numeric | Exact monetary value or weight to ensure future matching reciprocity. |
+## Customary Successions: Kugara Nhaka (Name & Estate Inheritance)
+Once the *Kurova Makuva* ceremony is completed, the final legal step occurs: **Kugara Nhaka**.
+ * The deceased man's physical estate and responsibilities are formally passed down.
+ * A chosen successor (often a younger brother or eldest son depending on sub-clan parameters) steps forward to inherit the **traditional name** and spiritual spear of the family head.
+ * **App Logic:** When this occurs, the app engine should update the successor's profile node, appending the inherited ancestral honorific title to their modern legal name to showcase the continuation of the leadership line.
+
+Ndebele:
+In the Ndebele custom framework, death (*Ukufa* or the more respectful honorifics *Ukuphutha* / *Ukuhamba*) triggers a highly structured communal protocol designed to cleanse the family line of the dark shadow of grief (*Isinyama*) and legally transition property, custody, and ancestral status.
+For your **Roots** database engine, mapping an Ndebele deceased node requires a strict understanding of patriarchy, primogeniture (inheritance by the firstborn), and the absolute requirement of cleansing rituals before any structural assets can change hands.
+## The Ndebele Deceased Node Asset Tally
+To build out this module accurately for regional administrative verification, your schema must incorporate:
+ * **5 Chronological Milestone Nodes:** From the physical passing to the final integration of the spirit.
+ * **3 Specific Operational Roles:** Tasked with executing the logistics and safeguarding lineage property.
+ * **The "Inzilo" (Mourning State) Flag:** A Boolean or state variable tracking whether a surviving spouse is under customary restriction.
+ * **The "Ukubuyisa" Spiritual Anchor State:** Elevating the profile from an unmapped deceased entity to an active *Idlozi* (Ancestor Guardian).
+## The Chronological Lifecycle of an Ndebele Deceased Node
+Ndebele funerary customs follow a strict legalistic and timeline-driven approach. Mismanaging these steps can freeze an estate or cause local traditional leaders (*Izinduna*) to penalize the family homestead.
+ 1. Isaziso lesikhumbuzo (The Notification & Guarding)
+   Day 1 to 2
+   Immediate notification is sent to the local Headman (Sadunhu/Isiduna) and maternal uncles (Omalume). The community gathers at the family homestead (Ekhaya). A night vigil (Ukuproza / Ukulinda isidumbu) is held inside the main kitchen structure.
+ 2. Ukungcwaba (The Burial Protocol)
+   Day 3 to 5
+   Burial historically occurs in the early morning before the sun becomes intense, signifying peace. For a male head of the household, burial positioning near the cattle kraal (Isibaya) carries deep structural weight. The Abakhwenyana (in-laws) perform the physical digging and heavy lifting.
+ 3. Ukugezwa Kwezikhali (The Cleansing of Tools)
+   Day of Burial (Post-Interment)
+   Immediately after returning from the grave site, all tools used (shovels, picks) and the immediate family must undergo a ritual wash using specific botanical formulations. This step cleanses the Isinyama (grief shadow) so the family can interact with the community without bringing misfortune.
+ 4. Ukukhanyisa / Memorial
+   Month 1 to 3
+   A short gathering to support the immediate family and evaluate the immediate stability of the household, ensuring dependents have basic food security before the long-term mourning period concludes.
+ 5. Ukubuyisa (Bringing Back the Spirit)
+   Year 1 to 2
+   The absolute peak transition node. A massive traditional ceremony where livestock is slaughtered and traditional beer brewed. This ritual formally invites the spirit of the deceased back into the home to watch over the family as an active guardian ancestor (Idlozi).
+## Core Structural Roles
+When configuring a funeral or estate management event in **Roots**, your app must explicitly bind users to these three operational roles:
+### 1. Abakhwenyana (The In-Laws / Sons-in-Law)
+In Ndebele custom, blood sons do not dig the grave or handle the raw physical layout of the burial site. That responsibility falls entirely on the *Abakhwenyana*. They act as the physical labor force of the event, paying respect to the lineage that gave them wives by executing all heavy logistics.
+### 2. Omalume (The Maternal Uncles)
+The *Omalume* are the ultimate legal observers. They must oversee the entire funeral to ensure the deceased's biological children are treated fairly and that paternal relatives do not quietly clear out the homestead assets before the official inheritance date.
+### 3. The Inzilo Bearer (The Mourning Widow)
+The surviving wife enters a strict, protected state called **Inzilo**. She wears distinct black mourning attire, faces specific movement restrictions in the village, and cannot enter negotiations or remarry until a full year has passed and her *Inzilo* is ceremonially cut and removed by the elder women of the husband’s clan.
+## Inheritance Protocols: Ukudla Ifa (Eating the Inheritance)
+In Ndebele customary law, the distribution of an estate **cannot occur** until the *Ukubuyisa* ceremony is completely checked off. Once the spirit is brought home, the court of elders holds the **Ukudla Ifa** assembly.
+```
+[Ukubuyisa Completed] ──> [Elders Convene] ──> [Apply Primogeniture Logic] ──> [Estate Apportioned]
+
+```
+### The Primogeniture System
+Ndebele tradition utilizes a direct patrilineal primogeniture model:
+ * **The Firstborn Son (*Izibulo*):** He is the primary heir. He does not "own" the wealth in a modern Western individualistic sense; rather, he inherits the **status, name, and role** of the deceased father.
+ * **The Obligation:** He becomes the legal custodian of the homestead, the cattle herd, and is structurally responsible for taking care of his mother and minor siblings.
+ * **The App Logic:** In the *Roots* app backend, when an *Ukudla Ifa* event is executed, the system should automatically link minor sibling nodes to the *Izibulo* node as their new legal customary guardian.
+### Asset Distribution Matrix
+During the *Ukudla Ifa* assembly, assets are divided based on strict lineage categories:
+| Asset Classification | Primary Custodian | Customary Purpose / Trust Rule |
+|---|---|---|
+| **Isibaya (The Base Cattle Herd)** | Eldest Son (*Izibulo*) | Held in trust to pay future *Amalobolo* for younger brothers or support family emergencies. |
+| **Inkomo Wesithole (Specific Heifers)** | Younger Sons | Apportioned to younger brothers to help them kickstart their independent herds. |
+| **Impahla Zomndeni (Household/Intimate Goods)** | Surviving Wife / Daughters | Kitchen assets, personal furniture, and domestic tools remain with the maternal core. |
+| **Ukuvusa Igama (The Name Revival)** | Eldest Son | The father's traditional name is formally bestowed upon the heir, signaling continuity of leadership. |
+> **App Engine Note:** To make *Roots* fully functional for legal estate clearing house utility in Zimbabwe, the system must block any user from moving an asset from a deceased node to an heir node unless the date_of_ukubuyisa field contains a valid timestamp that is at least 365 days past the date_of_death.
+> 
+
+----------------
+
+Locking into **Topic No. 1: The Matrilineal Exception: The Tonga Framework (Binga)**. We will not touch topics 2 through 5 until you are satisfied that this module is fully mapped and architected.
+To build a true national registry or identity system for Zimbabwe, your backend engine cannot use a single, hardcoded "Patrilineal" rule for lineage inheritance. If it does, it will completely break when handling the **Tonga (BaTonga) people of the Zambezi Valley (Binga district)**.
+Historically and culturally, the Tonga operate on a **matrilineal descent system** that fundamentally flips how family tree nodes, property, and spiritual anchors are linked.
+## 1. The Core Tonga Kinship Pillars: *Mukowa* vs. *Luzubo*
+In Shona or Ndebele contexts, you have one primary totem that dictates your identity. In the Tonga framework, every individual node simultaneously tracks two distinct lineage streams, but they are weighted completely differently.
+ * **The Mukowa (The Matriclan - Primary Anchor):** This is the mother’s clan. It is the absolute core of a Tonga person’s identity. Your *Mukowa* determines your legal lineage, your structural rights to community land, your primary spiritual protection, and your inheritance rights.
+ * **The Luzubo (The Patriclan - Secondary Anchor):** This is the father’s clan. While respected and tracked for purposes of avoiding incest in marriage, it does not confer property or primary lineage rights.
+### Node Attribute Comparison Matrix
+| Identity/Asset Attribute | Patrilineal Engine (Shona/Ndebele) | Matrilineal Engine (Tonga) |
+|---|---|---|
+| **Primary Clan/Totem Inherited From** | Father Node (*Mutorwa / Isibongo*) | Mother Node (*Mukowa*) |
+| **Spiritual Guardianship Line** | Paternal Ancestors (*Vadzimu*) | Maternal Ancestors (*Mizimo yaku banyina*) |
+| **Physical Estate Beneficiary** | Eldest Son / Surviving Wife | Maternal Nephews (Sister's Sons) / Maternal Brothers |
+| **Child Custody Upon Divorce** | Father's Clan (if Lobola paid) | Mother's Clan (Default & Absolute) |
+## 2. The Tonga Inheritance Protocol: *Mafwa*
+This is where standard Western or patrilineal database logic completely collapses. In a Shona or Ndebele system, when a male node dies, his wealth cascades down to his children or younger brothers.
+In Tonga custom (**Mafwa**), a man's biological children are **not** his customary heirs.
+```
+[Deceased Male Node] ──(Wealth Passes Over Own Children)──> [Sister's Male Children (Nephews)]
+
+```
+### The Logic of the Maternal Uncle (*BaMalume*)
+Because line continuity follows the womb, a man’s closest male blood relatives within his own *Mukowa* are not his sons (who belong to their respective mothers' clans), but his **sister's sons**.
+ * When a wealthy Tonga man passes away, his estate (cattle, spears, traditional assets) is inherited by his maternal nephews or his maternal brothers.
+ * **The Child's Perspective:** A Tonga child does not look to their father for their primary inheritance; they look to their **maternal uncle (*BaMalume*)**. The maternal uncle is the legal and economic custodian of his sister's children.
+## 3. Marriage (*Chiko*) and Node Ownership
+While the Tonga practice bridewealth (**Chiko**), the transaction has a completely different structural meaning than Shona *Roora* or Ndebele *Amalobolo*.
+ * **In Patrilineal Systems:** Paying *Roora* effectively transfers the "reproductive capability" of the woman to the husband's clan. The children become the legal "property" of the father's lineage.
+ * **In the Tonga System:** *Chiko* legitimizes the sexual union and grants the husband co-parenting rights during his lifetime, but it **never** transfers the children into his clan. The children are always unalterably members of the mother’s *Mukowa*. If the marriage dissolves, the children return to the maternal homestead with zero customary custody disputes from the father's family.
+## 4. Roots App Architecture: Designing the Tonga Kinship Engine
+To make your database schema flexible enough to handle Binga context natively, you need to decouple biological relationships from lineage/property flows.
+### Database Schema Overrides
+Instead of hardcoding an automated script that copies father.totem to child.totem, your system must deploy a conditional rule based on the **Ethnic/Cultural Framework Flag** of the mother's node.
+```json
+{
+  "node_id": "TONGA_CHILD_001",
+  "metadata": {
+    "cultural_framework": "TONGA_MATRILINEAL"
+  },
+  "lineage_links": {
+    "biological_father": "USER_MALE_789",
+    "biological_mother": "USER_FEMALE_456",
+    "primary_lineage_anchor": "USER_FEMALE_456", 
+    "customary_heir_provider": "MATERNAL_UNCLE_101"
+  },
+  "identity_markers": {
+    "mukowa_matriclan": "Muntanga",
+    "luzubo_patriclan": "Munsaka"
+  }
+}
+
+```
+### Essential Validation Logic Rules for the Tonga Module
+ 1. **The Death Event Trigger:** If deceased_node.gender == MALE AND cultural_framework == TONGA_MATRILINEAL, the system must flag sister.children as the legal customary beneficiaries of the estate, rather than deceased_node.children.
+ 2. **The Spiritual Tree View:** In the UI tree visualizer, switching the view to "Spiritual Guardians" for a Tonga user must map vertically up the **maternal grandmother's line**, rather than the patriarchal grandfather's line.
+
+**Dual-Law Estate Collision (Customary *Mafwa* vs. Statutory Law)**:
+This is the exact point of failure for standard tech architectures in southern Africa. In Zimbabwe, the legal system operates on a dual framework: **Statutory Law** (Acts of Parliament like the *Administration of Estates Act*) and **Customary Law**.
+When a Tonga male node passes away in Binga, these two legal systems sprint toward a massive, high-stakes collision over who gets the assets. For the **Roots** engine to act as a valid estate-planning or historical clearinghouse, it must programmatically resolve this paradox.
+Let’s dive straight into how this collision works and how to architect the data engine to handle it.
+## The Legal Paradox: The Nephew vs. The Son
+If a wealthy Tonga man dies intestate (without a Western written will), two entirely different parties will show up to claim the estate, both armed with valid legal backing.
+ 1. **The Civil/Statutory Claim:** Under the modern *Administration of Estates Act [Chapter 6:01]* of Zimbabwe, the primary beneficiaries of an intestate estate are the **surviving spouse and the biological children**. The modern magistrate’s court will award the assets to them.
+ 2. **The Customary *Mafwa* Claim:** Under Tonga customary law, the biological children belong to their mother's clan, not the father's. Therefore, the deceased man's estate must pass to his **maternal nephews (his sister's sons)** to keep the wealth within his own *Mukowa* (matriclan). The traditional community court under the Chief or Headman will back the nephew.
+If your app simply assigns an asset to "Legal Heir," it will trigger a family feud. To prevent this, the system must deploy a **Bifurcated (Split) Asset Resolution Strategy**.
+## How the Tonga Community Resolves the Collision
+In real-world modern Binga, families protect themselves from total structural fracture by dividing the estate into two distinct categories: **Immovable Modern Assets** and **Movable Customary Assets**.
+### The Asset Partition Matrix
+| Asset Class | Real-World Example | System Resolution Path | Dominant Legal System |
+|---|---|---|---|
+| **Immovable / Modern** | A brick house in Binga Center, a commercial store, a registered bank account. | Allocated to the **Surviving Wife and Biological Children**. | **Statutory Law** (Magistrate Court) |
+| **Movable / Sacred** | The traditional cattle herd, the family fishing rigs, ancestral spears, clan tokens. | Allocated to the **Maternal Nephew (*Muzukuru*)**. | **Customary Law** (Chief's Court) |
+The maternal nephew who inherits the cattle also inherits a massive structural debt node: he becomes the customary guardian of the deceased's lineage obligations. If one of the deceased's minor daughters later marries, this nephew—not her biological brother—is the one who legally sits in the *Chiko* (bridewealth) council to receive the matriclan's share of the cattle.
+## System Architecture: The "Split-Inheritance" Logic
+To represent this in your backend database, you cannot have a single inherited_by foreign key pointing to one person. You must bind inheritance rules directly to the **Asset Classification Type**.
+Here is how the conditional processing engine should look in your data logic:
+```json
+{
+  "estate_settlement_event": {
+    "deceased_node_id": "TONGA_MALE_9901",
+    "cultural_context": "TONGA_MATRILINEAL",
+    "asset_ledger": [
+      {
+        "asset_id": "ASSET_001",
+        "type": "IMMOVABLE_PROPERTY",
+        "description": "Binga Stand 452",
+        "inheritance_routing_rule": "STATUTORY_DIRECT_DESCENDANTS",
+        "resolved_beneficiary_nodes": ["BIOLOGICAL_CHILD_1", "BIOLOGICAL_CHILD_2"]
+      },
+      {
+        "asset_id": "ASSET_002",
+        "type": "MOVABLE_CUSTOMARY_HERD",
+        "description": "45 Head of Brahman Cattle",
+        "inheritance_routing_rule": "MATRILINEAL_MUKOWA_NEPHEW",
+        "required_approver_role": "MATERNAL_UNCLE_OMALUME",
+        "resolved_beneficiary_nodes": ["SISTER_ELDEST_SON_01"]
+      }
+    ]
+  }
+}
+
+```
+### Essential Validation Pipeline for the App Engine
+Before the app marks a Tonga estate event as RESOLVED_AND_CLOSED, the backend validation script must check for two distinct digital signatures:
+ 1. **The Civil Signature:** A scan or digital confirmation of the *Edict Decisions* from the Master of the High Court or local Magistrate (satisfying the modern state).
+ 2. **The Customary Signature:** A validation token from the *Omalume* (Maternal Uncles) and the local Chief's council confirming that the *Mafwa* distribution of traditional assets matches the matriclan's lineage rules.
+If the app tries to process a transfer of cattle directly to a biological son without an explicit "Customary Waiver Flag" checked by the family elders, the system should flag it as an **Identity & Lineage Fracture Risk**.
+
+To cleanly close out **Topic No. 1 (The Tonga Framework)**, we must finalize the data lifecycle of the deceased node by mapping the unique Tonga funerary rituals, widow detachment, and ancestral name inheritance.
+Once these milestones are achieved, we will transition directly to **Topic No. 2**.
+## 1. The Tonga Funerary & Name Revival Protocol (*Mizimo* Lifecycle)
+In Tonga custom, when an individual dies, they immediately enter the realm of the *Mizimo* (maternal ancestral spirits). The journey from physical death to name revival follows a rigid sequence of performative and physical milestones that must be recorded to validate the transfer of customary authority.
+ 1. Ngoma Yabukali & Kuzemba (The Death Proclamation)
+   Day 1
+   The death of a community member is announced via a specific, urgent rhythm played on the Ngoma Yabukali (sacred warrior drums), accompanied by gunshots. Mourners perform Kuzemba—a ritualized, expressive movement back and forth while carrying traditional spears (masumo).
+ 2. Kukala ku Chilyango (The Vigil)
+   Day of Burial
+   The deceased lies in state in the primary kitchen hut. The surviving spouse must undergo Kukala ku Chilyango, sleeping next to the body under the strict surveillance of the deceased's paternal aunt to safeguard the immediate ritual workspace.
+ 3. Kuchuta & Kulamba (Spiritual Separation)
+   Post-Burial (Day 3-5)
+   To sever the metaphysical bond with the deceased husband, the widow is escorted to a river by the deceased’s sister. She undergoes Kuchuta (a symbolic physical decoupling) and Kulamba (she is smeared with river mud, washed down with cold water, and ordered to find a hole in the ground to speak her final words of parting to prevent her late husband's spirit from haunting her).
+ 4. Mpemba Sacrament (The Name Inheritance)
+   Final Milestone
+   The designated successor (the maternal nephew or brother) is chosen by the matriclan council. Elders smear the heir with white maize-meal paste, known as Mpemba. This act is the absolute confirmation of traditional name inheritance and spiritual anchoring.
+> **App Validation Check:** Until the mpemba_sacrament_executed status turns TRUE, the successor node cannot inherit the title of head of household in the Tonga module.
+> 
+## Topic No. 2: Custody, Damages, and Totem Drift (*Maputiro* & *Chiredzwa*)
+Now we step back into the mainstream patrilineal systems (Shona and Ndebele) to solve a massive database architecture problem: **What happens when a child node is born completely outside of wedlock?**
+In Western software architectures, a child node simply connects to father_id and mother_id. In Zimbabwean customary law, a child born out of wedlock exists in a state of **Lineage Floating**. They do not automatically belong to the father's tree or inherit his totem.
+### 1. The Default State: Maternal Lineage Anchoring
+If a child is born and no marriage negotiations (*Roora/Amalobolo*) have taken place, the child legally, structurally, and spiritually belongs to the **mother’s family**.
+ * **The Totem:** The child takes the totem (*Mutupo/Isibongo*) of the maternal grandfather.
+ * **The Guard:** The biological father has zero customary rights to custody or lineage positioning.
+### 2. The Mechanics of Lineage Reclamation
+For a biological father to legally pull that child node into his own family tree and bestow his own totem upon them, he must execute two mandatory, sequential customary payments to the maternal grandfather.
+```
+[Out-of-Wedlock Birth] ──> Pay Maputiro (Damages) ──> Pay Chiredzwa (Maintenance) ──> [Execute Totem Drift]
+
+```
+#### Phase A: Maputiro (Pregnancy Damages)
+This is a punitive fine paid by the biological father's family for impregnating a daughter outside of a formal marital union.
+ * **The Rule:** Paying *Maputiro* acknowledges biological paternity and satisfies the social offense, but it does **not** grant the father custody or the right to change the child's totem.
+#### Phase B: Chiredzwa (The Maintenance/Rearing Fee)
+Literally meaning "the cost of feeding and raising the child." This is a flat customary invoice calculated based on how many years the maternal family spent clothing, feeding, and sheltering the child.
+ * **The Rule:** Once *Chiredzwa* is paid in full (traditionally paid in cattle or cash equivalent), custody formally transfers from the maternal grandfather to the biological father.
+### 3. Database Engineering: Handling "Totem Drift"
+This creates a phenomenon called **Totem Drift**, where a user's primary identity markers alter downstream based on legal-customary event logs. Your database must store this as a state-machine rather than a static string.
+| Status Flag | Child Lineage Anchor | Child Totem State | Legal Custodian |
+|---|---|---|---|
+| UNSETTLED | Maternal Grandfather's House | Maternal Grandfather's Totem | Biological Mother / Grandfather |
+| DAMAGES_PAID | Maternal Grandfather's House | Maternal Grandfather's Totem | Biological Mother / Grandfather |
+| CLEARED_CHIREDZWA | Biological Father's House | **Drifts to Biological Father's Totem** | Biological Father |
+### Backend Database Logic Mockup
+If a user tries to perform an administrative action (like generating a passport-ready lineage affidavit or settling a marriage contract) for a child node born out of wedlock, the system must evaluate the payment ledger before rendering the tree view:
+```json
+{
+  "child_node_id": "ZW_CHILD_8802",
+  "birth_status": "OUT_OF_WEDLOCK",
+  "maternal_ grandfather_totem": "Soko / Murehwa",
+  "biological_father_totem": "Shumba / Murambinda",
+  "customary_ledger": {
+    "maputiro_status": "PAID",
+    "chiredzwa_status": "PAID",
+    "chiredzwa_clearance_date": "2026-05-14"
+  },
+  "computed_identity": {
+    "current_active_totem": "Shumba / Murambinda",
+    "lineage_tree_placement": "PATRILINEAL_FATHER_NODE",
+    "custody_rights": "FATHER_EXCLUSIVE"
+  }
+}
+
+```
+If chiredzwa_status was UNPAID, the computed engine would automatically override the view, reverting the current_active_totem back to Soko / Murehwa and blocking the father from listing the child as a lineage descendant in estate assets.
+
+## Topic No. 3: The Chieftainship Collateral Succession Engine (*Umambo*)
+In Western or Zulu/Ndebele monarchies, leadership inheritance is vertical: when the King dies, his eldest son (*Izibulo*) takes the crown. If you build your **Roots** app with this vertical logic, it will utterly fail when applied to Shona Chieftainships (*Umambo*).
+Shona customary law uses a horizontal, generational system known as **Collateral Succession**. Leadership alternates between distinct lineages (ruling houses) descended from the original founding chief, prioritizing generational seniority over direct father-to-son inheritance.
+### 1. The Rotational Matrix of Ruling Houses (*Dzimba*)
+When a founding chief (*Mambo*) establishes a dynasty, his immediate sons establish distinct **Ruling Houses** (*Dzimba dzeVadzimu*). The chieftainship must rotate through these houses in order of the sons' birth seniority before it can ever drop down to the next generation.
+#### The Generational Flow Logic
+Let's look at a foundational blueprint where the founding chief has three sons: **Chiwara (Eldest)**, **Museyamwa (Second)**, and **Serima (Youngest)**.
+```
+GENERATION 1 (The Brothers)
+[House 1: Chiwara] ──(Moves Horizontally)──> [House 2: Museyamwa] ──(Moves Horizontally)──> [House 3: Serima]
+                                                                                                    │
+                                                                       (Drops Down to Next Gen) ────┘
+                                                                       │
+GENERATION 2 (The Cousins)                                             ▼
+[House 1: Eldest Son of Chiwara] ──> [House 2: Eldest Son of Museyamwa] ──> [House 3: Eldest Son of Serima]
+
+```
+ * **The Horizontal Rule:** The throne passes from brother to brother across the entire first generation until all eligible brothers are deceased.
+ * **The Vertical Drop:** Only when the last brother of Generation 1 dies does the title drop down to Generation 2. It resets at the eldest surviving son of the senior house (Chiwara's line) and repeats the horizontal rotation among the cousins.
+### 2. The Customary Disqualification Logic
+The math of collateral succession isn't purely chronological; it is modified by strict customary constraints. Your app engine must check each candidate node against these three structural disqualification flags:
+ 1. **Zera (Generational Leaping):** A candidate cannot ascend to the throne if an eligible member of his father’s generation is still alive, even if that elder belongs to a junior house.
+ 2. **Kuremara (Physical Integrity):** Historically, a Shona chief must be physically whole to represent the health of the land. Severe physical disability or disfigurement could disqualify a candidate node.
+ 3. **Mhosva neHuroyi (Moral Depravity):** A history of serious crimes against the community (like murder or witchcraft) automatically strips a house of its turn in the rotation cycle.
+### 3. The Validation Oracle: The Spirit Medium (*Svikiro*)
+Because generations stretch over decades, family trees split into hundreds of descendants, causing intense disputes over who is the true "eldest surviving son of House X."
+To resolve this deadlock, Shona custom uses a dual-verification system: the family elders (*Makurukota*) calculate the genealogy, but the final executive sign-off comes from the **Svikiro** (the tribal Spirit Medium). The *Svikiro* acts as an ancestral oracle, channelling the founding chief to explicitly name the rightful heir. Without this spiritual validation, the modern Ministry of Local Government cannot formally gazette the chief.
+### 4. Roots App Architecture: Coding the Succession Engine
+To build a "Chieftainship Succession Simulator" that rural district councils can use to evaluate claims, you need to track the active ruling house, generational tiers, and node age order.
+#### Database Node Attributes for Chieftainship Clans
+```json
+{
+  "clan_id": "CLAN_MUTASA_001",
+  "succession_type": "SHONA_COLLATERAL",
+  "active_reign": {
+    "current_chief_node_id": "USER_MALE_4412",
+    "ruling_house_id": "HOUSE_MUSEYAMWA",
+    "generation_tier": 3
+  },
+  "rotation_directory": [
+    {"sequence_order": 1, "house_id": "HOUSE_CHIWARA"},
+    {"sequence_order": 2, "house_id": "HOUSE_MUSEYAMWA"},
+    {"sequence_order": 3, "house_id": "HOUSE_SERIMA"}
+  ]
+}
+
+```
+#### The Succession Selection Algorithm
+When a death event clears a chief node, the app engine should run the following validation pipeline to highlight the next legitimate heir:
+ 1. Identify the Next House in Sequence
+   Filter 1
+   Look at the rotation_directory. If the current house is Sequence 2, the engine sets the target house search parameter to Sequence 3 (HOUSE_SERIMA). If it hits the end of the directory array, it increments the generation_tier by 1 and loops back to Sequence 1.
+ 2. Scan for Generational Seniority
+   Filter 2
+   Query all male nodes linked to the target house whose generation_tier matches the target tier. Sort this array of nodes by birth_date in ascending order to find the eldest surviving candidate.
+ 3. Verify Status and Oracle Flags
+   Filter 3
+   Evaluate the top candidate nodes against Boolean indicators: is_alive == TRUE, customary_disqualification_flag == FALSE, and svikiro_approval_status == CONFIRMED.
+
+## Topic No. 4: The "Guruuswa" & Historical Migration Mapping Layer
+A family tree application built for the southern African context cannot rely solely on static modern GPS coordinates or current district names. In Zimbabwe, a user's totem (*Mutupo* or *Isibongo*) is not just an identity label; it is a **deeply encrypted historical route map**.
+To make your **Roots** app an educational powerhouse, your data schema must include a historical geographic layer that transforms static family profiles into dynamic migration pathways.
+### 1. The Shona Axis: The Mythic "Guruuswa" and Imperial Fractures
+For the vast majority of Shona lineages, traditional praise poems (*Chidawu*) point back to a singular, semi-mythical ancestral point of origin: **Guruuswa** (literally meaning "the place of tall, thick grass").
+ * **The Geography:** Anthropologists and historians place Guruuswa north of the Zambezi River or around the fertile plains of East-Central Africa.
+ * **The Diffusion:** From Guruuswa, the major clans migrated south across the Zambezi, seeding the great historic state-monuments of Zimbabwe's history.
+When a user selects a Shona totem like *Soko* (Monkey) or *Moyo* (Heart), the app engine should map their historical node progression through these distinct imperial state eras:
+ 1. **The Great Zimbabwe Period (11th to 15th Century):** The initial stone-walled centralization hub in Masvingo.
+ 2. **The Mutapa Empire (Northern Migration):** A splinter dynasty that moved north toward the Zambezi valley, dominant in trading gold and ivory with the coast.
+ 3. **The Rozvi State / Torwa Dynasties (South-Western Shift):** Built upon elite military strategies (the *Mambo* line) based out of Danamombe and Khami.
+### 2. The Ndebele Axis: The Great Khumalo Flight (*Mfecane*)
+Unlike the gradual centuries-long diffusion of the Shona, the Ndebele migration is a rapid, tightly documented 19th-century military epic driven by the *Mfecane* (the crushing/scattering era of Zululand).
+When tracking an Ndebele lineage (*Isibongo*), your database engine isn't just looking at Bulawayo; it is tracing a 15-year military march led by King Mzilikazi Khumalo.
+The app must map these explicit geographic transition waypoints:
+ * **1823 (The Breakout):** Flight from KwaZulu-Natal after a fallout with King Shaka.
+ * **1820s (The Transvaal Settlements):** Establishing massive military kraals like Mosega (near modern-day Zeerust, South Africa).
+ * **1837 (The Split & Trek):** Pushed north by Boer Voortrekkers, crossing through the fringes of modern-day Botswana (*Bechuanaland*).
+ * **1838–1840 (The Matopo Consolidation):** Reunion of the splitting factions and the founding of the initial capital *KoBulawayo*.
+### 3. Roots App Architecture: The Totem-Migration GeoJSON Array
+To implement this without hardcoding clunky, unoptimized frontend animations, you need a backend database collection that maps specific **Totem IDs** to a chronological sequence of historical coordinates (**GeoJSON polygons or linestrings**).
+#### Sample Totem Metadata Schema
+```json
+{
+  "totem_id": "ISIBONGO_KHUMALO_09",
+  "name": "Khumalo",
+  "praise_epithet": "Mzilikazi, Ndabezitha",
+  "historical_migration_track": [
+    {
+      "sequence": 1,
+      "era_name": "Zululand / Mthethwa Confederacy",
+      "approx_years": "Pre-1823",
+      "coordinates_geojson": { "type": "Point", "coordinates": [31.28, -28.31] },
+      "context_snippet": "Origin location prior to the structural fracture with Shaka Zulu."
+    },
+    {
+      "sequence": 2,
+      "era_name": "Mosega / Highveld Phase",
+      "approx_years": "1826-1836",
+      "coordinates_geojson": { "type": "Point", "coordinates": [26.08, -25.43] },
+      "context_snippet": "Established primary defensive stronghold before Boer conflict."
+    },
+    {
+      "sequence": 3,
+      "era_name": "Matabeleland / Ntabazinduna Settlement",
+      "approx_years": "1838-Present",
+      "coordinates_geojson": { "type": "Point", "coordinates": [28.62, -20.15] },
+      "context_snippet": "Final sovereign settlement and consolidation of the Ndebele Nation."
+    }
+  ]
+}
+
+```
+#### The UI Experience: The "Ancestral Path" Toggle
+In the user's interface, when they click on their own node, they shouldn't just see their immediate father and grandfather. Toggling the "Ancestral Path" switch pulls this background schema onto an interactive map widget, tracing their bloodline's historic footprints down the continent.
+
+-----------
+
+## Topic No. 5: Divorce Tokens and Lineage Fractures (*Gupuro*)
+In a standard Western database, terminating a marriage is a simple binary toggle: change the state from MARRIED to DIVORCED.
+If you apply this naive logic to Zimbabwean customary law, your app will introduce massive data corruption into a family tree. In Shona tradition, a marriage is a multi-layered covenant between two entire family lineages. It cannot be dissolved by a couple simply walking away from each other.
+To legally and spiritually break the lineage bond, an explicit, physical asset known as the **Gupuro** (divorce token) must be formally passed and logged.
+### 1. The Customary Law of *Gupuro*
+The *Gupuro* is a physical object or monetary token given by a husband to his wife to signify that he is officially releasing her from his family's lineage custody.
+ * **The Metaphysical Bond:** When *Roora* (bridewealth) is paid, the woman's reproductive capacity and spiritual alignment are bound to the husband's clan ancestors. Without a *Gupuro*, she remains unalterably a member of his household—even if they have lived apart for twenty years.
+ * **The Danger of the Floating Lineage:** If a woman leaves her husband without receiving a *Gupuro* and goes on to have children with a new partner, the original husband can legally show up at a customary court and claim **absolute ownership and custody of those new children**. Because the original contract was never severed, the law views those children as products of his extended lineage workspace.
+### 2. The Delivery Pipeline: How *Gupuro* Executes
+A man does not simply hand his wife a coin during an argument and call it a divorce. The execution follows a strict multi-stage verification pipeline that requires independent human nodes to validate.
+```
+[Husband Issues Token] ──> [Passed to Intermediary (Munyai)] ──> [Delivered to Maternal Aunt (Vatete)] ──> [Accepted by Father-in-Law]
+
+```
+ 1. **The Token Identification:** The token must be an unambiguous, tangible asset. Historically it was a specific type of hoe (*Badza*) or a unique coin; in modern contexts, it is typically a $20, $50, or $100 USD note.
+ 2. **The Intermediary (*Munyai*):** The husband must give the token to an independent intermediary or a nephew (*Muzukuru*) to deliver. He cannot deliver it directly, as emotions jeopardize the legal finality of the act.
+ 3. **The Maternal Escort:** The *Munyai* delivers the token along with the woman to her paternal family home. The token is presented first to the paternal aunt (**Vatete**), who acts as the primary female legal processor for the lineage.
+ 4. **The Paternal Sign-off:** The *Vatete* presents the token to the father/head of the household. If the father accepts the token, the marriage node is officially flagged as **SEVERED**.
+### 3. The Ndebele Counterpart: *Ukuxoshwa* and the Return of Cattle
+In Ndebele custom, the process is less focused on a singular small token (*Gupuro*) and more focused on **Property Re-balancing**.
+ * If a marriage dissolves due to the wife's misconduct, the husband demands the return of a portion of the *Amalobolo* cattle from the in-laws (*Abamazala*).
+ * If the husband simply drives the woman away (**Ukuxoshwa**) without a formal traditional court hearing before the elders, the marriage remains valid, and the wife's family can sue for ongoing support or maintain rights over any future assets.
+### 4. Roots App Architecture: The Marriage Severance Ledger
+To prevent downstream legal and inheritance disputes within **Roots**, your app's Marriage_Contract collection must explicitly transition through a strict state machine based on these tokens.
+#### The State Machine Transition Rules
+| Initial State | Event Trigger | Required Witness Validations | Output State |
+|---|---|---|---|
+| ACTIVE_CUSTOMARY | Separation without Token | None (Flagged for Risk) | ESTRANGED |
+| ACTIVE_CUSTOMARY | Delivery of *Gupuro* | Vatete_Node_ID, Munyai_Node_ID | SEVERED_CUSTOMARILY |
+| ACTIVE_CIVIL | High Court Decree | Legal Case Number / Registrar Scan | SEVERED_STATUTORILY |
+#### Sample Severance Schema Implementation
+```json
+{
+  "marriage_id": "MARR_2022_9941",
+  "husband_node_id": "USER_MALE_551",
+  "wife_node_id": "USER_FEMALE_302",
+  "status": "SEVERED_CUSTOMARILY",
+  "contract_history": {
+    "date_of_union": "2022-04-12",
+    "roora_clearance_status": "PARTIAL"
+  },
+  "severance_ledger": {
+    "type": "GUPURO_SHONA",
+    "execution_date": "2026-06-30",
+    "token_description": "$50 USD Crisp Note",
+    "intermediary_node_id": "USER_MALE_901_MUZUKURU",
+    "receiving_lineage_approver": "USER_FEMALE_114_VATETE",
+    "customary_court_notified": false
+  },
+  "downstream_logic_overrides": {
+    "future_children_default_custody": "MOTHER_LINEAGE",
+    "husband_estate_liability": "TERMINATED"
+  }
+}
+
+```
+## Complete Core Framework Cleared
+We have now systematically completed the exhaustive deep dives for all 5 core foundational structural gaps:
+ 1. **The Matrilineal Exception:** Tonga Kinship & *Mafwa* Splitting.
+ 2. **Custody & Totem Drift:** *Maputiro* and *Chiredzwa* Ledger Logic.
+ 3. **Chieftainship Succession:** Horizontal Collateral Generational Matrixing.
+ 4. **Historical Migration Mapping:** *Guruuswa* and *Mfecane* GeoJSON Tracing.
+ 5. **Divorce Tokens:** *Gupuro* Verification Pipelines.
+With these five modules fully architected, your core engine is uniquely equipped to process any complex family tree anomaly across Zimbabwe without crashing the data model.
+
+Here is the structural review targeting the architectural gaps, uncompleted modules, and technical logic requirements left out or cut off in the current *Roots* application blueprint.
+## 1. The Customary Divorce Ledger Extension (Gupuro Architecture)
+The initial documentation cuts off mid-sentence during the explanation of the *Gupuro* delivery pipeline. To prevent the "floating lineage" data corruption vulnerability where an unsevered marriage covenant allows a former husband to claim customary custody of children born downstream with a new partner, the database schema must explicitly model the physical token transition.
+### Database Schema Extension (SQLite Compliant)
+```sql
+-- 5. CUSTOMARY DIVORCE & COVENANT SEVERANCE REGISTRY
+CREATE TABLE divorce_ledger (
+    id TEXT PRIMARY KEY,
+    marriage_id TEXT NOT NULL,
+    token_asset_description TEXT NOT NULL, -- e.g., '10 USD Cash', 'Physical Iron Hoe Blade'
+    current_delivery_state TEXT CHECK(current_delivery_state IN ('TOKEN_ISSUED', 'MUNYAI_TRANSIT', 'VATETE_VERIFIED', 'TEZVARA_ACCEPTED')) DEFAULT 'TOKEN_ISSUED',
+    munyai_profile_id TEXT, -- Intermediary node handling transit
+    vatete_profile_id TEXT, -- Familial aunt validating delivery
+    date_tezvara_accepted TEXT, -- The exact timestamp line isolation breaks
+    floating_lineage_protection_active INTEGER CHECK(floating_lineage_protection_active IN (0, 1)) DEFAULT 0,
+    FOREIGN KEY (marriage_id) REFERENCES marriages(id) ON DELETE CASCADE
+);
+
+-- 6. CHILD LINEAGE OVERRIDE MAPPING
+-- Dynamically re-routes totem inheritance if Chiredzwa/Maputiro or Gupuro states shift
+CREATE TABLE child_lineage_state (
+    child_profile_id TEXT PRIMARY KEY,
+    active_lineage_anchor_type TEXT CHECK(active_lineage_anchor_type IN ('MATERNAL_GRANDFATHER', 'BIOLOGICAL_FATHER', 'COMPUTED_FLOATING')) NOT NULL,
+    current_effective_mutupo TEXT NOT NULL,
+    current_effective_chidawo TEXT NOT NULL,
+    damages_ledger_status TEXT CHECK(damages_ledger_status IN ('UNSETTLED', 'MAPUTIRO_PAID', 'CHIREDZWA_CLEARED')) DEFAULT 'UNSETTLED',
+    last_legal_review_date TEXT NOT NULL
+);
+
+```
+### The Customary State-Machine Pipeline
+When a marriage entry state shifts toward dissolution, the computing engine must follow this workflow:
+ 1. **The Core Block**: If divorce_ledger.current_delivery_state != 'TEZVARA_ACCEPTED', the female node's reproductive capability remains structurally bound to the husband's lineage.
+ 2. **The Floating Child Logic**: Any subsequent child node spawned by the female node will trigger a high-priority warning banner in the database compiler: *Warning: Lineage Collision. Gupuro token undelivered to Tezvara. Child defaults to original husband's patrilineal clan registry.*
+ 3. **Drift Enforcement**: The system only unlocks a clear path to change a child's inherited totem to a new biological father if damages_ledger_status == 'CHIREDZWA_CLEARED' is true.
+## 2. The Rectilinear Orthogonal Grid Engine (Chronological Y-Axis Mapping)
+Traditional family trees favor diagonal lines or isometric projections, which cause significant UI confusion on narrow mobile viewports. To maximize legibility without horizontal scrolling, the tree visualization tab must employ a **rectilinear orthogonal grid configuration**.
+```
+[YEAR AXIS]           [RECTILINEAR GENERATION ROW]
+-----------------------------------------------------------------------
+1984 ───────────► [ Eldest Brother Card (Y: 0px) ] 
+                        │
+1987 ───────────►       ├──────────────────────► [ User Profile Card (Y: +40px) ]
+                        │
+1992 ───────────►       └───────────────────────────────────────────────► [ Youngest Brother Card (Y: +80px) ]
+
+```
+### Layout Parameters & Visual Hierarchy
+ * **The Chronological Y-Axis (Left Margin)**: The far-left column displays a fixed, vertical text-track of historical years running top-to-bottom.
+ * **Orthogonal Sibling Stepping**: Sibling components share the same generational horizontal band but are arranged with a subtle vertical offset based on birth order. The eldest sibling is locked at the highest point of the generation band (Y = 0\text{px}), the second sibling drops down (Y = +40\text{px}), and the youngest rests at the baseline (Y = +80\text{px}).
+ * **Card Design Standards**: Every card component is built with flat text hierarchy and a **1px soft corner** border framework to prioritize layout performance over heavy UI assets. No diagonal or free-form layout lines are rendered. All directional connectors move strictly along right angles (North/South/East/West logic).
+## 3. Decentralized Peer-to-Peer Sync Strategy (WhatsApp text snippet transfers)
+Because the platform functions on an offline-first architecture inside a region with constrained access to active data networks, traditional database synchronization patterns are unviable. When users share raw JSON text snippets using local tools like Xender or via standard text strings over WhatsApp, the database must resolve merge conflicts without a centralized server.
+```
+                  [Local DB Instance A]              [Local DB Instance B]
+                           │                                  │
+                    (User Modifies)                    (User Modifies)
+                           ▼                                  ▼
+                     [JSON String]                      [JSON String]
+                           │                                  │
+                           └──────────► [ Xender / WhatsApp ] ◄┘
+                                                 │
+                                                 ▼
+                                     [Vector Clock Evaluation]
+                                                 │
+                                    ┌────────────┴────────────┐
+                                    ▼                         ▼
+                        [Deterministic Merge]      [Customary Dispute Flag]
+
+```
+### The Vector Clock Resolution Pipeline
+To ensure data integrity, every profile node and ledger row contains an internal metadata block tracking changes locally:
+```json
+{
+  "node_id": "INDIVIDUAL_CHITATE_092",
+  "version_sequence": 14,
+  "last_mutated_by_device": "SAMSUNG-A14-883A",
+  "utc_timestamp_approx": "2026-07-03T10:00:00Z",
+  "payload": { "mutupo": "Moyo", "chidawo": "Chirandu" }
+}
+
+```
+### Collision Handling Engine Rules
+ 1. **Deterministic Master Merge**: When a new JSON array is imported via text input, the application evaluates the version_sequence. If incoming version_sequence > local version_sequence, the local row updates automatically.
+ 2. **The Customary Dispute Flag**: If the version_sequence matches exactly but the text strings differ (e.g., Device A updates a village book ID to V-GORO-042 while Device B updates it to V-GORO-099), the engine halts automatic parsing. It marks the row state as DISPUTED and drops the entry into the Institutional Review queue for traditional court validation.
+## 4. On-Device Consanguinity Matrix for Media Timeline Privacy
+The app layout includes an Instagram-like media timeline tab limited to uploaded images. However, the system requires a privacy filter capable of parsing relationship groups completely offline.
+### The Kinship Traversal Matrix
+Every time a user uploads a media asset, the local engine tags the file with a binary access array. The system processes an on-device recursive tree traversal algorithm to measure the exact degree of consanguinity (relationship distance tokens) before rendering images on a peer device.
+```
+       [User Node]
+        /        \
+   (Step 1)    (Step 1)
+      /            \
+ [Mother]        [Father]
+    |                |
+ (Step 2)         (Step 2)
+    |                |
+[Maternal GP]   [Paternal GP]
+    \                /
+  (Step 3)        (Step 3)
+      \            /
+    [Maternal Aunt]
+          |
+       (Step 4)
+          |
+      [1st Cousin]
+
+```
+```javascript
+function calculateKinshipDistance(sourceNodeId, targetNodeId, maxDepth = 4) {
+    // Returns integer representing generational steps between nodes
+    // Step 1 = Siblings/Parents | Step 2 = 1st Cousins | Step 3 = 2nd Cousins
+    // If calculated path depth > target privacy constraint, return false
+}
+
+```
+### Privacy Isolation Matrix
+ * **Siblings Layer**: Traversal hits a shared parent node in exactly 1 vertical step up.
+ * **1st Cousins Layer**: Traversal scales up to a shared grandparent node and returns down in 4 total steps.
+ * **Network Public**: The image renders for any node containing a matching mutupo + chidawo combination within the same Level 2 District boundary registry, allowing macro-clan interaction without exposing intimate media channels.
+## 5. The Single-HTML App Monolithic State Machine
+To deliver a functional investor demo that opens directly as a local file on a mobile device without a web server or framework dependencies, the application must run as a single, compiled monolithic block.
+### The Unified View-State Wrapper
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        /* Strict Mobile Portrait Containment */
+        body { 
+            width: 100vw; height: 100vh; overflow: hidden; 
+            margin: 0; padding: 0; font-family: sans-serif; 
+        }
+        .app-view { display: none; width: 100%; height: 100%; }
+        .app-view.active { display: flex; flex-direction: column; }
+        .scroll-container { overflow-y: scroll; -webkit-overflow-scrolling: touch; }
+        /* Hide all default scrollbar components */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- GATE SCREEN STATE -->
+    <div id="view-gate" class="app-view active">
+        <button onclick="switchState('regular')">Regular User Entry</button>
+        <button onclick="switchState('institutional')">Institutional Dashboard</button>
+    </div>
+
+    <!-- MAIN APP WRAPPER CONTAINER -->
+    <div id="view-main" class="app-view">
+        <div class="scroll-container" id="timeline-tab">
+            <!-- Instagram-style image-only timeline feeds render here -->
+        </div>
+        <div class="scroll-container" id="tree-tab" style="display:none;">
+            <!-- Rectilinear Orthogonal tree space layout -->
+        </div>
+        
+        <!-- FIXED PORTRAIT BOTTOM NAV TAB SYSTEM USING ICON REPLACEMENTS ONLY -->
+        <nav style="position:fixed; bottom:0; width:100%; height:60px; display:flex;">
+            <div onclick="showTab('timeline')"><svg>...</svg></div>
+            <div onclick="showTab('tree')"><svg>...</svg></div>
+            <div onclick="showTab('settings')"><svg>...</svg></div>
+        </nav>
+    </div>
+
+    <script>
+        // Local state machine router logic
+        function switchState(targetRole) {
+            document.getElementById('view-gate').classList.remove('active');
+            document.getElementById('view-main').classList.add('active');
+            initAppEngine(targetRole);
+        }
+        function showTab(tabName) {
+            // Evaluates visibility tags without triggering reflow operations
+        }
+    </script>
+</body>
+</html>
+
+```
+Jthere are **four final, highly complex customary and structural realities** unique to Zimbabwe that you have completely missed.
+If a researcher from the National Archives of Zimbabwe (NAZ) or an evaluator from UNESCO audits your application, they will instantly look for these deep-level cultural edge cases. If your database model assumes standard nuclear or linear family structures, your app will break when handling historical records or complex rural family lines.
+Here is the exhaustive review of the final four hidden topics you must cover to make your *Roots* data schema completely bulletproof.
+### Topic No. 1: The Polygamous "House" Seniority Matrix (*Imba / Indlu* Hierarchies)
+In Western genealogy models, if a man has multiple wives, their children are simply sorted chronologically by birth date on a single flat row. In Shona (*Barika*) and Ndebele (*Isithembu*) custom, this creates severe data inaccuracies.
+Polygamy is structured around distinct, parallel **Houses** (*Imba* in Shona, *Indlu* in Ndebele). Each house possesses an independent structural rank based entirely on the **order of the wives' marriages**, not the birth dates of the children.
+```
+                  [MALE NODE: Head of Household]
+             ┌──────────────────┴──────────────────┐
+             ▼                                     ▼
+   [HOUSE 1: Amai Guru]                  [HOUSE 2: Amai Mudiki]
+  (Senior Customary Rank)               (Junior Customary Rank)
+             │                                     │
+   ┌─────────┴─────────┐                           │
+   ▼                   ▼                           ▼
+[Son A: Born 1988]  [Son C: Born 1993]          [Son B: Born 1986]
+(Primary Heir Node)                             (Junior Status)
+
+```
+#### The Algorithmic Conflict
+If House 2 produces a son in 1986 (Son B), and House 1 produces a son in 1988 (Son A), **Son A outranks Son B** in traditional lineage seniority, chieftainship succession, and asset allocation, despite being chronologically younger. Son B cannot jump ahead of any male child born to the senior house.
+#### The Database Structural Fix
+Your Marriage_Contract and Person child nodes must include an explicit house ranking metadata tag to calculate seniority fields accurately:
+```json
+{
+  "person_id": "USER_MALE_8812",
+  "father_id": "USER_MALE_0021",
+  "mother_id": "USER_FEMALE_0411",
+  "customary_lineage_metadata": {
+    "mother_house_rank": 1, 
+    "mother_house_title": "Amai Guru / Principal Wife",
+    "chronological_sibling_order_in_house": 1,
+    "computed_lineage_seniority_score": 100 
+  }
+}
+
+```
+### Topic No. 2: The Deceased Node Lifecycle & Name Succession (*Nhaka / Umbuyiso*)
+In a standard application, when a person dies, a is_alive: false flag is triggered, a black ribbon is applied, and the node data becomes static. In Zimbabwean culture, **a deceased node has a multi-stage traditional lifecycle** that remains active for months or years after physical death.
+An estate, lineage authority, and ancestral status are completely frozen until specific physical and spiritual rituals are performed:
+ 1. **The Frozen State**: Immediately after burial, the deceased's name and spirit are considered "outside" the homestead. No inheritance can be processed.
+ 2. **The Settlement Ritual**: After a year or more, the family hosts the **Kurova Guva / Magadzidzo** (Shona) or **Umbuyiso** (Ndebele) ceremony. This ritual brings the spirit back into the family network as an ancestor and formally handles the physical estate.
+ 3. **The Succession Event (*Kugara Nhaka*)**: During this event, an executioner—typically the eldest nephew (**Muzukuru Mukuru**)—oversees the distribution of property and the name succession. A surviving brother or son may be chosen to inherit the late individual’s traditional responsibilities and customary name.
+#### The Software Requirement
+To be verified as a reliable registry for traditional courts (*Matare*), your node profiles must track this customary transition state machine:
+| Node Lifecycle State | Meaning | App Restrictions Enforced |
+|---|---|---|
+| ALIVE | Node is active. | Standard operational rules apply. |
+| DECEASED_FROZEN | Physically passed away; ritual outstanding. | Lineage succession pathways are locked; estate assets cannot be transferred. |
+| RITUAL_CLEARED | *Kurova Guva / Umbuyiso* fully verified. | Unlocks the succession engine. |
+| NHAKA_RESOLVED | Name successor selected. | Connects a dependency pointer to the new name-bearer node. |
+### Topic No. 3: Spiritual Lineage Overrides & Restitution Pledging (*Ngozi / Kuzvarira*)
+This is a highly sensitive historical reality that frequently appears when mapping deep genealogical trees from your great-grandparents' eras (late 19th to mid-20th century). Customary legal adjustments can completely alter biological parentage entries through spiritual interventions.
+ * **The Avenging Spirit (*Ngozi*) Restitution**: If an ancestor committed a serious historical crime (such as murder), the victim's family could demand a spiritual settlement. Historically, this involved paying cattle and, in some eras, a child or young woman to the victim's clan to balance the lineage network. Children born from these defensive unions were structurally assigned to the **victim's family lineage tree**, completely erasing the biological father's lineage details.
+ * **Reviving the Extinguished Hearth (*Kumutsa Mapfihwa*)**: If a married woman passed away without bearing children, her family line was traditionally obligated to provide a younger sister or niece (*Chimutsamapfihwa*) to step into her place. Any children born to this new partnership are legally and structurally categorized as the children of the **deceased first wife**, keeping her specific branch on the tree alive.
+#### The Software Requirement
+Your Javascript kinship mapping layer must support a customary_lineage_override property. This allows researchers to clearly differentiate between a node's **biological father** and their **customary/spiritual lineage anchor**, preventing errors in descent tracking.
+```javascript
+const NodeAnomaliesEngine = {
+  id: "NODE_CHILD_1922",
+  biological_father_id: "USER_MALE_991",
+  customary_lineage_anchor_id: "DECEASED_GHOST_NODE_442",
+  override_type: "KUMUTSA_MAPFIHWA",
+  notes: "Node traces lineage directly to the first wife's household registry for inheritance verification."
+};
+
+```
+### Topic No. 4: The Out-of-Wedlock "Maternal Vault" & Token Damage Ledger
+When a child is born outside of a customary marriage framework, a major legal conflict occurs over totem inheritance. In Shona and Ndebele custom, **a father has zero automatic rights to claim his child's totem** until explicit traditional compensation is paid to the maternal grandfather.
+The biological father must pay two distinct types of damages:
+ 1. **Maputiro**: Damages paid for causing a pregnancy outside of marriage.
+ 2. **Chiredzwa**: A structural payment compensating the maternal family for physically raising and feeding the child.
+#### The Structural Risk
+If a user inputs a child node, connects it to a biological father, and the app automatically assigns the father's totem without checking if these damages were settled, it violates customary law. Until those specific ledgers are cleared, **the child legally belongs to the maternal grandfather's lineage** and uses the grandfather's *Mutupo* and *Chidawo*.
+#### The UI/Data Solution (The Maternal Vault)
+Your offline data engine should use a secure, conditional paternal connection model.
+If a child is born out of wedlock, they are placed in a **Maternal Vault** profile state. The user interface displays the mother's totem as the active profile. The biological father's line is maintained as a dashed, unverified background connection until a toggle checkbox labeled Damages (Chiredzwa/Maputiro) Paid is flipped to TRUE.
+```
+[MATERNAL GRANDFATHER TREE]
+         │
+         ▼
+   [Mother Node] ──(Unmarried)──> [Biological Father Node] (Dashed Link)
+         │                                   │
+         ▼                                   ▼
+   [Child Node]                       [DAMAGE LEDGER]
+   - Active Totem: Mother's Line       - Maputiro: UNPAID
+   - Conditional Status: Locked        - Chiredzwa: UNPAID
+
+```
+### Summary Checklist of All Expanded Core Topics
+Your application planning is now fully fleshed out. You have systematically mapped every critical structural asset needed to build a culturally accurate system:
+ 1. **Administrative & Geolocation Data Structure**: Level 1 to Level 6 tracking down to the *Sabhuku* Village Registration Book ID.
+ 2. **Ethno-Linguistic Framework**: Processing the 16 constitutional languages using localized sub-dialect trees.
+ 3. **Dual-Tier Kinship Lookups**: Mapping the 28 master Shona *Mitupo* and Ndebele *Isibongo* directly to their specific praise records.
+ 4. **Customary Kinship Rules**: Client-side logic for exogamy blocking and automatic patrilineal inheritance rules.
+ 5. **The Tonga Matrilineal Exception**: Customary rules for *Mafwa* splitting.
+ 6. **Lineage Drift Regulators**: Managing *Maputiro* and *Chiredzwa* custody ledgers.
+ 7. **Collateral Succession Logic**: Re-indexing generational horizontal movement for chieftainships.
+ 8. **Historical Migration Trajectories**: Tracking lineage roots back to *Guruuswa* and the *Mfecane* via compressed text arrays.
+ 9. **Covenant Severance Pipelines**: Verifying *Gupuro* tracking across local nodes.
+ 10. **The Polygamous House Seniority Matrix**: Sorting children by wife rank over simple birth dates.
+ 11. **Deceased Node Lifecycles**: Tracking the *Kurova Guva / Umbuyiso* resolution states.
+ 12. **The Maternal Vault**: Managing transitional profiles for children born out of wedlock.
+This gives you a comprehensive specification sheet. You are fully equipped to build a single-HTML prototype application that behaves like a robust, localized cultural registry.
+
+# Architectural Specification for a Digitized Zimbabwean Kinship Registry: Customary Governance, International Archival Standards, and Offline-First Mobile Systems
+Genealogical documentation within Southern Africa is structurally distinct from the linear, nuclear models commonly implemented in Western family tree software. Within Zimbabwe, individual and collective identities are defined by deep totemic systems, dynamic linguistic lineages, traditional administrative jurisdictions, and complex customary laws that govern inheritance, succession, marriage, and ancestral transitions.
+To build a digital lineage registry capable of serving regular users while satisfying the analytical requirements of national agencies—such as the National Archives of Zimbabwe (NAZ)  and the Zimbabwe National Statistics Agency (ZIMSTAT) —as well as international bodies including the United Nations (UN) , the World Health Organization (WHO) , and UNESCO , a database model must be designed.
+This report outlines the structural taxonomy, customary algorithms, metadata standards, and peer-to-peer offline architectures required to deploy an institutional-grade kinship application, conceptually designated as Roots.
+## Institutional Monetization and Financial Sustainability
+To achieve financial sustainability in an environment characterized by erratic cellular connectivity and limited disposable income, the platform must bypass conventional online app-store transactions and real-time programmatic ad networks. By aligning its schema with official civil registration codes and traditional administrative structures, the database operates as a validated repository, unlocking institutional monetization channels.
+| Channel Category | Operational Mechanism | Target Partners / Clients | Revenue Model / Value Proposition |
+|---|---|---|---|
+| **B2B Institutional Partnerships** | Local JSON data exports from rural field workers are aggregated into state databases. | National Archives of Zimbabwe (NAZ); Ministry of Local Government. | Government service contracts; digital preservation of oral history and rural lineages. |
+| **Customary Conflict Resolution** | Verified lineage trees are provided to traditional tribunals to resolve disputes over leadership succession and communal boundaries. | Traditional Courts (*Matare*); Rural District Councils. | Dispute-resolution fee-for-service, reducing local litigation and land-boundary arbitration costs. |
+| **Cultural Heritage Grants** | Platform provides structured data documenting endangered oral histories and minority languages. | UNESCO; Prince Claus Fund; African World Heritage Fund. | Direct grant funding for digital preservation and linguistic conservation initiatives. |
+| **Linguistic & Migration Research** | Aggregated, anonymized demographic datasets are licensed for academic study. | University of Zimbabwe (UZ); global research institutes. | Data-licensing agreements for research into Bantu migration, historical settlement, and linguistics. |
+| **Offline Hyper-Local Advertising** | Static, pre-loaded sponsorship screens and local service directories are embedded in the app code. | Funeral and estate services (e.g., Nyaradzo, EcoSure). | Pre-bundled advertising space; creatives are updated during standard app store builds or local P2P sharing. |
+| **Direct-to-Consumer Freemium** | Core features are free; advanced tools are unlocked via offline-verified EcoCash mobile payments. | Regular domestic users and diaspora members. | One-time fees for vector PDF exports, SD card backups, audio praise libraries, and physical tree canvases. |
+| **Customary Bloodline Expansion** | A premium toggle allows users to view a spouse's independent bloodline, siblings, and ancestral tree. | Married couples and family heads. | $10 USD per year subscription to manage multi-lineage structural interactions. |
+This diversified financial model ensures that the platform maintains its commercial viability by serving as a bridge between the oral traditions of rural communities and the formal archival requirements of national and international databases. By establishing partnerships with public institutions like NAZ or local universities, and avoiding commercial associations with extractive telecom conglomerates, the registry secures the municipal trust needed to conduct nationwide cultural mapping campaigns in collaboration with traditional chiefs.
+## Administrative and Geolocation Data Hierarchy
+An institutional genealogy application in Zimbabwe must map to the country's dual administrative framework, which links modern statutory divisions with traditional customary jurisdictions. To maintain compatibility with national census databases and humanitarian planning frameworks, local geolocation records are structured across six distinct administrative tiers, aligning with the United Nations Office for the Coordination of Humanitarian Affairs (UN OCHA) P-code system.
+| Administrative Tier | Statutory Designation | Traditional Customary Equivalent | Governing Authority | Primary Database Identifier & Coding Standard |
+|---|---|---|---|---|
+| **Level 1** | Province | - | Provincial Governor / ZIMSTAT Managers  | ISO 3166-2:ZW (e.g., ZW-HA for Harare, ZW-MV for Masvingo)  |
+| **Level 2** | District | - | District Administrator (DA)  | ZIMSTAT / UN OCHA P-code ADM2 (e.g., 1606 for Chivi District)  |
+| **Level 3** | Ward | - | Elected Local Councillor | ZIMSTAT / UN OCHA P-code ADM3 (e.g., 160621 for Chivi Ward 21)  |
+| **Level 4** | - | Chieftainship (*Umambo*) | Traditional Chief (*Mambo*)  | Ministry of Local Government Gazette Codes |
+| **Level 5** | - | Headman (*Sadunhu*) | Traditional Headman  | Local Traditional Court Registry ID |
+| **Level 6** | - | Village (*Ushabhuku*) | Village Head (*Sabhuku*) | Sabhuku Registration Book Number (e.g., V-CHIV-089)  |
+Traditional land rights, ancestral burials, and customary inheritance claims are verified at **Level 6**, which is overseen by the *Sabhuku* (Village Head). The *Sabhuku* maintains a physical Village Registration Book, which serves as the primary municipal record for validating residency, land tenure, and family lineage within traditional communities.
+To ensure integration with national census and civil registry databases, the system maps this local record using a standardized, composite village key:
+This structural mapping ensures that when database nodes are captured offline in remote areas, their local customary positions can be verified against formal statutory boundaries, facilitating clean integration into national civil registry archives.
+## Ethno-Linguistic and Kinship Architecture
+To preserve localized family origins, a database must bypass generic ethnic categories. The system must implement the 16 constitutionally recognized statutory languages of Zimbabwe , further mapping Shona and Nguni-linked populations into their distinct dialectal and regional clusters.
+### Statutory Languages and Dialect Trees
+The application's backend architecture accommodates the linguistic diversity of Zimbabwe's population, providing localized interfaces and vocabulary sets for the constitutional languages.
+| Linguistic Cluster | Constitutional Languages | Major Sub-Dialects / Regional Branches | Centroid Geographic Focus |
+|---|---|---|---|
+| **Shona Dialect Tree** | Shona, Ndau | Zezuru, Karanga, Manyika, Korekore, Ndau | Mashonaland, Masvingo, Midlands, and Manicaland Provinces |
+| **Nguni Dialect Tree** | Ndebele, Xhosa | Northern Ndebele, Kalanga (Nguni-adjacent) | Matabeleland North, Matabeleland South, and Bulawayo |
+| **Sotho-Tswana Tree** | Sotho, Tswana | Birwa, Sotho-pockets | Southwestern Matabeleland South |
+| **Zambezi & Border Tree** | Tonga, Venda, Shangani, Sena, Chewa, Chibarwe, Nambya, Koisan | Valley Tonga, Plateau Tonga, Tsonga, Doma, Tshwa San  | Binga, Beitbridge, Chiredzi, Kariba, Kanyemba, and border zones  |
+| **Official & Assistive** | English, Sign Language | - | National coverage; administrative and urban hubs |
+Linguistic and cultural clusters directly influence local inheritance customs, marriage ceremonies, and funerary protocols. For instance, Shona subgroups practice patrilineal succession across collateral lineages, whereas the Tonga communities of Binga adhere to matrilineal systems, requiring distinct database rules.
+### Customary Totemic Registry
+The cornerstone of identity within Shona and Ndebele families is the totemic association, which traces lineage back to a common ancestor. Every profile node in the registry must bind a primary totem—such as an animal, bird, or organ—to its matching sub-clan praise name, ancestral greeting, and traditional proverb.
+| ID | Class | Primary Totem (Mutupo / Isibongo) | Praise Name (Chidawo / Izithakazelo) | Core Ancestral Greeting | Customary Proverb (*Tsumo / Izaga*) | Customary Diet Taboo (*Miko / Izila*) |
+|---|---|---|---|---|---|---|
+| **1** | Shona | Moyo (Heart) | Moyondizvo | Maita Moyondizvo, Changamire | Moyo muti, unomera paunoda | Heart of any animal |
+| **2** | Shona | Moyo (Heart) | Chirandu | Maita Chirandu, Svosve | Kandiro kanoenda kunobva kamwe | Lungs of animal |
+| **3** | Shona | Moyo (Heart) | Sinyoro (Vachinjanja) | Maita Sinyoro, maita zvenyu | Kure kwegava ndokusina musungusungu | Spleen of animal |
+| **4** | Shona | Shumba (Lion) | Murambwi | Maita Shumba, vari Chibi, Murambwi | Shumba inodya inofamba | Lion meat and paws |
+| **5** | Shona | Shumba (Lion) | Mhazi | Maita Mhazi, vari Chishawasha | Pasi pomoto pane madota | Big cat claws and flesh |
+| **6** | Shona | Soko (Monkey) | Mukanya | Maita Mukanya, Soko Mukanya | Tsoko kana yoti tsvo, yaona bako | Velvet monkey |
+| **7** | Shona | Soko (Monkey) | Murehwa | Maita Murehwa, vari muMbire | Chara chimwe hachitswanyi hinda | Baboon |
+| **8** | Shona | Mbizi (Zebra) | Samaita | Maita Samaita, heri Mbizi | Mbizi ikaswera mumatope inofana nembongoro | Zebra flesh |
+| **9** | Shona | Tembo (Zebra) | Mazvimbakupa | Maita Tembo, Mazvimbakupa | Ndambakuudzwa akaonekwa nembonje pamhanza | Zebra stripe-skin / liver |
+| **10** | Shona | Nzou (Elephant) | Samanyanga | Maita Samanyanga, vari muBocha | Nzou hairemerwi nenyanga dzayo | Elephant trunk |
+| **11** | Shona | Zhou (Elephant) | Mhukahuru | Maita Zhou, vari muMberengwa | Mviromviro dzembanje dzinotanga nemashizha | Elephant flesh |
+| **12** | Shona | Shava (Eland) | Museyamwa | Maita Mhofu, Museyamwa | Mhofu yomukono haina danga | Eland flesh |
+| **13** | Shona | Shava (Eland) | Chihera | Maita Chihera, Chidavarume | Mukadzi anofamba haashayi mapfihwa | Female Eland |
+| **14** | Shona | Gumbo (Leg) | Madyirapasi | Maita Gumbo, Madyirapasi, vari muGutu | Gumbo rine mhanza rinotsika pane rine rombe | Cloven-hoofed animals |
+| **15** | Shona | Dziva (Pool) | Mbedzi | Maita Dziva, vari muMatonjeni | Hove dzinofamba nemvura | Scale fish; Hippopotamus |
+| **16** | Shona | Ngara (Porcupine) | Chipunza | Maita Ngara, Chipunza | Nungu haisweli musaga | Porcupine |
+| **17** | Shona | Garwe (Crocodile) | Nyamasvisva | Maita Garwe, Nyamasvisva | Garwe haridyi chebamba | Crocodile meat |
+| **18** | Shona | Nyati (Buffalo) | Chidawanyika | Maita Nyati, Chidawanyika | Nyati haityi vana vaduku | Buffalo meat |
+| **19** | Shona | Humba (Boar) | Nyakuvimba | Maita Humba, vari muMakombe | Humba inotenda panyoro | Wild boar |
+| **20** | Shona | Beta (Termite) | Mazviona | Maita Beta, Mazviona | Ishwa inobuda mumwena une mvura | Winged harvester termites |
+| **21** | Shona | Tsiwo (Genitalia) | Gushungo | Maita Gushungo, vari muZvimba | Gushungo rinoruma nenzara | Albino / white-spotted game |
+| **22** | Shona | Shiri (Bird) | Hungwe | Maita Hungwe, Shiri yomudenga | Shiri inovururuka nemapapiro ayo | Fish eagle |
+| **23** | Ndebele | Khumalo | Mntungwa | Bayethe Mntungwa, Khumalo! | Imbila yaswela umsila ngokuyalezela | Royal game / Eland |
+| **24** | Ndebele | Sibanda | Shumba (Chibi equivalent) | Ngiabonga Sibanda, lina bakwaChibi | Inkunzi isematholeni | Lion meat / claws |
+| **25** | Ndebele | Dube | Zephania | Dube, Mbombela, lina elimitshatshazi | Kakho mfula ungabo gubha | Zebra |
+| **26** | Ndebele | Ndlovu | Gatsheni | Gatsheni, lina elisenga inkomo zokusisela | Indlovu ayisindwa ngumbhoko wayo | Elephant meat and tusks |
+| **27** | Ndebele | Ncube | Mzilankatha | Ncube, lina elikhwela emithini | Indlela ibuzwa kwabaphambili | Monkey / Baboon |
+| **28** | Ndebele | Ngwenya | Mambo | Ngwenya, lina elihlala emanzini amanyama | Izandla sihlamba esinye | Crocodile |
+In both Shona and Ndebele cultures, totems act as a system of customary laws. This includes a strict dietary restriction: consuming one's totem animal (*Miko* in Shona, *Izila* in Ndebele) is traditionally believed to result in physical ailments, such as hair or tooth loss, which serves to reinforce traditional ecological preservation guidelines.
+## Matrilineal Customary Exceptions: The Tonga Framework
+Most Zimbabwean kinship groups adhere to patrilineal structures where the primary totem and lineage rights are inherited from the father's side. However, the **Tonga (BaTonga) people of Binga District** follow a matrilineal descent model, which alters inheritance patterns and requires distinct database rules.
+| Operational Variable | Patrilineal Standard (Shona / Ndebele) | Matrilineal Standard (Binga Tonga) |
+|---|---|---|
+| **Primary Clan Inheritance** | Inherited from the father's line (*Mutorwa / Isibongo*). | Inherited from the mother's line (*Mukowa* matriclan). |
+| **Secondary Lineage Tracking** | Mother's line tracked for exogamy check. | Father's line (*Luzubo*) tracked to prevent incest. |
+| **Primary Spiritual Anchor** | Paternal ancestral spirits (*Vadzimu*). | Maternal ancestral spirits (*Mizimo yaku banyina*). |
+| **Property & Cattle Beneficiary** | Eldest son (*Izibulo*) or surviving brothers. | Maternal nephews (sister's sons) or maternal brothers. |
+| **Customary Ward Custody** | Father's house, assuming bride-wealth is settled. | Mother's house, which holds default custody. |
+| **Council Veto Authority** | Paternal aunts (*Vatete*) and paternal uncles. | Maternal uncles (*BaMalume*). |
+Under Tonga customary law (*Mafwa*), biological children do not inherit their father's estate. Instead, assets such as cattle, traditional tools, and fishing rights pass to his maternal nephews (his sister's sons), keeping the family assets within the same *Mukowa* (matriclan).
+While bride-wealth (*Chiko*) is paid to formalize the marriage, it does not transfer custody of the children to the father's lineage. In the event of a divorce, the children remain with the mother's family, and the biological father has no customary grounds for custody claims.
+To support these dual systems, the database engine implements a conditional routing system that evaluates the lineage anchor based on the cultural cluster flag:
+```json
+{
+  "node_id": "ZW-BING-9082",
+  "cultural_system": "TONGA_MATRILINEAL",
+  "lineage": {
+    "primary_clan_inherited": "MATERNAL_MUKOWA",
+    "secondary_clan_tracked": "PATERNAL_LUZUBO",
+    "customary_guardian_node": "MATERNAL_UNCLE_ID"
+  }
+}
+
+```
+This structural mapping ensures that when database records are generated for Tonga communities, descendants are assigned to the correct maternal branch, preventing data errors during family audits or land inheritance reviews.
+## Customary Rules for Lineage Drift, Seniority, and Dissolution
+To serve as an accurate repository for traditional courts, the platform must process complex family events, such as out-of-wedlock births, polygamous marriages, and customary separations.
+### Out-of-Wedlock Births and Totem Drift
+Under Shona and Ndebele custom, a child born outside of marriage does not automatically inherit the biological father's totem. Instead, they are placed in a "Maternal Vault" state, taking the totem of the maternal grandfather.
+To transfer custody and shift the child's totem to the biological father's line (**Totem Drift**), the father must settle specific customary payments with the mother's family.
+| Ledger Code | Customary Payment | Recipient | Functional and Lineage Purpose |
+|---|---|---|---|
+| **ZW-LEDG-MAP** | *Maputiro* (Pregnancy Damages) | Maternal Grandfather | Acknowledges biological paternity and compensates the family for the out-of-wedlock pregnancy. |
+| **ZW-LEDG-CHI** | *Chiredzwa* (Maintenance/Rearing) | Maternal Grandfather | Reimburses the maternal family for the costs of raising and feeding the child. |
+Once both *Maputiro* and *Chiredzwa* are settled, custody and the child's totem drift to the biological father's line. If these payments are unresolved, the child remains on the maternal grandfather's tree.
+In statutory law, this customary barrier has been challenged. The High Court and Supreme Court of Zimbabwe (Sadiqi v Muteswa) ruled that the common law giving sole guardianship to the mother was unconstitutional, establishing that parents of children born in or out of wedlock can equally exercise **joint custody and guardianship** based on the best interests of the child.
+### Polygamous "House" Seniority Matrix
+Polygamy (*Barika* in Shona, *Isithembu* in Ndebele) is structured around parallel **Houses** (*Imba* in Shona, *Indlu* in Ndebele). Each house is ranked based on the chronological order of the marriages, not the birth dates of the children.
+```
+                           
+                                       │
+                ┌──────────────────────┴──────────────────────┐
+                ▼                                             ▼
+                            
+   (Senior Customary Rank)                       (Junior Customary Rank)
+                │                                             │
+        ┌───────┴───────┐                                     ▼
+        ▼               ▼                           
+                  (Junior Lineage Status)
+  (Primary Heir)     (Second Heir)
+
+```
+As illustrated above, Son A outranks Son B in traditional lineage seniority, chieftainship succession, and asset allocation, despite being chronologically younger, because his mother is the senior wife (*Amai Guru*). Son B cannot jump ahead of any male child born to the senior house.
+### Chronological Dowry Negotiations
+Marriage negotiations in Zimbabwe are structured transactions with clear phases and designated recipients.
+| Phase Sequence | Shona Customary Phase | Ndebele Customary Phase | Primary Recipient | Modern Range (USD) | Customary Meaning and Consequences |
+|---|---|---|---|---|---|
+| **Phase 1** | *Kunyora Tsamba* & *Vhuramuromo* | *Isicelo* & *Isivulamulomo* | Father / Brothers | $20 – $150 | Initiates talks; "mouth opener" to allow the family to open and read the request letter. |
+| **Phase 2** | *Zvirango* (Entry Protocols) | *Ukungena* (Gate Fees) | Paternal Lineage | $20 – $100 | Clears the path to enter the homestead; introduces the family to the household ancestors. |
+| **Phase 3** | *Zvamai* (Mother's Honoring) | *Ukubona Amehlo* (Eye Meeting) | Mother (*Ambuya*) | $100 – $300 | Compensates the mother for raising the bride; includes *Mbonano* and *Matwiro*. |
+| **Phase 4** | *Rusambo* (Core Dowry) | *Amalobolo* / *Ikhazi* | Father (*Tezvara*) | $1,500 – $5,000+ | The foundational bride price that legally binds the marriage at customary law. |
+| **Phase 5** | *Danga* (Cattle Herd) | *Ikhazi* (Cattle Count) | Family Herd | 4–10 Beasts ($500/head) | Builds the wealth of the family lineage. One beast must be a live dairy cow for the mother. |
+| **Phase 6** | *Mombe yeHumai* | *Inkomo kaMama* | Mother (*Ambuya*) | 1 Live Heifer / Cow | **Mandatory live cow** representing maternal breastfeeding; cannot be substituted for cash. |
+| **Phase 7** | *Mbatya dzeVatezvara* | *Izibizo* & *Amacansi* | Parents & Aunts | $300 – $800 | Wardrobe and blankets for the parents; includes clothing and direct fees for the maternal uncle. |
+| **Phase 8** | *Madyo* / *Majaka* (Feast) | *Ukwamukelwa* (Welcoming) | Community / Cooks | $50 – $150 | Sealing feast funded by the groom's family; introduces the groom to his in-laws. |
+Under Shona custom, if the groom's family (*Vakwasha*) performs a phase out of order, or speaks directly to the elders instead of through the go-between (*Munyai*), they are penalized with immediate fines (*Zvirehwa*). Additionally, the *Mombe yeHumai* (mother's cow) belongs to the mother's maternal ancestors, meaning it is legally separate from family assets and is non-refundable in the event of a divorce.
+### Customary Severance and Divorce
+Customary unions cannot be dissolved by a couple simply separating. The marriage must be dissolved through explicit customary protocols :
+* **Shona *Gupuro* Token:** To dissolve a customary union, the husband must issue a physical token of rejection (*Gupuro*), typically a cash note ($20 to $100 USD). This token is handed to the go-between (*Munyai*), who delivers it to the wife's paternal aunt (*Vatete*). The *Vatete* then presents it to the father (*Tezvara*). If the father accepts the *Gupuro*, the marriage covenant is severed. Without *Gupuro*, the woman remains customarily married to the husband, meaning any children she has with a subsequent partner are customarily claimed by the first husband. However, if the wife marries another man who pays lobola, the second marriage customarily dissolves the first, even if no *Gupuro* was paid.
+* **Ndebele *Ukuxoshwa*:** Dissolution (*Ukuxoshwa*) is managed through property re-balancing. If the marriage dissolves due to misconduct, the husband can petition the traditional court to return a portion of the *Amalobolo* cattle. If the husband drives the woman away without a formal traditional hearing, the marriage remains valid.
+The database schema manages these custom transactions through structured tables:
+```sql
+-- CUSTOMARY DIVORCE & COVENANT SEVERANCE REGISTRY
+CREATE TABLE divorce_ledger (
+    id TEXT PRIMARY KEY,
+    marriage_id TEXT NOT NULL,
+    token_asset_description TEXT NOT NULL, -- e.g., '50 USD Cash', 'Hoe Blade'
+    current_delivery_state TEXT CHECK(current_delivery_state IN ('TOKEN_ISSUED', 'MUNYAI_TRANSIT', 'VATETE_VERIFIED', 'TEZVARA_ACCEPTED')) DEFAULT 'TOKEN_ISSUED',
+    munyai_profile_id TEXT, -- Intermediary node handling transit
+    vatete_profile_id TEXT, -- Familial aunt validating delivery
+    date_tezvara_accepted TEXT, -- Timestamp of divorce validation
+    floating_lineage_protection_active INTEGER CHECK(floating_lineage_protection_active IN (0, 1)) DEFAULT 0,
+    FOREIGN KEY (marriage_id) REFERENCES marriages(id) ON DELETE CASCADE
+);
+
+```
+This tracking ensures that when family lineages are updated, children born downstream of a separation are assigned to the correct paternal or maternal branch based on the verification status of the *Gupuro* token.
+## Ancestral Transitions and Mortuary Lifecycles
+In Zimbabwean custom, death (*Rufu/Ukufa*) is a multi-stage transition that changes a node's status in the family registry from living to ancestral.
+| Mortuary Stage | Shona Customary Phase | Ndebele Customary Phase | Key Customary Protocol | System State Override |
+|---|---|---|---|---|
+| **Stage 1** | *Kuchema neChiziviso* | *Isaziso lesikhumbuzo* | Formal wailing; notifying maternal uncles (*Omalume*) and the *Sabhuku*. | DECEASED_FROZEN |
+| **Stage 2** | *Kuvigwa* (Burial) | *Ukungcwaba* (Burial) | Grave dug by *Abakhwenyana* (sons-in-law). | BURIAL_COMPLETED |
+| **Stage 3** | *Nyaradzo* (Consolation) | *Ukugezwa Kwezikhali* | Cleansing of tools; declaring outstanding debts (*Mhosva*). | MOURNING_ACTIVE |
+| **Stage 4** | *Kugovera Mbatya* | *Ukukhanyisa* (Memorial) | Distribution of clothing and personal belongings via the *Vatete*. | ESTATE_PENDING |
+| **Stage 5** | *Kurova Makuva / Magadzira* | *Ukubuyisa* (Bringing Home) | Brewed beer (*Bira*); bringing the spirit home as an active guardian ancestor. | ANCESTRAL_NODE |
+In Ndebele custom, the surviving wife enters a strict mourning state called **Inzilo**, wearing distinctive black attire and facing movement restrictions.
+The formal distribution of the estate (**Ukudla Ifa**) cannot execute until the *Ukubuyisa* ceremony is completed, certifying that the spirit has been brought home.
+Once completed, the estate is distributed based on patrilineal primogeniture, where the eldest son (*Izibulo*) becomes the custodian of the family herd (*Isibaya*) and assumes custody of minor siblings.
+### The Communal Insurance Ledger (*Bhuku reChemo*)
+During a funeral, every visitor’s contribution of cash or food is recorded in the *Bhuku reChemo*. This ledger is a formal system of reciprocal social insurance.
+If Family A contributes a specific amount to Family B's funeral, Family B is customarily obligated to match or exceed that contribution when Family A experiences a loss.
+| Contributor Name | Relationship Tier | Contribution Type | Quantity | USD Value | Reciprocity Status |
+|---|---|---|---|---|---|
+| **K. Chitate** | *Vakwasha* (In-laws) | CASH_USD | $50.00 | $50.00 | PENDING |
+| **M. Sibanda** | *Vazukuru* (Nephews) | MEALIE_MEAL_KG | 50.00 | $25.00 | PENDING |
+| **Traditional Court** | *Vagari* (Neighbors) | GOAT | 1.00 | $40.00 | SATISFIED |
+This ledger tracking ensures that families can audit their community obligations during subsequent bereavement events.
+## Deep Ancestral Overrides and Spiritual Restitution
+Genealogical tracking from the late 19th to the mid-20th century occasionally encounters lineage adjustments that alter biological parentage entries through spiritual interventions.
+* **Avenging Spirit (*Ngozi*) Restitution:** If an ancestor committed murder, the victim's family could demand a spiritual settlement (*Ngozi*). Historically, this involved paying cattle or, in some eras, a young woman to the victim's clan to balance the lineage network. Children born from these unions were structurally assigned to the **victim's family lineage tree**, bypassing the biological father's details.
+* **Reviving the Extinguished Hearth (*Kumutsa Mapfihwa*):** If a married woman passed away without bearing children, her family line was customarily obligated to provide a younger sister or niece (*Chimutsamapfihwa*) to step into her place. Any children born to this new partnership are legally categorized as the children of the **deceased first wife**, keeping her specific branch on the tree active.
+To prevent data errors during inheritance audits, the database engine implements a customary lineage override property, allowing researchers to differentiate between a node's biological parentage and their customary lineage anchor :
+```json
+{
+  "node_id": "ZW-ANOM-1922",
+  "biological_father": "ZW-MALE-991",
+  "customary_lineage_anchor": "ZW-GHOST-442",
+  "override_type": "KUMUTSA_MAPFIHWA",
+  "notes": "Traces customary lineage directly to first wife's household for inheritance audits."
+}
+
+```
+## Alignment with International Archival and Metadata Standards
+To ensure compatibility with global databases managed by NAZ , UNESCO , WHO , and ZIMSTAT , the system's data model must align with international metadata standards.
+| Standard / System | Sponsoring Body | Primary Applied Focus | Schema Formats & Protocols | Core Applied Fields / Nodes |
+|---|---|---|---|---|
+| **CIDOC CRM (ISO 21127)** | ICOM / UNESCO  | Intangible Cultural Heritage  | RDF / XML / Semantic Web Graph  | E21 Person, E53 Place, E65 Creation, E73 Information Object. |
+| **LIDO (v1.1)** | ICOM / CIDOC  | Material Culture & Objects  | XML Harvesting Schema  | lido:descriptiveMetadata, lido:event. |
+| **ISAD(G)** | ICA / NAZ  | Hierarchical Archival Description  | XML Schemas (EAD3 / EAC-CPF)  | Reference code, Title, Date, Level, Extent, Creator. |
+| **ICD-11** | WHO  | Mortality & Cause of Death (CoD)  | REST HTTP API / URIs  | http://id.who.int/icd/schema/code, DORIS UCOD. |
+| **DHS Recode** | USAID / ZIMSTAT  | Demographic & Health Survey  | CSPro / Hierarchical Recode Files  | HR (Household), PR (Persons), IR (Individual Women), BR (Births). |
+This comprehensive mapping ensures that local genealogical data captured in remote areas can be exported in formats that are instantly compatible with both domestic civil archives and global research systems.
+### UNESCO Intangible Cultural Heritage (CIDOC CRM & LIDO)
+The preservation of oral history, clan praise poetry (*Detembo / Izithakazelo*), and traditional dances requires alignment with the **CIDOC Conceptual Reference Model (ISO 21127)**.
+```
+           ── (P12i was present at) ──►
+                     │
+             (P108 has produced)
+                     │
+       [span_20](start_span)[span_20](end_span)              ▼
+         [E73 Information Object] ── (P2 has type) ──►
+
+```
+For instance, a recording of a clan praise poem (*Detembo*) is modeled as an E73 Information Object produced during an E65 Creation event. This event links the E21 Person (the reciter) , the E53 Place (the traditional Level 6 Sabhuku node) , and the E4 Period (the historical era).
+Material artifacts, such as traditional *pfihwa* hearthstones or chieftainship scepters, are categorized as E22 Human-Made Object and exported using **LIDO XML** to ensure cataloging interoperability.
+### National Archives of Zimbabwe Cataloging (ISAD(G) & EAD)
+Archival descriptions of family collections must adhere to the **ISAD(G)** hierarchy, organizing finding aids from the collection level down to individual files.
+```
+                           
+                           (e.g., ZW-NAZ-Moyo-Chirandu)
+                           [span_77](start_span)[span_77](end_span)[span_79](start_span)[span_79](end_span)            │
+                                       ▼
+                                  
+                            (e.g., Bokoto House)
+                                       │
+                                       ▼
+                                     [FILE]
+                          (e.g., Chibanda Branch)
+                                       │
+                                       ▼
+                                  
+                        (e.g., Individual Profile)
+
+```
+The database structures XML outputs using **EAD3 (Encoded Archival Description)** to manage finding aids hierarchically :
+```xml
+<ead>
+  <control>
+    <recordid>ZW-NAZ-MOYO-001</recordid>
+  </control>
+  <archdesc level="fonds">
+    <did>
+      <unittitle>Moyo Chirandu Clan Archives</unittitle>
+      <creator>Svosve Dynasty</creator>
+    </did>
+    <dsc>
+      <c01 level="series">
+        <did>
+          <unittitle>Bokoto Royal House Lineage</unittitle>
+        </did>
+        <c02 level="item">
+          <did>
+            <unittitle>Chief Jonathan Tafirenyika Chibanda</unittitle>
+            <unitdate normal="1969/2013">1969-2013</unitdate>
+          </did>
+        </c02>
+      </c01>
+    </dsc>
+  </archdesc>
+</ead>
+
+```
+Individual profiles map to **EAC-CPF (Encoded Archival Context - Corporate Bodies, Persons, and Families)**, separating biographical details from the record's context.
+### WHO and Civil Registration and Vital Statistics (CRVS) Compliance
+To support public health and cause-of-death (CoD) tracking in remote areas, the system matches UN CRVS standards. Birth and death registrations are logged using structured forms designed to be compatible with national vital statistics frameworks.
+Cause-of-death mapping utilizes the **WHO International Classification of Diseases (ICD-11)**. The offline database contains a localized dictionary of ICD-11 diagnostic codes.
+When a death event is registered, the local application uses **DORIS (Digital Open Rule Integrated System)** rule logic to validate the reported sequence of events, ensuring accurate identification of the underlying cause of death (UCOD) before compilation.
+## Technical Implementation and Offline Sync Engine
+The application is built to run offline first, operating as a single, compiled index.html file that can be distributed locally via peer-to-peer file-sharing utilities like Xender or WhatsApp Web.
+### Unified Single-HTML App View-States
+To manage the application interface on low-resource mobile screens, the front-end operates as a single-page state machine that toggles visibility layers on target divs based on the selected hub role.
+| Hub Role | View State | UI View Identifier | Layout and Navigation Controls |
+|---|---|---|---|
+| **Boot Layer** | Gate Selection | view-gate | Startup screen presenting two navigation options: Regular User or Institutional Dashboard. |
+| **Regular Hub** | Media Timeline | view-timeline | Landing page. Instagram-style media timeline limited to image uploads. Bottom icon nav. |
+| **Regular Hub** | Family Tree | view-tree | Rectilinear orthogonal grid layout with vertical cards, touch gestures, settings, and generations slider. |
+| **Regular Hub** | Cultural Lookup | view-lookup | Offline totemic search engine and praise poetry audio library. |
+| **Regular Hub** | Export/Settings | view-settings | Manages local SD card backups, vector PDF generation, and P2P WhatsApp sync exports. |
+| **Institutional** | Aggregation Hub | view-admin | Data-dense metrics dashboard highlighting totemic density, regional mappings, and active Sabhuku counts. |
+| **Institutional** | Lineage Auditor | view-audit | Advanced filter interface and dispute queue for chieftainship successions. |
+This structure ensures that the entire prototype runs without server side-rendering or web framework dependencies, maintaining compatibility with basic Android runtime containers.
+### Sibling Seniority Grid Layout
+To display generational rows in portrait mode without horizontal scrolling, the system uses a **rectilinear orthogonal grid layout**.
+Siblings share the same generational horizontal band, but are offset vertically based on their birth order seniority to reflect their customary rank.
+```
+  
+-----------------------------------------------------------------------
+1984 ─────────────►
+                         │
+1987 ─────────────►      ├────────────────► [ User Profile Card (y: 40px) ]
+                         │
+1992 ─────────────►      └────────────────────────────────────────►
+
+```
+The vertical position of each profile card within the generation row is computed dynamically:
+Where R_{\text{sibling}} represents the chronological sibling rank index. This ensures senior members remain clearly visible at the top of their generational band on narrow screens.
+### WhatsApp Text-Snippet Sync Engine (P2P Data Compression)
+To sync data across devices without relying on cellular networks, the application compiles profile changes into highly compressed, pipe-delimited text snippets. These compressed payloads can be shared directly via SMS or standard WhatsApp.
+The payload schema is structured as follows:
+```javascript
+// Dense WhatsApp Payload Generator
+function generateSyncSnippet(personNode) {
+    const segments =;
+    const compressedString = btoa(segments.join('|'));
+    return `whatsapp://send?text=${encodeURIComponent("ROOTS_SYNC:" + compressedString)}`;
+}
+
+```
+### Decentralized Vector Clock Conflict Resolution
+When decentralized database files are shared between devices, conflicts are resolved using a **Vector Clock** model (V) to verify version history without a central server :
+* Every database record contains a vector clock mapping devices to sequence numbers:
+* When an incoming record is imported, the system evaluates the incoming clock (V_{\text{incoming}}) against the local clock (V_{\text{local}}):
+   1. If V_{\text{incoming}} > V_{\text{local}} for all keys, the local record is automatically overwritten.
+   2. If the vector clocks are concurrent (V_{\text{incoming}} \parallel V_{\text{local}}), indicating a merge conflict, the record is flagged as DISPUTED and queued for manual review by family elders or traditional council administrators.
+### Offline Trust Graph (Consanguinity Verification)
+Privacy controls for on-device media timelines utilize a recursive tree-traversal algorithm to calculate the exact degree of consanguinity (d) between the active user and the author of a post before displaying images :
+```
+                     [Active User Node]
+                             │
+                      (Step 1: Parent)
+                             │
+                             ▼
+                       [Parent Node]
+                             │
+                    (Step 2: Grandparent)
+                             │
+                             ▼
+                    [Grandparent Node]
+                             │
+                     (Step 3: Uncle)
+                             │
+                             ▼
+                        [Uncle Node]
+                             │
+                     (Step 4: Cousin)
+                             │
+                             ▼
+                    [Cousin Node (d = 4)]
+
+```
+The algorithm evaluates relationship distance metrics:
+```javascript
+function calculateConsanguinityDistance(startNodeId, targetNodeId, graph, visited = new Set(), depth = 0) {
+    if (startNodeId === targetNodeId) return depth;
+    if (depth > 4) return Infinity; // Limit traversal to 2nd cousins (d = 4)
+   
+    visited.add(startNodeId);
+    const node = graph[startNodeId];
+    let minDistance = Infinity;
+   
+    // Union parents, children, and spouses as valid structural adjacencies
+    const adjacencies = [...node.parents,...node.children,...node.spouses];
+   
+    for (const adjacentId of adjacencies) {
+        if (!visited.has(adjacentId)) {
+            const distance = calculateConsanguinityDistance(adjacentId, targetNodeId, graph, visited, depth + 1);
+            if (distance < minDistance) minDistance = distance;
+        }
+    }
+   
+    visited.delete(startNodeId);
+    return minDistance;
+}
+
+```
+Media files are tagged with visibility constraints. If the calculated path distance is less than or equal to the designated threshold:
+the image is rendered on the client's timeline. This ensures intimate family media remains protected from the broader clan network entirely offline.
+## Conclusions
+To successfully build a genealogical platform for the Zimbabwean context, database architectures must transition away from standard Western genealogical models. By replacing linear structures with relational taxonomies that account for administrative geolocations, dual-tier totems, and customary inheritance laws, the platform can operate as a validated lineage registry.
+This framework aligns with international metadata standards, including UNESCO’s CIDOC CRM , NAZ’s ISAD(G) , and WHO’s CRVS guidelines. Supported by an offline-first peer-to-peer sync engine, this architecture ensures that local oral histories and vital statistics can be preserved, synced, and validated directly within remote communities, bridging the gap between traditional heritage and global scientific databases.
+ 

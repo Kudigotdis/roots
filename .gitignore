@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Generated build output (rebuild with: npm run copy:www && npx cap sync)
+www/
+android/app/src/main/assets/public/
+
+# Android / Gradle build intermediates
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties/
+android/.idea/
+*.iml
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Backups / temp
+*.bak
+*.tmp

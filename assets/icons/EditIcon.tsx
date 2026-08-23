@@ -1,0 +1,31 @@
+import React from 'react';
+
+export interface EditIconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+  color?: string;
+}
+
+export const EditIcon: React.FC<EditIconProps> = ({
+  size = 24,
+  color = 'currentColor',
+  className = '',
+  ...props
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
+      fill={color}
+      color={color}
+      className={className}
+      {...props}
+    >
+      <path d="M17 10 C11.5 10 7 14.5 7 20 L7 44 C7 49.5 11.5 54 17 54 L41 54 C46.5 54 51 49.5 51 44 L51 34 C51 32.3 49.7 31 48 31 C46.3 31 45 32.3 45 34 L45 44 C45 46.2 43.2 48 41 48 L17 48 C14.8 48 13 46.2 13 44 L13 20 C13 17.8 14.8 16 17 16 L28 16 C29.7 16 31 14.7 31 13 C31 11.3 29.7 10 28 10 Z" />
+      <path d="M54.7 10.3 C52.5 8.1 48.8 8.1 46.6 10.3 L27.2 29.7 C26.7 30.2 26.3 30.8 26.1 31.5 L24.1 38.6 C23.8 39.8 24.9 40.9 26.1 40.6 L33.2 38.6 C33.9 38.4 34.5 38 35 37.5 L54.7 17.8 C56.9 15.6 56.9 12.5 54.7 10.3 Z" />
+    </svg>
+  );
+};
+
+export default EditIcon;

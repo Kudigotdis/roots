@@ -1,0 +1,19 @@
+{
+  "name": "Roots — Zimbabwe Genealogy",
+  "short_name": "Roots",
+  "description": "Offline-first family tree & cultural heritage platform for Zimbabwe",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='38' r='18' fill='none' stroke='%23c9793f' stroke-width='2.5'/><circle cx='22' cy='52' r='13' fill='none' stroke='%23c9793f' stroke-width='2'/><circle cx='78' cy='52' r='13' fill='none' stroke='%23c9793f' stroke-width='2'/><path d='M50 56 L50 90' stroke='%23c9793f' stroke-width='2.5' stroke-linecap='round'/><path d='M50 62 L30 52' stroke='%23c9793f' stroke-width='2' stroke-linecap='round'/><path d='M50 62 L70 52' stroke='%23c9793f' stroke-width='2' stroke-linecap='round'/><circle cx='50' cy='38' r='4' fill='%23c9793f'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

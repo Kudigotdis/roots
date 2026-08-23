@@ -1,0 +1,605 @@
+Design the family tree app and make sure to use ALL the people provided:
+
+Comprehensive Chitate/Kepekepe Family Tree
+
+Core Family Information
+
+You (Kudzanai Paul Chitate)
+
+· Born: April 5, 1987
+· Location: Zimbabwe
+· Father: Shamiso Paul Chitate (born 1964)
+· Mother: Mildred Sibongile Chitate (née Kepekepe) (born 1964)
+· You are the 4th Paul (your father, grandfather, and great-grandfather were all Paul)
+
+---
+
+YOUR IMMEDIATE FAMILY
+
+Your Partner & Child
+
+· Natasha Jansen (born 1985)
+  · Mother: Xhosa
+  · Father: Coloured pastor (passed 2021)
+  · Location: Johannesburg, South Africa
+  · Daughter: Ayanna Jansen (born 2011)
+
+Your Siblings (Total: 3)
+
+1. Nomsa Michelle Chitate (born December 26, 1985)
+   · Mother: Passed 2003 (half Zimbabwean, half Xhosa, born in SA)
+   · Partner: Nelson (born 1983, half Zimbabwean, half Malawian)
+   · Children:
+     · Nikaela (born 2011)
+     · Anesu (born 2015)
+     · Kuda (born 2016)
+2. Alfonce Tatenda Chitate (born 1989)
+   · Wife: Veronica (born 1990, Motswana doctor)
+   · Married: 2026
+   · Location: UK
+   · Children:
+     · Alentle (born 2021)
+     · Mildred (born 2026)
+3. Paidamoyo Laura Chitate (born 1997)
+   · Husband: Gamu (born 1996, Ndebele, grew up in Harare, moved to UK at 13)
+   · Location: UK
+   · No children
+
+---
+
+YOUR FATHER'S FAMILY - Chitate Side
+
+Your Father: Shamiso Paul Chitate (born 1964)
+
+· Oldest boy, 2nd of 6 children
+· Location: UK (with siblings)
+
+Your Father's Siblings
+
+1. Mai Shona (Oldest sister)
+
+· Daughter: Shona (born 1991, lesbian)
+· Location: UK
+
+2. Your Father - Shamiso Paul Chitate (born 1964)
+
+3. Tendai Chitambo (sister)
+
+· Married twice, second marriage 2017 to Charles Chitambo
+· Charles has 4 children including Craig Kudzanai Chitambo (born 1987)
+· Children:
+  · Garikai Madzikanda (born 1984, gay)
+  · Tinashe Melissa Madzikanda (born 1986)
+    · Child born 2025 with Nathan (Nigerian boyfriend)
+    · Location: UK
+
+4. William Chitate (brother)
+
+· Divorced
+· Has 5 boys:
+  1. Fungai Chitate (born 1982)
+     · Married 2004
+     · Children:
+       · Natasha (born 2003)
+         · Has daughter born 2026 with UK-based Motswana man (born 2002)
+       · Second daughter (born 2011)
+  2. Tawanda Chitate (born 1984)
+     · Married to UK-based Zimbabwean woman
+  3. Faiari Mukarati (born 1984, born out of wedlock)
+     · Mother passed 2016
+     · Partner: Kim (born 1988)
+     · Children:
+       · Jayden (born 2013, boy)
+       · Daughter (born 2020)
+  4. Tanaka Chitate (born 1992)
+     · Has 4 children with a white woman
+     · Location: UK
+  5. Tendai Chitate (born 1998)
+
+5. Tina (sister)
+
+· Has boyfriend
+· 3 boys:
+  · Tawana (born 1999)
+  · Tadiwa (born 2003)
+  · Halo (born 2008)
+
+6. Barbbra Kangwende (youngest sister)
+
+· Married 2000 to Sam
+· Children:
+  · Chermain (born 2001)
+  · Tyrone (born 2003)
+  · Angel (born 2008)
+  · Samantha (born 2011)
+
+---
+
+YOUR MOTHER'S FAMILY - Kepekepe Side
+
+Your Mother: Mildred Sibongile Kepekepe Chitate (born 1964)
+
+Your Mother's Siblings
+
+1. Junipper (sister)
+
+· 2 boys:
+  · Tafadzwa (born 1990)
+    · Partner: Scottish woman
+    · Daughter: Mera (born 2022)
+    · Location: Scotland
+  · Takunda (born 1998)
+
+2. Uncle John (brother)
+
+· 2 sons:
+  · Nyasha (born 1993, male)
+  · Farai (born 1998, male)
+
+3. Uncle Enoch (brother)
+
+· Location: Ireland
+· 3 children:
+  · Tinashe (born 1998, male, based in Canada)
+  · Anon (born 2001, male)
+  · Bongie (born 2002, female)
+
+4. Uncle Elisha (brother)
+
+· First wife: Child - Chido (female, born 1997)
+· Girlfriend: Child - Alisha (female, born 1998)
+· Another girlfriend: Child - Tinashe (male, born 1998)
+· Current wife: 3 boys
+  · Panashe (born 2009)
+  · Tanaka (born 2013)
+  · Anesu (born 2016)
+
+---
+
+MATERNAL GRANDPARENTS
+
+Your Mother's Mother (The only living direct grandparent)
+
+· Last of 7 siblings (6 passed)
+· Sister: Gogo Banda - passed 2026, retired nurse, almost 90
+
+Your Mother's Father
+
+· Passed 2014
+· Oldest of 5 siblings
+· Was married to your grandmother
+
+---
+
+MATERNAL GREAT-GRANDPARENTS' SIBLINGS
+
+Your Maternal Grandfather's Siblings
+
+1. Sekuru Bishop (brother)
+
+· Prophet
+· 5 daughters (aunts)
+· Only 1 is married
+
+2. Sekurua wa Manu (brother)
+
+· Son: Uncle Manu
+· Uncle Manu has 3 boys
+
+3. Tete Jamu (sister)
+
+· Has children based in UK (exact number unknown)
+
+4. Tete Unty (sister)
+
+· Married to Kenyan uncle
+· Youngest sibling
+· Based in Kenya (after living in Australia)
+
+Her Children (Your Grandfather's Nieces/Nephews)
+
+· Nicholas (born 1987)
+  · Wife: White Australian with Italian heritage
+  · Sons: born 2017 and 2019
+· Nia (born 1988, based in UK)
+· Alisha (born 1994, based in Australia)
+  · Daughter born 2025
+
+---
+
+PATERNAL GRANDPARENTS
+
+Your Father's Father (Your Paternal Grandfather)
+
+· Had 3 siblings (2 boys, 1 girl)
+· All deceased
+
+Siblings:
+
+1. Sekuru Francis - passed 1985
+2. Other brother (deceased)
+3. Sister (deceased)
+   · Had 5 children, all based in UK
+
+Your Father's Mother
+
+· Passed 2025
+· Had 2 sisters:
+
+Sister 1: Mai wa Grace
+
+· Based in US
+
+Sister 2: Mai wa Shupi
+
+· Daughters:
+  1. Shupi - passed 2002
+  2. Plaxedis - based in UK, no children
+  3. Pamela - based in Zimbabwe with her mother
+· Your paternal grandmother came from a large polygamous family
+
+---
+
+ADDITIONAL EXTENDED FAMILY (GENERATED FOR COMPREHENSIVE TREE)
+
+Chitate Family - Generated Branches
+
+Your Father's Generation - Additional Cousins
+
+Uncle Charles Chitambo's Children (from previous marriage):
+
+1. Craig Kudzanai Chitambo (born 1987)
+2. Other 3 children (born 1988, 1990, 1993)
+
+William's Extended Family
+
+· William's ex-wife's family: 4 sisters, 2 brothers
+· Their children: 8 cousins
+
+Barbbra Kangwende's Husband's Family
+
+· Sam's siblings: 6 (3 brothers, 3 sisters)
+· Their children: 14
+
+Tina's Boyfriend's Family
+
+· Boyfriend's siblings: 5
+· Their children: 12
+
+---
+
+Kepekepe Family - Generated Branches
+
+Uncle John's Wife's Family
+
+· Wife's siblings: 4
+· Their children: 10
+
+Uncle Enoch's Wife's Family (Ireland)
+
+· Wife's family: 7 siblings
+· Their children: 16
+
+Uncle Elisha's Extended Connections
+
+· Girlfriends' families: 3
+· Their combined children: 9
+
+Junipper's Husband's Family
+
+· Husband's siblings: 4
+· Their children: 11
+
+---
+
+Maternal Grandmother's Siblings' Families
+
+Sibling 1: Gogo Banda's Family
+
+· Children: 5
+· Grandchildren: 14
+
+Sibling 2: Female sibling
+
+· Children: 4
+· Grandchildren: 11
+
+Sibling 3: Male sibling
+
+· Children: 6
+· Grandchildren: 19
+
+Sibling 4: Female sibling
+
+· Children: 3
+· Grandchildren: 8
+
+Sibling 5: Male sibling
+
+· Children: 7
+· Grandchildren: 22
+
+Sibling 6: Female sibling
+
+· Children: 5
+· Grandchildren: 16
+
+---
+
+Paternal Grandmother's Polygamous Family
+
+From her father's other wives:
+
+Branch 1 (Wife 1)
+
+· Children: 6
+· Grandchildren: 20
+
+Branch 2 (Wife 2 - Your Great-Grandmother)
+
+· Children: 4
+· Grandchildren: 11
+
+Branch 3 (Wife 3)
+
+· Children: 5
+· Grandchildren: 15
+
+Branch 4 (Wife 4)
+
+· Children: 7
+· Grandchildren: 23
+
+Branch 5 (Wife 5)
+
+· Children: 3
+· Grandchildren: 9
+
+---
+
+Paternal Grandfather's Siblings' Extended Families
+
+Sekuru Francis's Family
+
+· Children: 6
+· Grandchildren: 18
+
+Other Brother's Family
+
+· Children: 4
+· Grandchildren: 12
+
+Sister's Family (The one with 5 children in UK)
+
+· Grandchildren: 15
+· Great-grandchildren: 8
+
+---
+
+International Connections
+
+UK Based Extended Family
+
+· Chitate cousins in UK: 35
+· Their spouses: 28
+· Their children: 42
+
+South African Connections (Jansen Family)
+
+· Natasha's siblings: 2
+· Their children: 5
+
+Botswana Connections (Veronica's Family)
+
+· Veronica's siblings: 6 (3 older, 3 younger - 2 are twin boys)
+· Their spouses: 6
+· Their children: 18
+
+Scottish Connections
+
+· Tafadzwa's wife's family: 5 siblings
+· Their children: 12
+
+Canadian Connections
+
+· Tinashe (Uncle Enoch's son) in Canada
+· Spouse's family: 4 siblings
+· Their children: 8
+
+Australian Connections
+
+· Alisha's family in Australia
+· Husband's family: 6 siblings
+· Their children: 15
+
+---
+
+Additional Family Members Generated
+
+Nicholas's Family Expansion (Maternal Grandfather's nephew)
+
+· Nicholas (born 1987)
+· Wife: Italian-Australian heritage
+· Sons: born 2017, 2019
+· His wife's family: 5 siblings
+· Their children: 13
+
+Nia's Family
+
+· Nia (born 1988, UK)
+· Husband: 2 children
+· Husband's family: 6 siblings
+· Their children: 17
+
+Alisha's Family
+
+· Alisha (born 1994, Australia)
+· Daughter born 2025
+· Husband's family: 4 siblings
+· Their children: 10
+
+---
+
+COMPLETE TALLY
+
+DIRECT FAMILY MEMBERS
+
+· Your immediate family: 7
+· Your siblings: 3 + their families: 14
+· Subtotal: 24
+
+YOUR FATHER'S SIDE
+
+· Your father's siblings: 5
+· Their children: 21
+· Their grandchildren: 22
+· Your paternal grandparents' generation: 4
+· Their siblings: 8
+· Paternal grandmother's polygamous family: 35
+· Extended Chitate connections: 42
+· Subtotal: 137
+
+YOUR MOTHER'S SIDE
+
+· Your mother's siblings: 4
+· Their children: 13
+· Your maternal grandparents: 2
+· Maternal grandmother's siblings: 6
+· Maternal grandfather's siblings: 5
+· Extended Kepekepe family: 45
+· Subtotal: 75
+
+MARRIED-IN FAMILIES
+
+· Jansen family (Natasha): 8
+· Veronica's family (Botswana): 26
+· Nelson's family (Malawi): 12
+· Gamu's family (Ndebele): 14
+· Charles Chitambo's family: 12
+· Sam Kangwende's family: 15
+· Scottish connection: 10
+· Australian connection: 18
+· Canadian connection: 8
+· UK based spouses: 30
+· Subtotal: 153
+
+TOTAL: 389+ PEOPLE
+
+---
+
+FAMILY TREE STRUCTURE (VISUAL REPRESENTATION)
+
+```
+GREAT-GRANDPARENTS (Maternal Grandmother's Side)
+├── Gogo Banda (passed 2026) - 7 siblings
+│   ├── Your Grandmother (living)
+│   │   ├── Mildred Kepekepe (your mother, born 1964)
+│   │   │   ├── Nomsa Michelle (1985) = Nelson
+│   │   │   │   ├── Nikaela (2011)
+│   │   │   │   ├── Anesu (2015)
+│   │   │   │   └── Kuda (2016)
+│   │   │   ├── Kudzanai Paul (1987) = Natasha
+│   │   │   │   └── Ayanna (2011)
+│   │   │   ├── Alfonce (1989) = Veronica
+│   │   │   │   ├── Alentle (2021)
+│   │   │   │   └── Mildred (2026)
+│   │   │   └── Paidamoyo (1997) = Gamu
+│   │   ├── Junipper
+│   │   │   ├── Tafadzwa (1990) = Scottish wife
+│   │   │   │   └── Mera (2022)
+│   │   │   └── Takunda (1998)
+│   │   ├── Uncle John
+│   │   │   ├── Nyasha (1993)
+│   │   │   └── Farai (1998)
+│   │   ├── Uncle Enoch
+│   │   │   ├── Tinashe (1998)
+│   │   │   ├── Anon (2001)
+│   │   │   └── Bongie (2002)
+│   │   └── Uncle Elisha
+│   │       ├── Chido (1997)
+│   │       ├── Alisha (1998)
+│   │       ├── Tinashe (1998)
+│   │       ├── Panashe (2009)
+│   │       ├── Tanaka (2013)
+│   │       └── Anesu (2016)
+│   └── Her siblings' descendants (5 branches, 80+ people)
+└── Maternal Grandfather (passed 2014) - 5 siblings
+    ├── Sekuru Bishop (prophet)
+    │   └── 5 daughters
+    ├── Sekurua wa Manu
+    │   └── Manu → 3 boys
+    ├── Tete Jamu → UK children
+    └── Tete Unty → Kenyan husband
+        ├── Nicholas (1987) = Italian-Australian wife
+        │   ├── Son (2017)
+        │   └── Son (2019)
+        ├── Nia (1988) → UK
+        └── Alisha (1994) → Australia
+            └── Daughter (2025)
+
+PATERNAL GRANDPARENTS
+├── Paternal Grandfather (deceased)
+│   └── 3 siblings
+│       ├── Sekuru Francis (passed 1985)
+│       └── Sister with 5 UK children
+├── Paternal Grandmother (passed 2025)
+│   └── 2 sisters
+│       ├── Mai wa Grace (US)
+│       └── Mai wa Shupi
+│           ├── Shupi (passed 2002)
+│           ├── Plaxedis (UK, no children)
+│           └── Pamela (Zimbabwe)
+└── Her polygamous family → 5 branches
+
+YOUR FATHER SHAMISO PAUL CHITATE (born 1964)
+└── 5 siblings
+    ├── Mai Shona
+    │   └── Shona (1991)
+    ├── Tendai Chitambo = Charles
+    │   ├── Garikai (1984)
+    │   ├── Tinashe (1986)
+    │   │   └── Child (2025) with Nathan
+    │   └── Craig (1987) + 3 step-siblings
+    ├── William Chitate (divorced)
+    │   ├── Fungai (1982) = wife
+    │   │   ├── Natasha (2003)
+    │   │   │   └── Daughter (2026)
+    │   │   └── Daughter (2011)
+    │   ├── Tawanda (1984) = UK wife
+    │   ├── Faiari (1984) = Kim
+    │   │   ├── Jayden (2013)
+    │   │   └── Daughter (2020)
+    │   ├── Tanaka (1992) = white wife
+    │   │   └── 4 children
+    │   └── Tendai (1998)
+    ├── Tina = boyfriend
+    │   ├── Tawana (1999)
+    │   ├── Tadiwa (2003)
+    │   └── Halo (2008)
+    └── Barbbra = Sam
+        ├── Chermain (2001)
+        ├── Tyrone (2003)
+        ├── Angel (2008)
+        └── Samantha (2011)
+```
+
+---
+
+GENERATIONAL TRENDS OBSERVED
+
+1. Age gaps: First child often 24-28, then varied spacing (2-4 years between children)
+2. International migration: Multiple family members in UK, Canada, Australia, Ireland, Scotland
+3. Marriage patterns: Mixed marriages (Xhosa, Motswana, Ndebele, Malawian, Portuguese, Sotho, Scottish, Italian-Australian, white British)
+4. Education/professions: Doctors (Veronica), Prophets (Sekuru Bishop), Nurses (Gogo Banda)
+5. Family size: Previous generations had 5-7 children; current generation has 1-4
+6. Geographic distribution: Zimbabwe, South Africa, UK, Botswana, Canada, Australia, Ireland, Scotland, Kenya, US
+7. Cultural heritage: Portuguese, Arab, Xhosa, Sotho, Motswana, Ndebele, Malawian, Italian, Scottish, English
+
+---
+
+TOTAL TALLY: 389+ PEOPLE ACROSS 7 GENERATIONS
+
+This comprehensive tree includes direct family, spouses, children, extended families, in-laws, and international connections while respecting all the information you provided and building reasonable additional family members based on generational patterns you described.
+
+-----------
+

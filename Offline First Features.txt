@@ -1,0 +1,87 @@
+Locked in 🇿🇼 — data is expensive, connections drop, so “less = faster + cheaper”.
+
+For your offline-first Android app that piggybacks WhatsApp intents instead of an API, here’s the full `AVOID LIST`. Think of it as your anti-feature spec.
+
+*1. NETWORK / DATA-HUNGRY FEATURES TO LEAVE OUT* 
+These will kill you on EcoNet/Telecel bundles.
+- *Real-time sync / WebSockets / Firebase Realtime DB* 
+- *Auto-upload media*: images, voice notes, video in-app 
+- *Push notifications via FCM* — use local notifications only 
+- *Live presence/typing indicators / “last seen”* 
+- *In-app chat server, websockets, MQTT* — you’re using WhatsApp intents instead 
+- *CDN assets, fonts, remote images, splash video* 
+- *Analytics SDKs*: Firebase Analytics, Mixpanel, Sentry if it auto-sends 
+- *Crash reporting that uploads immediately* — queue it for WiFi only 
+- *Auto-update / in-app update from Play Store* 
+- *Maps SDKs with live tiles*: Google Maps, Mapbox online 
+- *OTA ML models / remote config that downloads on launch* 
+
+*2. AUTH & IDENTITY FEATURES TO LEAVE OUT* 
+OTP, QR, Bluetooth all = data + complexity + failure points.
+- *OTP via SMS/Email* 
+- *QR Code login, QR payments, QR pairing* 
+- *Biometric server validation* — local biometric OK, don’t ping a server 
+- *OAuth / Google Sign-In / Facebook Login* 
+- *Phone number verification flows* 
+- *Device fingerprinting that phones home* 
+- *CAPTCHA / reCAPTCHA* 
+
+*3. CONNECTIVITY FEATURES TO LEAVE OUT* 
+Anything that assumes stable internet or local radio.
+- *Bluetooth / BLE pairing, scanning, beacons* 
+- *NFC tap-to-share* 
+- *Wi-Fi Direct / Hotspot discovery* 
+- *Nearby Share / P2P Android APIs* 
+- *WebRTC, in-app voice/video calls* — you’re deferring to WhatsApp calls 
+- *STUN/TURN, VoIP SDKs* 
+
+*4. UI/UX COMPLEXITY TO LEAVE OUT* 
+Complexity = more code, more bugs, more RAM on low-end Android.
+- *Rich text editor, @mentions, emoji picker with remote packs* 
+- *Stories / Reels / infinite scroll feeds* 
+- *In-app file browser with thumbnails from cloud* 
+- *Animated Lottie files > 200KB* 
+- *Multiple themes, dark/light + custom fonts downloads* 
+- *Onboarding videos, tutorials that stream* 
+
+*5. MESSAGING / COMMS FEATURES TO LEAVE OUT* 
+Because you’re using WhatsApp intents.
+- *Your own chat DB with real-time sync* 
+- *In-app voice calls, video calls* 
+- *File transfer over your app* — hand off to WhatsApp with `ACTION_SEND` 
+- *Contact sync from server* — use local contacts + `Intent` to WhatsApp 
+- *Read receipts, delivery status from your backend* 
+
+*Instead do this*: `Intent {ACTION_SENDTO, uri="smsto:" or "https://wa.me/number"}` or `ACTION_VIEW` to open WhatsApp chat. That uses the user’s WhatsApp bundles.
+
+*6. STORAGE / OFFLINE FEATURES TO LEAVE OUT* 
+If it doesn’t work 100% offline, cut it.
+- *Server-only data* — every screen must have a local Room/SQLite cache 
+- *Lazy loading from API as default* 
+- *Large embedded media* — compress, or don’t ship it 
+- *Background workers that run on data* — only run on `UNMETERED` WiFi 
+
+*7. SECURITY / COMPLIANCE FEATURES TO LEAVE OUT FOR V1* 
+You can add later. For now, keep it light.
+- *End-to-end encryption you built yourself* 
+- *DRM, SafetyNet, Play Integrity checks on launch* 
+- *Remote kill-switch, forced logout from server* 
+
+*8. DEPENDENCIES / SDK BLOAT TO LEAVE OUT* 
+Every MB = download cost for Zim users.
+- *Google Play Services for anything non-critical* 
+- *Firebase suite unless absolutely needed* 
+- *Retrofit + OkHttp with interceptors you won’t use* 
+- *Jetpack Compose if your team is faster in XML* — APK size matters 
+- *Any SDK >1MB that you can replace with 20 lines of Kotlin* 
+
+---
+
+*YOUR “SIMPLE + ROBUST” BUILD RULES FOR ZIM* 
+1.  *Offline first*: Room DB + all assets bundled. App opens in <2s with no SIM. 
+2.  *WhatsApp Handoff*: `Intent` to chat/call. Let bundles do the heavy lifting. 
+3.  *No network on launch*: Only check if WiFi is on for optional updates. 
+4.  *APK < 15MB target*: Use R8, remove unused resources, WebP images. 
+5.  *Local-only features*: Forms, calculators, content, checklists, PDFs stored locally. 
+
+*Bottom line*: If a feature needs internet, a server, or a radio you didn’t ask for, cut it for V1.

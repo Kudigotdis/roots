@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#6f392b" />
+  <title>Shona Tradition — Ethnographic Synthesis</title>
+  <style>
+    :root {
+      --ink: #25211e;
+      --muted: #665f59;
+      --paper: #fbf7f0;
+      --surface: #fffdf9;
+      --line: #e6ddd1;
+      --clay: #843f2d;
+      --clay-dark: #652d22;
+      --gold: #b77932;
+      --green: #526b56;
+      --shadow: 0 7px 20px rgba(61, 43, 27, .08);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .page { max-width: 720px; margin: 0 auto; padding: 0 16px 48px; }
+    .sitebar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 0; color: var(--muted); font-size: .86rem;
+    }
+    .sitebar a { text-decoration: none; font-weight: 700; color: var(--clay-dark); }
+    .hero {
+      background: linear-gradient(145deg, #733527, #9a4d33 65%, #b0713e);
+      color: #fffaf3; border-radius: 0 0 24px 24px; margin: 0 -16px 24px;
+      padding: 34px 20px 26px; box-shadow: var(--shadow);
+    }
+    .eyebrow { margin: 0 0 8px; text-transform: uppercase; letter-spacing: .11em; font-size: .73rem; font-weight: 800; opacity: .85; }
+    h1 { margin: 0; font-size: clamp(2rem, 10vw, 3.25rem); line-height: 1.06; letter-spacing: -.045em; }
+    .dek { margin: 15px 0 0; max-width: 38ch; font-size: 1rem; line-height: 1.48; opacity: .94; }
+    .chips { display: flex; gap: 8px; overflow-x: auto; padding: 20px 0 2px; scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chips a { white-space: nowrap; text-decoration: none; padding: 7px 11px; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; font-size: .82rem; background: rgba(255,255,255,.1); }
+    .lead, .notice, .term, .fact-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .lead { padding: 18px; margin: 0 0 24px; }
+    .lead h2, .glossary h2, .closing h2 { margin: 0 0 8px; font-size: 1.1rem; }
+    .lead ul { padding-left: 1.15rem; margin: 10px 0 0; }
+    .lead li + li { margin-top: 5px; }
+    .section-label { margin: 24px 4px 9px; color: var(--muted); font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    details { overflow: clip; }
+    .accordion { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin: 10px 0; box-shadow: var(--shadow); }
+    summary { position: relative; display: flex; gap: 12px; cursor: pointer; list-style: none; padding: 16px 48px 16px 15px; min-height: 58px; align-items: flex-start; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; position: absolute; right: 16px; top: 14px; color: var(--clay); font-size: 1.55rem; font-weight: 350; line-height: 1; }
+    details[open] > summary::after { content: "−"; }
+    summary:focus-visible { outline: 3px solid #d9a66c; outline-offset: -3px; border-radius: var(--radius); }
+    .num { display: inline-grid; place-items: center; flex: 0 0 29px; height: 29px; border-radius: 50%; background: #f3e5d7; color: var(--clay-dark); font-size: .73rem; font-weight: 800; }
+    .summary-copy { display: grid; gap: 2px; }
+    .summary-copy strong { font-size: 1rem; line-height: 1.25; }
+    .summary-copy small { color: var(--muted); font-size: .8rem; line-height: 1.35; }
+    .content { padding: 0 15px 17px; border-top: 1px solid var(--line); }
+    .content > :first-child { margin-top: 15px; }
+    .content p { margin: 0 0 14px; }
+    .sub { margin: 11px 0; border-radius: 12px; box-shadow: none; background: #fdf9f3; }
+    .sub summary { padding: 13px 42px 13px 13px; font-weight: 750; font-size: .94rem; min-height: 51px; }
+    .sub summary::after { top: 11px; right: 13px; font-size: 1.35rem; }
+    .sub .content { padding: 0 13px 14px; font-size: .94rem; }
+    .subsub { margin: 9px 0; border-radius: 10px; box-shadow: none; background: #fff; }
+    .subsub summary { padding: 11px 38px 11px 12px; min-height: 45px; font-size: .9rem; }
+    .subsub summary::after { top: 9px; right: 12px; font-size: 1.2rem; }
+    .subsub .content { padding: 0 12px 12px; font-size: .9rem; }
+    .term { padding: 13px; margin: 14px 0; border-left: 4px solid var(--gold); box-shadow: none; }
+    .term h4 { margin: 0 0 3px; color: var(--clay-dark); font-size: .96rem; }
+    .term p { margin: 0; }
+    .timeline { display: grid; gap: 11px; margin: 13px 0; }
+    .step { position: relative; padding: 12px 12px 12px 49px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+    .step b { position: absolute; left: 12px; top: 12px; display: grid; place-items: center; height: 27px; width: 27px; border-radius: 50%; color: #fff; background: var(--green); font-size: .8rem; }
+    .step h4 { margin: 0 0 3px; font-size: .94rem; }
+    .step p { margin: 0; font-size: .88rem; }
+    .role-grid, .card-grid { display: grid; gap: 10px; margin: 13px 0; }
+    .fact-card { padding: 13px; box-shadow: none; }
+    .fact-card h4 { margin: 0 0 4px; color: var(--clay-dark); font-size: .95rem; }
+    .fact-card p { margin: 0; font-size: .89rem; }
+    dl { margin: 12px 0 0; }
+    dl div { display: grid; grid-template-columns: 105px 1fr; gap: 9px; padding: 8px 0; border-top: 1px solid var(--line); }
+    dt { color: var(--muted); font-size: .8rem; font-weight: 800; }
+    dd { margin: 0; font-size: .88rem; }
+    .bullets { margin: 8px 0 12px; padding-left: 1.15rem; }
+    .bullets li + li { margin-top: 6px; }
+    .notice { padding: 15px; margin: 24px 0; border-left: 4px solid var(--green); box-shadow: none; font-size: .9rem; }
+    .notice strong { color: var(--green); }
+    .glossary, .closing { margin-top: 28px; padding: 18px; background: #f0e4d6; border-radius: var(--radius); }
+    .glossary details { border-bottom: 1px solid rgba(101,45,34,.18); }
+    .glossary details:last-child { border-bottom: 0; }
+    .glossary summary { padding: 10px 32px 10px 0; min-height: 43px; font-size: .92rem; font-weight: 800; }
+    .glossary summary::after { right: 2px; top: 8px; }
+    .glossary .content { border: 0; padding: 0 0 11px; font-size: .9rem; }
+    .back { display: inline-block; margin: 14px 2px 2px; color: var(--clay-dark); font-size: .86rem; font-weight: 800; text-decoration: none; }
+    footer { color: var(--muted); text-align: center; font-size: .78rem; padding: 28px 10px 0; }
+    @media (min-width: 560px) {
+      .page { padding-left: 24px; padding-right: 24px; }
+      .hero { margin-left: -24px; margin-right: -24px; padding-left: 28px; padding-right: 28px; }
+      .role-grid { grid-template-columns: repeat(3, 1fr); }
+      .card-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <main class="page" id="top">
+    <nav class="sitebar" aria-label="Page navigation">
+      <a href="#top">Shona Tradition</a>
+      <span>Ethnographic guide</span>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Ethnographic and analytical synthesis</p>
+      <h1>Shona Tradition</h1>
+      <p class="dek">Socio-cultural dynamics, ritual cosmology, communal governance, foodways, and ancestral practice.</p>
+      <nav class="chips" aria-label="Jump to a topic">
+        <a href="#language">Language</a>
+        <a href="#mortuary">Mortuary rites</a>
+        <a href="#reintegration">Kurova Guva</a>
+        <a href="#food">Foodways</a>
+        <a href="#governance">Governance</a>
+        <a href="#sacred">Sacred rites</a>
+      </nav>
+    </header>
+
+    <section class="lead" aria-labelledby="overview">
+      <h2 id="overview">At a glance</h2>
+      <ul>
+        <li>Shona identity encompasses diverse regional dialects, lineages, and cultural practices.</li>
+        <li>Ritual terminology often preserves local language distinctions despite written standardization.</li>
+        <li>Death is understood as a transition requiring both social mourning and ancestral reintegration.</li>
+        <li><em>Hunhu</em> emphasizes dignity, reciprocity, humility, and responsibility to others.</li>
+      </ul>
+    </section>
+
+    <p class="section-label">Explore the synthesis</p>
+
+    <details class="accordion" id="language" open>
+      <summary><span class="num">01</span><span class="summary-copy"><strong>Sociolinguistic Matrix</strong><small>Regional dialects, standardization, and ritual vocabulary</small></span></summary>
+      <div class="content">
+        <details class="accordion sub" open>
+          <summary>Shona identity, region, and history</summary>
+          <div class="content"><p>The Shona are the predominant ethnic group in Zimbabwe, with historical and contemporary communities in Mozambique, South Africa, and the diaspora. Their linguistic and cultural landscape developed through migration, political consolidation, and adaptation across ecological regions.</p></div>
+        </details>
+        <details class="accordion sub">
+          <summary>Standard Shona and linguistic hierarchy</summary>
+          <div class="content"><p>Clement Doke’s 1931 unification recommendation established a written standard based primarily on Zezuru, supplemented by Karanga vocabulary. Standardization supported literacy, administration, and media while potentially marginalizing non-Zezuru forms in formal settings.</p></div>
+        </details>
+        <details class="accordion sub">
+          <summary>Dialect-specific ritual terminology</summary>
+          <div class="content">
+            <p>Localized terminology remains important in mortuary rites and ancestral practice.</p>
+            <details class="accordion subsub"><summary>Zezuru</summary><div class="content"><dl><div><dt>Region</dt><dd>Mashonaland East, Central, and Harare</dd></div><div><dt>Status</dt><dd>Backbone of Standard Shona</dd></div><div><dt>Ritual term</dt><dd><em>Kurova Guva</em> — “striking the grave”</dd></div></dl></div></details>
+            <details class="accordion subsub"><summary>Karanga</summary><div class="content"><dl><div><dt>Region</dt><dd>Masvingo and Midlands</dd></div><div><dt>Status</dt><dd>Primary supplementary vocabulary source</dd></div><div><dt>Ritual term</dt><dd><em>Kurova Guva</em> / <em>Kutora Mudzimu</em></dd></div></dl></div></details>
+            <details class="accordion subsub"><summary>Manyika</summary><div class="content"><dl><div><dt>Region</dt><dd>Manicaland, including Mutare and Nyanga</dd></div><div><dt>Status</dt><dd>Regional dialect</dd></div><div><dt>Ritual term</dt><dd><em>Chenura</em> — cleansing ritual</dd></div></dl></div></details>
+            <details class="accordion subsub"><summary>Korekore</summary><div class="content"><dl><div><dt>Region</dt><dd>Northern Zimbabwe</dd></div><div><dt>Status</dt><dd>Regional dialect</dd></div><div><dt>Ritual term</dt><dd><em>Bona</em> — accommodating the spirit</dd></div></dl></div></details>
+            <details class="accordion subsub"><summary>Ndau and Kalanga</summary><div class="content"><dl><div><dt>Region</dt><dd>Chipinge and southeastern borderlands</dd></div><div><dt>Status</dt><dd>Partly autonomous literacy traditions</dd></div><div><dt>Ritual term</dt><dd>Localized ancestral elevation rites</dd></div></dl></div></details>
+          </div>
+        </details>
+      </div>
+    </details>
+
+    <details class="accordion" id="mortuary">
+      <summary><span class="num">02</span><span class="summary-copy"><strong>Death, Funeral, and Transition</strong><small>Cosmology, post-mortem care, kinship duties, and burial variation</small></span></summary>
+      <div class="content">
+        <details class="accordion sub" open>
+          <summary>Life, death, and the ancestral realm</summary>
+          <div class="content"><div class="term"><h4>Cosmological continuum</h4><p>Human existence is described through the living unborn, the living living, and the living dead (<em>vadzimu</em>). Death is a profound transition, not necessarily an immediate arrival at full ancestral status.</p></div><p>In this account, a deceased person’s spirit may remain liminal until post-burial rites formally integrate it into the ancestral realm.</p></div>
+        </details>
+        <details class="accordion sub"><summary>Immediate post-mortem practices</summary><div class="content"><p>Elders may perform <em>Kupeta</em>, including arranging the limbs and closing the eyes. The body is washed, anointed, wrapped in new cloth or blankets, and placed on a reed mat or in a coffin. Red cloth is avoided in this account because of associations with anger, blood, and spiritual contamination.</p><p>Where death occurred in hospital, symbolic facial washing (<em>geza kumeso</em>) may be performed upon arrival at the home.</p></div></details>
+        <details class="accordion sub"><summary>Funeral gathering and burial</summary><div class="content"><div class="timeline"><div class="step"><b>1</b><h4>Announcing loss</h4><p><em>Kuridza mhere</em>, high-pitched wailing, alerts the community and summons support.</p></div><div class="step"><b>2</b><h4>Community support</h4><p>Mourners offer condolences through <em>kubata maoko</em> and contribute <em>chema</em>, such as money, groceries, or firewood.</p></div><div class="step"><b>3</b><h4>Vigils</h4><p>Nightly gatherings can include scripture, song, storytelling, and collective grieving.</p></div><div class="step"><b>4</b><h4>Farewell procession</h4><p>The body may be carried around the main house in <em>kutenderedza imba</em> before burial.</p></div></div></div></details>
+        <details class="accordion sub"><summary>Kinship and gendered responsibilities</summary><div class="content"><div class="role-grid"><article class="fact-card"><h4>Varoora</h4><p>Daughters-in-law manage domestic work: cleaning, food supplies, meal preparation, serving mourners, and grave sweeping.</p></article><article class="fact-card"><h4>Vakuwasha</h4><p>Sons-in-law handle demanding physical tasks: firewood, shelters, livestock preparation, and grave digging.</p></article><article class="fact-card"><h4>Sahwira</h4><p>A ritual friend may use jesting and remembrance to offer catharsis while carrying out selected ceremonial acts.</p></article></div></div></details>
+        <details class="accordion sub"><summary>Burial protocols by category</summary><div class="content">
+          <details class="accordion subsub"><summary>Standard adult</summary><div class="content"><dl><div><dt>Timing</dt><dd>Usually several days after death</dd></div><div><dt>Location</dt><dd>Village graveyard (<em>mabwiro</em>)</dd></div><div><dt>Features</dt><dd>Vigils, procession, communal attendance, and grave sweeping</dd></div></dl></div></details>
+          <details class="accordion subsub"><summary>Infant</summary><div class="content"><dl><div><dt>Timing</dt><dd>Within 24 hours</dd></div><div><dt>Location</dt><dd>Riverbank in some accounts</dd></div><div><dt>Features</dt><dd>May be interred in a clay pot; public feasting is limited</dd></div></dl></div></details>
+          <details class="accordion subsub"><summary>Traditional healer (N’anga)</summary><div class="content"><dl><div><dt>Timing</dt><dd>Before sunrise or at dusk</dd></div><div><dt>Preparation</dt><dd>May be wrapped in raw cow hide</dd></div><div><dt>Officiant</dt><dd>Another traditional healer</dd></div></dl></div></details>
+          <details class="accordion subsub"><summary>Bride with unpaid lobola</summary><div class="content"><p>Where bridewealth remains outstanding, both lineages may negotiate settlement before burial arrangements proceed. Documented arrangements vary by family, agreement, and locality.</p></div></details>
+        </div></details>
+      </div>
+    </details>
+
+    <details class="accordion" id="reintegration">
+      <summary><span class="num">03</span><span class="summary-copy"><strong>Kurova Guva and Reintegration</strong><small>Post-burial spirit elevation, music, succession, and inheritance</small></span></summary>
+      <div class="content">
+        <details class="accordion sub" open><summary>Purpose and timing</summary><div class="content"><p>Often held about a year after burial, <em>Kurova Guva</em> is described as a rite through which a deceased person’s spirit is led from a vulnerable, wandering state into the ancestral community as a protective <em>mudzimu</em>.</p></div></details>
+        <details class="accordion sub"><summary>Ritual sequence</summary><div class="content"><div class="timeline"><div class="step"><b>1</b><h4>Preparation</h4><p>Traditional beer may be brewed seven days in advance, and food preparation begins for guests and ritual participants.</p></div><div class="step"><b>2</b><h4>At the grave</h4><p>Varoora sweep the grave, while kin and ritual figures may make offerings and pour beer lees.</p></div><div class="step"><b>3</b><h4>Symbolic closure</h4><p>A gourd may be broken and fragments buried, marking the completion of an earthly cycle.</p></div><div class="step"><b>4</b><h4>Leading the spirit home</h4><p>A branch cut from a nearby tree is drawn from the grave to the home and attached to the deceased’s hut.</p></div></div></div></details>
+        <details class="accordion sub"><summary>Music and sacred performance</summary><div class="content"><div class="card-grid"><article class="fact-card"><h4>Mbira dzaVadzimu</h4><p>Used to establish contact with the spirit realm and support altered ritual consciousness.</p></article><article class="fact-card"><h4>Ngoma</h4><p>Drums provide rhythmic momentum during vigils and ceremonial movement.</p></article><article class="fact-card"><h4>Hosho</h4><p>Gourd rattles maintain rhythmic structures and ensemble tempo.</p></article><article class="fact-card"><h4>Sacred song</h4><p>Processional and lineage-oriented songs invite the spirit to take its protective place.</p></article></div></div></details>
+        <details class="accordion sub"><summary>Succession and inheritance</summary><div class="content"><details class="accordion subsub"><summary>Kugova Nhumbi</summary><div class="content"><p>Personal effects are distributed in accordance with lineage principles. Accounts distinguish the handling of a woman’s belongings from a man’s tools, clothing, land rights, and livestock.</p></div></details><details class="accordion subsub"><summary>Kugadza Nhaka</summary><div class="content"><p>Estate and widow succession may be addressed after the reintegration rite, according to family and lineage procedure.</p></div></details><details class="accordion subsub"><summary>Widow succession</summary><div class="content"><p>Some accounts describe <em>kudarika tsvimbo</em>, a ritual involving a staff or knobkerrie, followed by choices concerning guardianship, levirate marriage, or household leadership. These practices are highly sensitive and vary considerably.</p></div></details></div></details>
+      </div>
+    </details>
+
+    <details class="accordion" id="food">
+      <summary><span class="num">04</span><span class="summary-copy"><strong>Food, Hosting, and Domestic Space</strong><small>Sadza, fermented drinks, household roles, and dining etiquette</small></span></summary>
+      <div class="content">
+        <details class="accordion sub" open><summary>Sadza and relish</summary><div class="content"><p><em>Sadza</em> is a dense staple porridge made from grain flour, commonly maize meal and sometimes rapoko, finger millet, or rice flour. It is eaten with <em>usavi</em>, or relish.</p><div class="card-grid"><article class="fact-card"><h4>Vegetable relishes</h4><p>Derere, dovi-based leafy greens, rape, and tsunga.</p></article><article class="fact-card"><h4>Protein relishes</h4><p>Beef, mutton, goat, game meat, fish, or cultured buttermilk.</p></article></div></div></details>
+        <details class="accordion sub"><summary>How sadza is prepared</summary><div class="content"><div class="timeline"><div class="step"><b>1</b><h4>Blend</h4><p>Cold water and mealie-meal are mixed into a smooth paste.</p></div><div class="step"><b>2</b><h4>Thicken</h4><p>Boiling water is added and the mixture is stirred until it thickens.</p></div><div class="step"><b>3</b><h4>Work the meal</h4><p>More mealie-meal is incorporated while mixing vigorously to achieve a firm consistency.</p></div><div class="step"><b>4</b><h4>Steam and serve</h4><p>The pot rests on low heat before a final stir and serving.</p></div></div></div></details>
+        <details class="accordion sub"><summary>Fermented beverages</summary><div class="content"><details class="accordion subsub"><summary>Doro and related brews</summary><div class="content"><p>Alcoholic brews may be used for ancestral libations, work parties, and socio-religious gatherings.</p></div></details><details class="accordion subsub"><summary>Mahewu</summary><div class="content"><p>A non-alcoholic fermented drink that may use maize meal, sorghum, finger millet malt, or leftover sadza, allowed to ferment in a warm place before serving.</p></div></details></div></details>
+        <details class="accordion sub"><summary>Dining space and etiquette</summary><div class="content"><p>Historical meal arrangements commonly distinguished the <em>dare</em>, an outdoor communal space associated with adult men, from the kitchen hearth area associated with women and young children. Meals may be shared from communal bowls.</p><ul class="bullets"><li>Wash hands before eating; elders are served first.</li><li>Use the right hand for receiving and passing items.</li><li>Support the right forearm with the left hand as a gesture of respect.</li><li>Say <em>Pamusoroyi</em> when requesting permission or showing respect.</li><li>Say <em>Maitabasa</em> in gratitude to the cook or matriarch.</li></ul></div></details>
+      </div>
+    </details>
+
+    <details class="accordion" id="governance">
+      <summary><span class="num">05</span><span class="summary-copy"><strong>Communal Governance and Social Ethics</strong><small>Collective work, care, accountability, and hunhu</small></span></summary>
+      <div class="content">
+        <details class="accordion sub" open><summary>Nhimbe, humwe, and collective labour</summary><div class="content"><p><em>Mushandirapamwe</em> expresses mutual support and shared labour. Cooperative work parties may be called <em>nhimbe</em>, <em>humwe</em>, <em>jakwara</em>, or <em>jangano</em>, depending on region and activity.</p><div class="timeline"><div class="step"><b>1</b><h4>Before work</h4><p>The host outlines tasks and leaders frame expectations.</p></div><div class="step"><b>2</b><h4>During work</h4><p>People labour together, converse, and may use the gathering to ease tension and rebuild relations.</p></div><div class="step"><b>3</b><h4>After work</h4><p>Food, mahewu, and beer turn shared work into social exchange and celebration.</p></div></div><div class="term"><h4>Zunde raMambo</h4><p>When a chief organizes collective cultivation for communal food reserves, especially in anticipation of drought, the practice is described as <em>Zunde raMambo</em>.</p></div></div></details>
+        <details class="accordion sub"><summary>Care, discipline, and moral regulation</summary><div class="content"><div class="card-grid"><article class="fact-card"><h4>Kuona Varwere</h4><p>Visiting the sick with food, prayer, companionship, and help with household work.</p></article><article class="fact-card"><h4>Collective parenting</h4><p>Adults may correct a child’s misconduct and later report it to the child’s parents.</p></article><article class="fact-card"><h4>Kudzorana</h4><p>Elders and community members may rebuke conduct perceived to depart from accepted norms.</p></article></div></div></details>
+        <details class="accordion sub"><summary>Hunhu / ubuntu etiquette</summary><div class="content"><p><em>Hunhu</em>, often aligned with the wider philosophy of ubuntu, foregrounds respect, humility, and interdependence.</p><ul class="bullets"><li>Use age-appropriate greetings before introducing business.</li><li>Young people may sit or squat when speaking with elders.</li><li>Avoid standing over elders in formal interaction.</li><li>Receive and offer objects with the right hand, supporting the forearm with the left.</li></ul></div></details>
+      </div>
+    </details>
+
+    <details class="accordion" id="sacred">
+      <summary><span class="num">06</span><span class="summary-copy"><strong>Sacred Rites and Agricultural Life</strong><small>Spiritual hierarchy, rainmaking, harvest rites, and spirit categories</small></span></summary>
+      <div class="content">
+        <details class="accordion sub" open><summary>Spiritual hierarchy</summary><div class="content"><p>This synthesis presents a hierarchy including <em>Mwari</em> (Supreme Creator), <em>maGombwe</em> (divine or regional spirits), <em>vadzimu</em> (ancestral guardians), <em>svikiro</em> (spirit mediums), <em>n’anga</em> (healers/diviners), and <em>mashavi</em> (non-lineage or talent spirits).</p></div></details>
+        <details class="accordion sub"><summary>Mukwerere rainmaking</summary><div class="content"><p>In drought, a chief and elders may initiate <em>Mukwerere</em> or <em>Mukwerera</em> to petition ancestors for rain. The account describes offerings at a sacred muhacha tree and community music led through the authority of a <em>svikiro</em>.</p></div></details>
+        <details class="accordion sub"><summary>Marombo first-fruits thanksgiving</summary><div class="content"><p>Held around the maturation of crops, Marombo is described as withholding new produce until ancestral blessing has been sought. Samples of ripened crops are gathered, prayers are offered, and the harvest season is formally opened.</p></div></details>
+        <details class="accordion sub"><summary>Mombe yeGono</summary><div class="content"><p>A consecrated bull or ox may represent the patrilineal ancestral spirit. It is exempted from ordinary agricultural labour and, in some accounts, is honoured through beer brewing, sacrifice, and vigil.</p></div></details>
+        <details class="accordion sub"><summary>Mashavi and Chitsinha</summary><div class="content"><details class="accordion subsub"><summary>Mashavi</summary><div class="content"><p>Non-lineage spirits associated with talents such as hunting, healing, or artistic skill. Ceremonies may include drumming, hosho, dance, trance, and interpretation by an n’anga.</p></div></details><details class="accordion subsub"><summary>Chitsinha</summary><div class="content"><p>Described as an affliction involving the spirit of a deceased unmarried person, understood to obstruct a living person’s marriage prospects. Accounts describe naming rites and ancestral prayers as corrective action.</p></div></details></div></details>
+      </div>
+    </details>
+
+    <aside class="notice"><strong>Context note:</strong> Shona practices are not uniform. They can vary by dialect group, locality, lineage, generation, family circumstance, and religious affiliation. This page is a structured synthesis of the supplied material, not a claim that every practice is universal or unchanged.</aside>
+
+    <section class="glossary" aria-labelledby="glossary-title">
+      <h2 id="glossary-title">Glossary</h2>
+      <details><summary>Hunhu</summary><div class="content">A philosophy of dignity, respect, humility, reciprocity, and human interconnectedness.</div></details>
+      <details><summary>Kurova Guva</summary><div class="content">A post-burial rite associated with bringing a deceased person into ancestral status.</div></details>
+      <details><summary>Mudzimu / Vadzimu</summary><div class="content">An ancestral guardian spirit; <em>vadzimu</em> is the plural form.</div></details>
+      <details><summary>Nhimbe</summary><div class="content">A cooperative work party organized around mutual aid and shared labour.</div></details>
+      <details><summary>Sadza</summary><div class="content">A thick porridge made from grain meal, commonly served with relish.</div></details>
+      <details><summary>Svikiro</summary><div class="content">A spirit medium who serves as a channel or representative in ritual contexts.</div></details>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <h2 id="closing-title">Integrated cultural life</h2>
+      <p>Across language, mourning, food, agriculture, ethics, and governance, the traditions described here connect social belonging with ancestral responsibility and collective care.</p>
+    </section>
+
+    <p><a class="back" href="#top">↑ Back to top</a></p>
+    <footer>Single-page mobile-first layout. Replace or expand text, citations, source notes, and imagery according to your publication requirements.</footer>
+  </main>
+</body>
+</html>
