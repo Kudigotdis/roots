@@ -48,19 +48,8 @@
     </div>
     <div class="main-content">
 
-      <!-- TIMELINE VIEW — Instagram-style -->
-      <div id="timeline-view" class="view active">
-        <div class="ig-topbar">
-          <h2 class="ig-title">Roots</h2>
-          <span class="ig-notif-btn" id="igNotifBtn">♥</span>
-        </div>
-        <div class="ig-stories" id="igStories"></div>
-        <div class="ig-divider"></div>
-        <div id="timelineFeed"></div>
-      </div>
-
       <!-- TREE VIEW — Temporal Cascade Matrix -->
-      <div id="tree-view" class="view">
+      <div id="tree-view" class="view active">
         <div id="stats-strip">
           <div class="stat-cell"><div class="stat-label">Total People</div><div class="stat-value" id="stat-total">—</div></div>
           <div class="stat-cell"><div class="stat-label">Blood Line</div><div class="stat-value" id="stat-blood">—</div></div>
@@ -124,31 +113,13 @@
         <div class="profile-body" id="myProfileBody"></div>
       </div>
 
-      <!-- CULTURAL LIBRARY VIEW -->
-      <div id="library-view" class="view">
-        <div class="lib-topbar">
-          <h2 class="lib-topbar-title">📚 Cultural Library</h2>
-        </div>
-        <div class="library-tabs" id="libraryTabs">
-          <button class="lib-tab active" data-libtab="totems">Totems</button>
-          <button class="lib-tab" data-libtab="proverbs">Proverbs</button>
-          <button class="lib-tab" data-libtab="greetings">Greetings</button>
-          <button class="lib-tab" data-libtab="poems">Poems</button>
-          <button class="lib-tab" data-libtab="regions">Regions</button>
-          <button class="lib-tab" data-libtab="glossary">📖 Glossary</button>
-          <button class="lib-tab" data-libtab="shonaRoora">💍 Shona Roora</button>
-          <button class="lib-tab" data-libtab="ndebeleRoora">💍 Ndebele Roora</button>
-        </div>
-        <div id="libraryBody"></div>
-      </div>
-
     </div>
 
     <!-- BOTTOM NAV (4 white icons) -->
     <div class="bottom-nav">
-      <div class="nav-item active" data-view="timeline"><img src="assets/icons/clock.svg" alt="Timeline"></div>
+      <div class="nav-item" data-page="timeline" data-href="timeline.html"><img src="assets/icons/clock.svg" alt="Timeline"></div>
       <div class="nav-item" data-view="tree"><img src="assets/icons/tree.svg" alt="Family Tree"></div>
-      <div class="nav-item" data-view="library"><img src="assets/icons/read-book.svg" alt="Library"></div>
+      <div class="nav-item" data-page="library" data-href="library.html"><img src="assets/icons/read-book.svg" alt="Library"></div>
       <div class="nav-item" data-view="profile"><img src="assets/icons/profile-picture.svg" alt="Profile"></div>
     </div>
   </div>
