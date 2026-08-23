@@ -4,7 +4,7 @@
    institution types, staff roles, purposes, data-access groups,
    geographic scope levels and module suites.
    Consumed by institutional-login.js, institutional-onboarding.js
-   and institutional-workspace.js via window.RootsInstConfig.
+    and the institutional workspace modules via window.RootsInstConfig.
    ============================================================ */
 (function () {
   'use strict';

@@ -13,7 +13,7 @@ const pages = {
   'onboarding.html': ['onboarding.js'],
   'institutional/institutional-login.html': ['institutional/institutional-config.js', 'institutional/institutional-login.js', 'registration-data.js'],
   'institutional/institutional-onboarding.html': ['institutional/institutional-config.js', 'institutional/institutional-onboarding.js', 'registration-data.js', 'zw_locations.js'],
-  'institutional/institutional-workspace.html': ['institutional/institutional-config.js', 'institutional/institutional-workspace.js'],
+  'institutional/institutional-workspace.html': ['zw_locations.js', 'store.js', 'data.js', 'dataset_v2.js', 'dataset.js', 'lookups.js', 'customary.js', 'schools_db.js', 'institutional/institutional-config.js', 'institutional/institutional-workspace-config.js', 'institutional/institutional-access.js', 'institutional/institutional-dashboard.js', 'institutional/institutional-search.js', 'institutional/institutional-lineage.js', 'institutional/institutional-projects.js', 'institutional/institutional-reports.js', 'institutional/institutional-exports.js', 'institutional/institutional-disputes.js', 'institutional/institutional-access-centre.js', 'institutional/institutional-organisation.js', 'institutional/institutional-shell.js'],
   'admin/admin-login.html': ['registration-data.js', 'admin/admin-permissions.js', 'admin/admin-data.js', 'admin/admin-login.js'],
   'admin/admin.html': ['registration-data.js', 'zw_locations.js', 'schools_db.js', 'store.js', 'data.js', 'dataset_v2.js', 'dataset.js', 'lookups.js', 'customary.js', 'institutional/institutional-config.js', 'admin/admin-permissions.js', 'admin/admin-data.js', 'admin/admin.js']
 };

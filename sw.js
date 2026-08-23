@@ -1,4 +1,4 @@
-var CACHE = 'roots-v7';
+var CACHE = 'roots-v8';
 var URLS = [
   './',
   './index.html',
@@ -32,7 +32,19 @@ var URLS = [
   './institutional/institutional-onboarding.html',
   './institutional/institutional-onboarding.js',
   './institutional/institutional-workspace.html',
-  './institutional/institutional-workspace.js',
+  './institutional/institutional-workspace.css',
+  './institutional/institutional-workspace-config.js',
+  './institutional/institutional-access.js',
+  './institutional/institutional-shell.js',
+  './institutional/institutional-dashboard.js',
+  './institutional/institutional-search.js',
+  './institutional/institutional-lineage.js',
+  './institutional/institutional-projects.js',
+  './institutional/institutional-reports.js',
+  './institutional/institutional-exports.js',
+  './institutional/institutional-disputes.js',
+  './institutional/institutional-access-centre.js',
+  './institutional/institutional-organisation.js',
   './admin/admin-permissions.js',
   './admin/admin-data.js',
   './admin/admin.css',

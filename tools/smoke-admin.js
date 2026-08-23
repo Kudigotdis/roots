@@ -130,7 +130,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
     'admin/admin-login.html', 'admin/admin-login.js', 'admin/admin.html', 'admin/admin.js']
     .forEach((f) => check('file exists: ' + f, fs.existsSync(path.join(ROOT, f))));
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v7', /CACHE\s*=\s*'roots-v7'/.test(sw));
+  check('sw cache bumped to roots-v8', /CACHE\s*=\s*'roots-v8'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));
@@ -270,9 +270,12 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   };
   const wsp = await loadPage('/institutional/institutional-workspace.html', wsSeed);
   const ww = wsp.window, wd = ww.document;
-  await until(() => wd.querySelectorAll('#instStats .stat-card').length > 0, 15000, 'workspace stats');
-  check('provisional banner hidden after approval', wd.getElementById('instProvisional').style.display === 'none');
-  wd.getElementById('instExport').click();
+  await until(() => wd.querySelectorAll('#wsView .stat-card').length > 0, 15000, 'workspace overview');
+  check('provisional banner hidden after approval', wd.getElementById('wsProvisional').style.display === 'none');
+  // Drive a real export through the new Export Centre
+  ww.location.hash = '#/exports';
+  await until(() => wd.getElementById('exRun'), 6000, 'export centre');
+  wd.getElementById('exRun').click();
   try {
     await until(() => {
       const log = JSON.parse(ww.localStorage.getItem('roots_admin_export_log') || '[]');

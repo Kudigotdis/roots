@@ -14,7 +14,7 @@ Plain HTML/CSS/JS — no frameworks, no build step beyond `npm run copy:www`.
 | `onboarding.html` | Onboarding dev | 8-step Regular-User registration wizard (`onboarding.css/js`) |
 | `institutional/institutional-login.html` | Institutional dev | Login gate, demo auth + lockout, application status checker |
 | `institutional/institutional-onboarding.html` | Institutional dev | 9-step institutional registration wizard (`institutional-config.js/css/js`) |
-| `institutional/institutional-workspace.html` | Institutional dev | Session-guarded research dashboard (profiles, totems, auditor, dispute, export) |
+| `institutional/institutional-workspace.html` | Institutional dev | Type-specific post-login workspace: shell/router builds nav from effective access (`institutional-workspace-config.js`, `institutional-access.js`); views for records/person detail/totems/culture, lineage+succession+families, projects+saved queries, report builder+village books/places/schools/collections/finding aids, exports (mirrors admin log), dispute queue, access centre (REQUEST MORE ACCESS), organisation management |
 | `admin/admin-login.html` | Admin dev | Independent Roots Administrator auth gate (`admin-permissions/data/login`) |
 | `admin/admin.html` | Admin dev | Single-shell Roots Administrator console — 16 permission-gated views over `roots_admin_*` stores |
 

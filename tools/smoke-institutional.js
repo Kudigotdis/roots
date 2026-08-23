@@ -54,7 +54,11 @@ function loadPage(urlPath, seed) {
       if (/Not implemented: navigation|Not implemented: window.scrollTo/.test(msg)) return;
       pageErrors.push(msg);
     });
-    vc.on('error', () => {});
+    vc.on('error', (...a) => {
+      const msg = String((a[0] && (a[0].stack || a[0].message)) || a[0] || '');
+      if (/Not implemented: navigation|Not implemented: window.scrollTo/.test(msg)) return;
+      console.log('   [console.error] ' + msg.split('\n').slice(0, 3).join(' | '));
+    });
     const dom = new JSDOM(html, {
       url: 'http://127.0.0.1:' + server.address().port + '/' + urlPath.replace(/^\/+/, ''),
       resources: 'usable',
@@ -93,7 +97,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
 
   /* TEST 2 — sw.js precache list exists */
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v7', /CACHE\s*=\s*'roots-v7'/.test(sw));
+  check('sw cache bumped to roots-v8', /CACHE\s*=\s*'roots-v8'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => u !== '' && !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));
@@ -229,15 +233,34 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   const wsSeed = Object.assign({}, SEED, { roots_institutional_session: JSON.parse(sessRaw) });
   const wsp = await loadPage('/institutional/institutional-workspace.html', wsSeed);
   const w3 = wsp.window, d3 = w3.document;
-  await until(() => d3.querySelectorAll('#instStats .stat-card').length > 0, 8000, 'workspace stats rendered');
-  check('identity chip shows institution', d3.getElementById('instUserChip').textContent.includes('National Archives of Zimbabwe'));
-  check('provisional banner shown (UNDER REVIEW)', d3.getElementById('instProvisional').style.display !== 'none' && d3.getElementById('instProvisional').textContent.length > 0);
-  check('profile list populated (533 dataset)', d3.querySelectorAll('#instTotemList > *').length > 100);
-  check('export row present', !!d3.getElementById('instExport'));
+  await until(() => d3.querySelectorAll('#wsView .stat-card').length > 0, 8000, 'workspace overview rendered');
+  check('identity header shows org + user + role', d3.getElementById('wsOrgTitle').textContent.includes('National Archives of Zimbabwe') &&
+    d3.getElementById('wsUserChip').textContent.includes('Tendai Moyo') &&
+    d3.getElementById('wsUserChip').textContent.includes('ADMINISTRATOR'));
+  check('provisional banner shown (UNDER REVIEW)', d3.getElementById('wsProvisional').style.display !== 'none' &&
+    /UNDER REVIEW/.test(d3.getElementById('wsProvisional').textContent));
+  check('type landing title (GOVERNMENT)', d3.getElementById('wsView').textContent.includes('REGIONAL DATA OVERVIEW'));
+  check('sidebar nav populated (no universal menu)', d3.querySelectorAll('#wsNav button').length >= 6 && d3.querySelectorAll('#wsNav button').length <= 12);
+  check('mobile bottom nav has 5 items', d3.querySelectorAll('#wsBottomNav button').length === 5);
+  check('notifications bell rendered', d3.getElementById('wsBellCount').textContent.length > 0);
+
+  // Aggregate-only records view (no grant seeded -> person-level locked)
+  w3.location.hash = '#/records';
+  await until(() => d3.getElementById('wsView').textContent.includes('AGGREGATE VIEW ONLY'), 5000, 'records aggregate view');
+  check('aggregate-only mode without approval', true);
+  check('approval lock card offered', !!d3.querySelector('#wsView [data-lock="approval"]'));
+
+  // Village books registry (GOVERNMENT nav) — renders table or scoped empty state
+  w3.location.hash = '#/villages';
+  await until(() => d3.getElementById('wsView').textContent.includes('Village Books Registry'), 5000, 'villages view');
+  check('village books registry renders', d3.querySelector('#wsView .ws-table') || d3.querySelector('#wsView .ws-empty'));
+  w3.location.hash = '#/totems'; // NOT in GOVERNMENT navigation -> must fall back
+  await sleep(150);
+  check('hidden view falls back to default (no universal menu)', d3.getElementById('wsView').textContent.includes('REGIONAL DATA OVERVIEW'));
   check('no page JS errors (workspace)', wsp.pageErrors.length === 0, wsp.pageErrors.join(' | '));
 
   // Sign out clears session
-  d3.getElementById('instSignOut').click();
+  d3.getElementById('wsSignOut').click();
   await sleep(80);
   check('sign out clears session', w3.localStorage.getItem('roots_institutional_session') === null);
   w3.close();

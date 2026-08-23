@@ -1,74 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#003366">
-<title>Roots — Institutional Workspace</title>
-<link rel="stylesheet" href="../style.css">
-<link rel="stylesheet" href="institutional.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Roots — Institutional Workspace</title>
+  <meta name="theme-color" content="#0d2b4e">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="institutional-workspace.css">
 </head>
-<body class="institutional-root workspace-scope">
+<body>
+  <div class="ws-app">
+    <!-- Sidebar navigation (desktop) -->
+    <aside class="ws-sidebar" id="wsSidebar">
+      <div style="padding:4px 10px 14px;">
+        <div class="ws-brand" style="color:#0d2b4e;">ROOTS</div>
+        <p class="sub">Institutional Workspace</p>
+      </div>
+      <nav id="wsNav" aria-label="Workspace sections"></nav>
+    </aside>
 
-<div id="institutional-app" class="screen active">
-  <div class="inst-topbar">
-    <div class="inst-eyebrow">Roots · Research Portal</div>
-    <div class="inst-title">🏛️ Institutional Dashboard</div>
-    <div class="inst-userchip" id="instUserChip"></div>
-  </div>
-  <div class="inst-body" id="instBody">
-    <div class="inst-provisional" id="instProvisional"></div>
-    <div class="inst-stats" id="instStats"></div>
-    <div class="inst-view-toggles">
-      <button class="inst-view-toggle active" data-view="profiles">👤 Profiles</button>
-      <button class="inst-view-toggle" data-view="totems">📜 Totem Directory</button>
-      <button class="inst-view-toggle" data-view="auditor">🔍 Lineage Auditor</button>
-      <button class="inst-view-toggle" data-view="dispute">⚖️ Dispute Queue</button>
-    </div>
-    <div class="inst-search">
-      <span class="inst-search-icon">🔍</span>
-      <input type="text" id="instSearch" placeholder="Search name, totem, chidawo…">
-    </div>
-    <div class="inst-filter-row" id="instFilters"></div>
-    <div id="instTotemList"></div>
-    <div id="instAuditor" style="display:none;"></div>
-    <div id="instDispute" style="display:none;"></div>
-    <div class="inst-export-row" id="instExportRow">
-      <select id="instExportFormat" style="background:#fff;color:#16202c;border:1px solid #ccd3dd;border-radius:6px;padding:4px 8px;font-size:0.78rem;">
-        <option value="json">JSON</option>
-        <option value="csv">CSV</option>
-        <option value="ead3">ISAD(G) / EAD3 XML</option>
-      </select>
-      <button class="btn-export" id="instExport">📤 Export</button>
-    </div>
-    <div class="inst-sessionbar">
-      <button class="inst-signout" id="instSignOut">Sign out</button>
+    <!-- Main column -->
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+      <header class="ws-topbar">
+        <button class="ws-menu-btn" id="wsMenuBtn" aria-label="Menu">☰</button>
+        <span class="ws-brand">ROOTS</span>
+        <div class="ws-org">
+          <h1 id="wsOrgTitle">Institution</h1>
+          <p id="wsOrgType">Workspace</p>
+        </div>
+        <span class="chip" id="wsScopeChip">Scope</span>
+        <span class="chip ok" id="wsPlanChip">Plan</span>
+        <span id="wsSyncChip"></span>
+        <div class="ws-userchip" id="wsUserChip"></div>
+        <button id="wsBell" aria-label="Notifications">🔔<span id="wsBellCount">0</span></button>
+        <button id="wsSignOut">SIGN OUT</button>
+        <div id="wsNotifPop" role="menu"></div>
+      </header>
+
+      <div class="ws-provisional" id="wsProvisional" style="display:none;"></div>
+
+      <main class="ws-main" id="wsView" aria-live="polite"></main>
     </div>
   </div>
-</div>
 
-<!-- PROFILE DETAIL OVERLAY -->
-<div class="inst-modal-overlay" id="instProfileOverlay" role="dialog" aria-modal="true">
-  <div class="inst-modal inst-panel" style="max-width:420px;">
-    <h3 id="instProfileName" style="margin-bottom:2px;">—</h3>
-    <div style="font-size:12px;color:#5f6b7c;margin-bottom:12px;" id="instProfileSub"></div>
-    <div id="instProfileBody" style="font-size:13px;"></div>
-    <div class="inst-modal-actions" style="margin-top:14px;">
-      <button type="button" class="inst-btn inst-btn-ghost" id="instProfileClose">Close</button>
-    </div>
-  </div>
-</div>
+  <!-- Mobile bottom navigation -->
+  <nav id="wsBottomNav" aria-label="Quick navigation"></nav>
 
-<div id="toast"></div>
+  <div id="wsToast" role="status"></div>
 
-<script src="../data.js"></script>
-<script src="../lookups.js"></script>
-<script src="../customary.js"></script>
-<script src="../shell.js"></script>
-<script src="../store.js"></script>
-<script src="../dataset_v2.js"></script>
-<script src="../dataset.js"></script>
-<script src="institutional-config.js"></script>
-<script src="institutional-workspace.js"></script>
+  <!-- Shared data infrastructure (order matters: store before dataset) -->
+  <script src="../store.js"></script>
+  <script src="../data.js"></script>
+  <script src="../zw_locations.js"></script>
+  <script src="../dataset_v2.js"></script>
+  <script src="../dataset.js"></script>
+  <script src="../lookups.js"></script>
+  <script src="../customary.js"></script>
+  <script src="../schools_db.js"></script>
+  <!-- Institutional layer -->
+  <script src="institutional-config.js"></script>
+  <script src="institutional-workspace-config.js"></script>
+  <script src="institutional-access.js"></script>
+  <!-- View modules (register themselves, order-independent) -->
+  <script src="institutional-dashboard.js"></script>
+  <script src="institutional-search.js"></script>
+  <script src="institutional-lineage.js"></script>
+  <script src="institutional-projects.js"></script>
+  <script src="institutional-reports.js"></script>
+  <script src="institutional-exports.js"></script>
+  <script src="institutional-disputes.js"></script>
+  <script src="institutional-access-centre.js"></script>
+  <script src="institutional-organisation.js"></script>
+  <!-- Shell boots last -->
+  <script src="institutional-shell.js"></script>
 </body>
 </html>
