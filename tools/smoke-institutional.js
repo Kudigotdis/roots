@@ -93,7 +93,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
 
   /* TEST 2 — sw.js precache list exists */
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v6', /CACHE\s*=\s*'roots-v6'/.test(sw));
+  check('sw cache bumped to roots-v7', /CACHE\s*=\s*'roots-v7'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => u !== '' && !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));

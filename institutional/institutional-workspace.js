@@ -441,6 +441,7 @@
         });
         var csv = headers.join(',') + '\n' + rows.map(function (r) { return r.map(function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
         downloadBlob(csv, 'roots_export_' + new Date().toISOString().slice(0, 10) + '.csv', 'text/csv;charset=utf-8', '\uFEFF');
+        pingExportLog('CSV', PEOPLE.length);
         showToast('Exported CSV: ' + PEOPLE.length + ' records');
       } else if (format === 'ead3') {
         var xml = '<?xml version="1.0" encoding="UTF-8"?>\n<ead xmlns="urn:isbn:1-931666-22-9">\n <eadheader>\n  <eadid>ZW-ROOTS-' + new Date().toISOString().slice(0, 10) + '</eadid>\n  <filedesc><titlestmt><titleproper>Roots Zimbabwe Genealogy Export</titleproper></titlestmt></filedesc>\n </eadheader>\n <archdesc level="fonds">\n  <did><unittitle>Chitate/Kepekepe Genealogical Records</unittitle></did>\n';
@@ -453,6 +454,7 @@
         });
         xml += ' </archdesc>\n</ead>';
         downloadBlob(xml, 'roots_export_' + new Date().toISOString().slice(0, 10) + '.xml', 'application/xml', '');
+        pingExportLog('EAD3', PEOPLE.length);
         showToast('Exported EAD3 XML: ' + PEOPLE.length + ' records');
       } else {
         var data = JSON.stringify({
@@ -466,9 +468,30 @@
           persons: PEOPLE.map(function (p) { return { id: p.id, name: p.name, gender: p.gender, born: p.born, died: p.died, relation: p.relation, location: p.location, mutupo: (p.kinship || {}).mutupo, chidawo: (p.kinship || {}).chidawo }; })
         }, null, 2);
         downloadBlob(data, 'roots_export_' + new Date().toISOString().slice(0, 10) + '.json', 'application/json', '');
+        pingExportLog('JSON', peopleCount);
         showToast('Exported JSON: ' + peopleCount + ' profiles');
       }
     });
+
+    /* Phase C hook: mirror every workspace export into the Roots
+       Administrator export log (roots_admin_export_log). */
+    function pingExportLog(formatLabel, records) {
+      try {
+        var log = readJson('roots_admin_export_log', []);
+        log.unshift({
+          exportId: 'EXP-' + Date.now().toString(36).toUpperCase(),
+          institution: session.institutionName,
+          user: session.adminName,
+          dataset: 'People',
+          format: formatLabel,
+          records: records,
+          anonymized: true,
+          date: new Date().toISOString(),
+          status: 'COMPLETED'
+        });
+        localStorage.setItem('roots_admin_export_log', JSON.stringify(log.slice(0, 500)));
+      } catch (e) {}
+    }
 
     function downloadBlob(content, filename, mime, prefix) {
       var blob = new Blob([(prefix || '') + content], { type: mime });

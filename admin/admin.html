@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Roots Administrator</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-root">
+  <!-- Session guard: admin.js redirects to admin-login.html when absent. -->
+
+  <div class="adm-shell" id="adminShell">
+    <aside class="adm-sidebar" id="adminSidebar">
+      <div class="adm-side-brand">Roots Admin<span>Internal control environment</span></div>
+      <ul class="adm-nav" id="adminNav"></ul>
+      <div class="adm-side-foot">Roots Administrator · local demo<br>No backend security — demo only.</div>
+    </aside>
+
+    <div class="adm-main">
+      <header class="adm-topbar">
+        <button class="adm-menu-btn" id="adminMenuBtn" aria-label="Toggle navigation">☰</button>
+        <h1>Administrator</h1>
+        <div class="spacer"></div>
+        <div class="adm-search">
+          <span class="icon">🔍</span>
+          <input type="text" class="adm-input" id="adminGlobalSearch" placeholder="Search Roots Admin (institution, user, app ID, person, totem…)">
+        </div>
+        <button class="adm-bell" id="adminBell" aria-label="Notifications">🔔<span class="dot" id="adminBellCount">0</span></button>
+        <div class="adm-userchip" id="adminUserChip"></div>
+        <button class="adm-btn adm-btn-sm" id="adminLogout">Logout</button>
+      </header>
+
+      <div class="adm-notif-pop" id="adminNotifPop"></div>
+
+      <main class="adm-content" id="adminView"></main>
+    </div>
+  </div>
+
+  <div class="adm-overlay" id="adminPanelOverlay"></div>
+  <aside class="adm-panelbox" id="adminPanelBox" role="dialog" aria-modal="true">
+    <div class="adm-panel-head">
+      <div><h2 id="adminPanelTitle">Detail</h2><div class="meta" id="adminPanelMeta"></div></div>
+      <button class="adm-panel-close" id="adminPanelClose">✕ Close</button>
+    </div>
+    <div class="adm-panel-body" id="adminPanelBody"></div>
+  </aside>
+
+  <div class="adm-modal-wrap" id="adminConfirmWrap">
+    <div class="adm-modal" role="alertdialog">
+      <h3 id="adminConfirmTitle">Confirm action</h3>
+      <p class="desc" id="adminConfirmDesc"></p>
+      <div class="adm-field">
+        <label for="adminConfirmReason">Reason (required)</label>
+        <textarea class="adm-textarea" id="adminConfirmReason" rows="2" placeholder="Why is this action being taken?"></textarea>
+      </div>
+      <div class="row">
+        <button class="adm-btn adm-btn-ghost" id="adminConfirmCancel">CANCEL</button>
+        <button class="adm-btn" id="adminConfirmOk">CONFIRM</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="adm-toast" id="adminToast"></div>
+
+  <script src="../registration-data.js"></script>
+  <script src="../zw_locations.js"></script>
+  <script src="../schools_db.js"></script>
+  <script src="../store.js"></script>
+  <script src="../data.js"></script>
+  <script src="../dataset_v2.js"></script>
+  <script src="../dataset.js"></script>
+  <script src="../lookups.js"></script>
+  <script src="../customary.js"></script>
+  <script src="../institutional/institutional-config.js"></script>
+  <script src="admin-permissions.js"></script>
+  <script src="admin-data.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

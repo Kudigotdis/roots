@@ -15,13 +15,22 @@ Plain HTML/CSS/JS — no frameworks, no build step beyond `npm run copy:www`.
 | `institutional/institutional-login.html` | Institutional dev | Login gate, demo auth + lockout, application status checker |
 | `institutional/institutional-onboarding.html` | Institutional dev | 9-step institutional registration wizard (`institutional-config.js/css/js`) |
 | `institutional/institutional-workspace.html` | Institutional dev | Session-guarded research dashboard (profiles, totems, auditor, dispute, export) |
+| `admin/admin-login.html` | Admin dev | Independent Roots Administrator auth gate (`admin-permissions/data/login`) |
+| `admin/admin.html` | Admin dev | Single-shell Roots Administrator console — 16 permission-gated views over `roots_admin_*` stores |
 
 Each page may have its own JS file (`timeline.js`, `tree.js`, …). A dev touches
 **only their own page and their own JS file**.
 
 `index.html`'s **Institutional User** button routes to
 `institutional/institutional-login.html`; the legacy in-page institutional
-dashboard was removed from `index.html`/`app.js`.
+dashboard was removed from `index.html`/`app.js`. The **Roots Administrator**
+button routes to `admin/admin-login.html`.
+
+The institutional login refuses accounts suspended via the admin console
+(`roots_admin_user_suspensions`), and every workspace export mirrors an entry
+into `roots_admin_export_log` for the admin Export Centre. The institutional
+research workspace itself stays owned by the Institutional dev — the console
+reports on it but never rebuilds it.
 
 ## Shared files (shell owner only — do not edit without approval)
 

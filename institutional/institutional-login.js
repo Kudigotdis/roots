@@ -169,6 +169,17 @@
       return;
     }
 
+    /* Phase C hook: Roots Administrator suspension gate. Credentials were
+       correct, so reset the attempt counter before rejecting. */
+    var susp = readJson('roots_admin_user_suspensions', []).filter(function (s) {
+      return s.active && s.key === (match.applicationId || '') + '|' + String(match.adminName || '').toLowerCase();
+    })[0];
+    if (susp) {
+      writeJson(attemptKey, { count: 0, lockedUntil: 0 });
+      setState('invalid', 'Account suspended by the Roots Administrator.' + (susp.reason ? ' Reason: ' + susp.reason : ''));
+      return;
+    }
+
     writeJson(attemptKey, { count: 0, lockedUntil: 0 });
     writeJson(KEYS.SESSION, {
       applicationId: match.applicationId,

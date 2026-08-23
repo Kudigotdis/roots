@@ -1,4 +1,4 @@
-var CACHE = 'roots-v6';
+var CACHE = 'roots-v7';
 var URLS = [
   './',
   './index.html',
@@ -33,6 +33,13 @@ var URLS = [
   './institutional/institutional-onboarding.js',
   './institutional/institutional-workspace.html',
   './institutional/institutional-workspace.js',
+  './admin/admin-permissions.js',
+  './admin/admin-data.js',
+  './admin/admin.css',
+  './admin/admin-login.html',
+  './admin/admin-login.js',
+  './admin/admin.html',
+  './admin/admin.js',
   './manifest.json',
   './assets/icons/clock.svg',
   './assets/icons/tree.svg',

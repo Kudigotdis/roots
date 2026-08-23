@@ -13,7 +13,9 @@ const pages = {
   'onboarding.html': ['onboarding.js'],
   'institutional/institutional-login.html': ['institutional/institutional-config.js', 'institutional/institutional-login.js', 'registration-data.js'],
   'institutional/institutional-onboarding.html': ['institutional/institutional-config.js', 'institutional/institutional-onboarding.js', 'registration-data.js', 'zw_locations.js'],
-  'institutional/institutional-workspace.html': ['institutional/institutional-config.js', 'institutional/institutional-workspace.js']
+  'institutional/institutional-workspace.html': ['institutional/institutional-config.js', 'institutional/institutional-workspace.js'],
+  'admin/admin-login.html': ['registration-data.js', 'admin/admin-permissions.js', 'admin/admin-data.js', 'admin/admin-login.js'],
+  'admin/admin.html': ['registration-data.js', 'zw_locations.js', 'schools_db.js', 'store.js', 'data.js', 'dataset_v2.js', 'dataset.js', 'lookups.js', 'customary.js', 'institutional/institutional-config.js', 'admin/admin-permissions.js', 'admin/admin-data.js', 'admin/admin.js']
 };
 
 let failures = 0;

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Roots Administrator — Login</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-root">
+  <main class="adm-login" id="adminLoginScreen">
+    <div class="adm-login-card">
+      <div class="adm-login-brand">
+        <div class="crest">🛡️</div>
+        <h1>Roots</h1>
+        <p>Administrator Console</p>
+      </div>
+
+      <form id="adminLoginForm" novalidate>
+        <div class="adm-field">
+          <label for="adminLoginName">Name</label>
+          <input class="adm-input" type="text" id="adminLoginName" autocomplete="username" placeholder="Administrator name">
+        </div>
+
+        <div class="adm-field">
+          <label for="adminLoginWhatsapp">WhatsApp</label>
+          <div class="adm-phone-row">
+            <select class="adm-input cc" id="adminLoginWhatsappCountry" aria-label="Country dialing code"></select>
+            <input class="adm-input" type="tel" inputmode="tel" id="adminLoginWhatsapp" autocomplete="tel-national" placeholder="077 000 0001">
+          </div>
+        </div>
+
+        <div class="adm-field">
+          <label for="adminLoginPassword">Password</label>
+          <input class="adm-input" type="password" id="adminLoginPassword" autocomplete="current-password" placeholder="••••••••">
+        </div>
+
+        <button class="adm-btn block" id="adminLoginSubmit" type="submit">LOG IN</button>
+      </form>
+
+      <p class="adm-msg adm-msg-error" id="adminLoginError"></p>
+      <p class="adm-msg adm-msg-status" id="adminLoginStatus"></p>
+
+      <div class="adm-demo-note">
+        <strong>Offline demo credentials (seeded on this device):</strong><br>
+        Roots Super Admin · 0770000001 · super2026<br>
+        Quiet Auditor · 0770000005 · audit2026
+      </div>
+
+      <a class="adm-back-link" href="../index.html">← Back to Roots welcome</a>
+    </div>
+  </main>
+
+  <script src="../registration-data.js"></script>
+  <script src="admin-permissions.js"></script>
+  <script src="admin-data.js"></script>
+  <script src="admin-login.js"></script>
+</body>
+</html>

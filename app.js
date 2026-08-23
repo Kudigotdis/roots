@@ -108,6 +108,10 @@
     try { localStorage.setItem('roots_role', 'institutional'); } catch(e) {}
     location.href = 'institutional/institutional-login.html';
   });
+  $('btnAdministrator').addEventListener('click', function(){
+    try { localStorage.setItem('roots_role', 'admin'); } catch(e) {}
+    location.href = 'admin/admin-login.html';
+  });
   $('topbarBack').addEventListener('click', function(){ showScreen('welcome'); });
 
   /* ---------- ACCOUNT GATE ---------- */
