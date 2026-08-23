@@ -16,6 +16,10 @@
 const PEOPLE = [];
 const byId = {};
 function P(o){ PEOPLE.push(o); byId[o.id]=o; return o.id; }
+/* const/let are global lexical bindings, not window properties —
+   mirror them so `window.PEOPLE` readers see the live arrays. */
+window.PEOPLE = PEOPLE;
+window.byId = byId;
 
 window.RootsData = {};
 

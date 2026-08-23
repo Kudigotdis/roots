@@ -829,6 +829,9 @@
             r.status = 'REJECTED';
             persistRequest(r);
             Store.logAdminAction('REJECT_ACCESS_REQUEST', 'InstitutionDataRequest', r.requestId, { reason: res.reason });
+            if (Store.notifyInstitution && r.applicationId) {
+              Store.notifyInstitution(r.applicationId, 'access', 'Access request ' + r.requestId + ' was REJECTED.' + (res.reason ? ' Reason: ' + res.reason : ''));
+            }
             toast('Request rejected.'); route(); closePanel();
           });
         });
@@ -866,6 +869,12 @@
       institutionId: r.institutionId,
       after: { datasets: cfg.datasets, geography: cfg.geography, personLevel: cfg.personLevel, export: cfg.exportFormat }
     });
+    if (Store.notifyInstitution && r.applicationId) {
+      Store.notifyInstitution(r.applicationId, 'access',
+        'Access request ' + r.requestId + ' APPROVED · datasets: ' + (cfg.datasets || []).join(', ') +
+        (cfg.personLevel ? ' · person-level ON' : '') +
+        (cfg.expiresAt ? ' · valid until ' + cfg.expiresAt.slice(0, 10) : ''));
+    }
     toast('Grant ' + grant.grantId + ' created.');
     route(); closePanel();
   });

@@ -85,15 +85,26 @@
     render: function (host, ctx) {
       function draw() {
         var list = Store.get('SAVED');
-        var html = '<div class="ws-page-head"><div><h2>Saved Queries</h2>' +
-          '<p class="sub">Reusable searches across approved datasets</p></div></div>';
+        var reports = list.filter(function (q) { return q.kind === 'report'; });
+        var queries = list.filter(function (q) { return q.kind !== 'report'; });
+        var html = '<div class="ws-page-head"><div><h2>Saved Queries &amp; Reports</h2>' +
+          '<p class="sub">Reusable searches and report definitions across approved datasets</p></div></div>';
         if (!list.length) {
-          html += '<div class="ws-empty">No saved queries yet. Run a search in Records and save its filters.</div>';
+          html += '<div class="ws-empty">Nothing saved yet. Save a search in Records or a report in Reports.</div>';
         } else {
-          html += '<div class="ws-panel">' + list.map(function (q) {
-            return '<div class="ws-row static"><b>' + esc(q.name) + '</b><br><small><code>' + esc(q.summary || '') + '</code></small>' +
-              '<span class="when">' + esc(ctx.fmtDate(q.at)) + '</span></div>';
-          }).join('') + '</div>';
+          if (reports.length) {
+            html += '<div class="ws-panel"><h4>📊 Saved reports</h4>' + reports.map(function (r) {
+              return '<div class="ws-row static"><b>' + esc(r.name) + '</b><br><small><code>' + esc(r.summary || '') + '</code></small>' +
+                '<span class="row-actions"><span class="chip">REPORT</span>' +
+                '<button class="ws-btn ghost sm" data-openrpt="' + esc(r.id) + '">OPEN IN REPORTS</button></span></div>';
+            }).join('') + '</div>';
+          }
+          if (queries.length) {
+            html += '<div class="ws-panel">' + queries.map(function (q) {
+              return '<div class="ws-row static"><b>' + esc(q.name) + '</b><br><small><code>' + esc(q.summary || '') + '</code></small>' +
+                '<span class="when">' + esc(ctx.fmtDate(q.at)) + '</span></div>';
+            }).join('') + '</div>';
+          }
         }
         html += '<div class="ws-panel"><h4>+ Save the current filters</h4>' +
           '<input id="sqName" placeholder="Query name" style="max-width:320px;"> ' +
@@ -101,6 +112,12 @@
           '<input id="sqValue" placeholder="Value" style="max-width:200px;"> ' +
           '<button class="ws-btn" id="sqGo">SAVE QUERY</button></div>';
         host.innerHTML = html;
+        host.querySelectorAll('[data-openrpt]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            window.RootsInstSavedReportToRun = b.dataset.openrpt;
+            ctx.go('reports');
+          });
+        });
         document.getElementById('sqGo').addEventListener('click', function () {
           var name = document.getElementById('sqName').value.trim();
           if (!name) { ctx.toast('Name the query first.'); return; }

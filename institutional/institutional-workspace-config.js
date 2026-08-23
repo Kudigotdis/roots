@@ -59,7 +59,7 @@
   var INSTITUTION_WORKSPACE_CONFIG = {
     GOVERNMENT: {
       landingTitle: 'REGIONAL DATA OVERVIEW',
-      navigation: ['overview', 'records', 'villages', 'lineage', 'succession', 'disputes', 'reports', 'exports', 'access', 'organisation'],
+      navigation: ['overview', 'records', 'villages', 'lineage', 'lifecycle', 'succession', 'disputes', 'reports', 'exports', 'access', 'organisation'],
       defaultView: 'overview',
       dashboardWidgets: ['people', 'chiefdoms', 'districts', 'villageBooks', 'totems', 'disputes'],
       primaryActions: ['records', 'villages', 'lineage', 'succession', 'reports'],
@@ -68,7 +68,7 @@
     },
     TRADITIONAL_AUTHORITY: {
       landingTitle: 'CHIEFDOM REGISTER',
-      navigation: ['overview', 'records', 'families', 'totems', 'villages', 'lineage', 'succession', 'disputes', 'reports', 'organisation'],
+      navigation: ['overview', 'records', 'families', 'totems', 'villages', 'lineage', 'lifecycle', 'succession', 'disputes', 'reports', 'organisation'],
       defaultView: 'overview',
       dashboardWidgets: ['people', 'families', 'totems', 'villageBooks', 'sabhuku', 'disputes'],
       primaryActions: ['records', 'families', 'totems', 'villages', 'lineage', 'succession', 'disputes'],

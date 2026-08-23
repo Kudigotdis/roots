@@ -97,7 +97,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
 
   /* TEST 2 — sw.js precache list exists */
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v8', /CACHE\s*=\s*'roots-v8'/.test(sw));
+  check('sw cache bumped to roots-v9', /CACHE\s*=\s*'roots-v9'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => u !== '' && !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));
@@ -264,6 +264,92 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   await sleep(80);
   check('sign out clears session', w3.localStorage.getItem('roots_institutional_session') === null);
   w3.close();
+
+  /* ---------- D1 completion: lifecycle view + sync chip (§51, §63-65) ---------- */
+  const baseSess = JSON.parse(sessRaw);
+  const govSeed = Object.assign({}, SEED, {
+    roots_institutional_session: baseSess,
+    roots_admin_grants: [{
+      grantId: 'GRANT-SMOKE', institutionId: 'INST-00001', institutionName: 'National Archives of Zimbabwe',
+      applicationId: baseSess.applicationId,
+      requestId: '', accessScope: 'National',
+      approvedDatasets: ['PEOPLE', 'LINEAGE', 'LIFECYCLE'],
+      approvedModules: ['CORE', 'RESEARCH_SUITE', 'GOVERNMENT_SUITE'],
+      personLevelAllowed: true, anonymizationRequired: true,
+      exportFormatsAllowed: ['CSV'], expiresAt: null,
+      grantedBy: 'Smoke', createdAt: new Date().toISOString(), status: 'ACTIVE'
+    }],
+    roots_inst_corrections: [{ id: 'COR-1', status: 'SUBMITTED', field: 'name', at: new Date().toISOString() }]
+  });
+  const gp = await loadPage('/institutional/institutional-workspace.html', govSeed);
+  const g4 = gp.window, d4 = g4.document;
+  await until(() => d4.querySelectorAll('#wsView .stat-card').length > 0, 8000, 'gov workspace rendered');
+  await until(() => /submission/.test(d4.getElementById('wsSyncChip').textContent), 4000, 'sync chip pending count');
+  check('sync chip shows pending submissions (§51)', d4.getElementById('wsSyncChip').textContent.includes('1 submission pending'));
+
+  // Lifecycle & customary register (§63-65) — LIFECYCLE dataset granted
+  g4.location.hash = '#/lifecycle';
+  await until(() => d4.getElementById('wsView').textContent.includes('Customary Law Register'), 5000, 'lifecycle view');
+  check('lifecycle register renders state cards', d4.querySelectorAll('#wsView .ws-card').length >= 4);
+
+  // Exogamy checker runs against two scoped people
+  const mcA = d4.getElementById('mcA'), mcB = d4.getElementById('mcB');
+  if (mcA.options.length > 2 && mcB.options.length > 2) {
+    mcA.selectedIndex = 1;
+    mcB.selectedIndex = mcA.selectedIndex + 1 < mcA.options.length ? mcA.selectedIndex + 1 : 1;
+    d4.getElementById('mcGo').click();
+    await until(() => /Permitted|prohibited/.test(d4.getElementById('mcOut').textContent), 4000, 'exogamy verdict');
+    check('marriage feasibility check renders verdict (§63)', true);
+  } else {
+    check('marriage feasibility check renders verdict (§63)', false, 'no scoped living people to pick from');
+  }
+
+  // Lineage table (§62) — RESEARCH_SUITE granted via smoke grant
+  g4.location.hash = '#/lineage';
+  await until(() => !!d4.getElementById('lnResults'), 5000, 'lineage view');
+  const tableBtn = d4.querySelector('#lnResults [data-table]');
+  if (tableBtn) {
+    tableBtn.click();
+    await until(() => d4.getElementById('lnTable').textContent.includes('Lineage table'), 5000, 'lineage table');
+    const t = d4.getElementById('lnTable').textContent;
+    check('lineage table shows all §62 columns', ['Years', 'Person', 'Parents', 'Children', 'Collateral', 'Totem', 'House', 'Administrative area', 'Source'].every((h) => t.includes(h)));
+    check('no page JS errors (lineage/lifecycle)', gp.pageErrors.length === 0, gp.pageErrors.join(' | '));
+  } else {
+    check('lineage table shows all §62 columns', false, 'no search results to open table from');
+  }
+  g4.close();
+
+  /* ---------- §48/§69 role-determines-navigation ---------- */
+  async function roleSession(role) {
+    const p = await loadPage('/institutional/institutional-workspace.html',
+      Object.assign({}, SEED, { roots_institutional_session: Object.assign({}, baseSess, { role: role }) }));
+    await until(() => p.window.document.querySelectorAll('#wsNav button').length > 0, 8000, role + ' nav rendered');
+    return p;
+  }
+
+  const vp2 = await roleSession('Viewer');
+  const wv = vp2.window, dv = wv.document;
+  const viewerLabels = [...dv.querySelectorAll('#wsNav button')].map((b) => b.textContent.trim().toLowerCase());
+  check('Viewer nav reduced (≤4 items)', viewerLabels.length <= 4, viewerLabels.join(','));
+  check('Viewer denied Organisation/Lineage/Exports/Villages',
+    !viewerLabels.some((l) => /organisation|lineage|export|villages|disputes|lifecycle/.test(l)), viewerLabels.join(','));
+  dv.getElementById('wsSignOut'); // sanity element access
+  check('no page JS errors (viewer workspace)', vp2.pageErrors.length === 0, vp2.pageErrors.join(' | '));
+  wv.location.hash = '#/organisation';
+  await sleep(150);
+  check('hidden view falls back for Viewer (landing)', dv.getElementById('wsView').textContent.includes('REGIONAL DATA OVERVIEW'));
+  wv.close();
+
+  const rp2 = await roleSession('Researcher');
+  const wr = rp2.window, dr = wr.document;
+  const researcherLabels = [...dr.querySelectorAll('#wsNav button')].map((b) => b.textContent.trim().toLowerCase());
+  check('Researcher keeps lineage/reports/access',
+    researcherLabels.some((l) => l.includes('lineage')) && researcherLabels.some((l) => l.includes('reports')) && researcherLabels.some((l) => l.includes('access')),
+    researcherLabels.join(','));
+  check('Researcher denied Organisation/succession/lifecycle/villages',
+    !researcherLabels.some((l) => /organisation|succession|lifecycle|villages/.test(l)), researcherLabels.join(','));
+  check('no page JS errors (researcher workspace)', rp2.pageErrors.length === 0, rp2.pageErrors.join(' | '));
+  wr.close();
 
   console.log(failures ? '\n' + failures + ' PROBLEM(S)' : '\nALL INSTITUTIONAL SMOKE CHECKS PASSED');
   server.close();

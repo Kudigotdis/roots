@@ -148,6 +148,26 @@ button.ws-row:hover { background: #faf9f4; }
 .when { color: #97a1af; font-size: .64rem; white-space: nowrap; }
 .row-actions { display: inline-flex; gap: 5px; }
 
+/* lineage hits + §62 table + lifecycle register */
+.ws-lineage-hit { display: flex; align-items: stretch; gap: 6px; border-bottom: 1px solid #f0eee6; }
+.ws-lineage-hit .ws-row { border-bottom: none; }
+.ws-lineage-hit .grow { flex: 1 1 auto; }
+.ws-mini {
+  align-self: center; flex: 0 0 auto; background: #f1efe7; color: #16324f;
+  border: 1px solid #ddd7c6; border-radius: 8px; padding: 5px 9px;
+  font: inherit; font-size: .64rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.ws-mini:hover { background: #e8e4d6; }
+.ws-inline-link { background: none; border: none; padding: 0; font: inherit; color: #143c6b; text-decoration: underline; cursor: pointer; }
+.ws-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.ws-panel h4 { margin: 0 0 6px; }
+.chip.dim { background: #eef0f3; color: #66727f; border-color: #dde2e8; }
+.ws-row.static.ok { border-left: 3px solid #2e9e5b; background: #f4faf6; }
+.ws-row.static.bad { border-left: 3px solid #c0392b; background: #fdf6f5; }
+.ws-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+button.ws-card { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; text-align: left; }
+.ws-card b { font-size: 1.15rem; }
+
 .ws-quote { border-left: 3px solid #d9c26a; padding: 8px 12px; margin: 8px 0; background: #fbfaf5; border-radius: 0 10px 10px 0; font-size: .82rem; }
 .ws-quote small { color: #75808f; }
 

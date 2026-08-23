@@ -93,6 +93,7 @@
         Store.writeJson('roots_admin_access_seq', seq);
         Store.push('roots_admin_access_requests', {
           requestId: 'REQ-' + String(seq).padStart(5, '0'),
+          applicationId: ctx.session.applicationId,
           institutionId: access.institutionId,
           institutionName: access.institutionName,
           requestedBy: ctx.session.adminName,

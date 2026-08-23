@@ -91,7 +91,8 @@
     refreshNav: buildNavAndBottom,
     route: route,
     alerts: computeAlerts,
-    updateBell: updateBell
+    updateBell: updateBell,
+    renderSync: renderSync
   };
 
   /* ---------- lock states (§49) — not errors, plan/approval states ---------- */
@@ -138,12 +139,21 @@
   })();
 
   /* ---------- offline / sync status (§50-51) ---------- */
+  function pendingSubmissions() {
+    var corr = Store.get('CORRECTIONS').filter(function (c) { return c.status === 'SUBMITTED'; }).length;
+    var reqs = Store.readJson('roots_admin_access_requests', []).filter(function (r) {
+      return r.status === 'PENDING' && r.applicationId === session.applicationId;
+    }).length;
+    return corr + reqs;
+  }
   function renderSync() {
     var last = localStorage.getItem(Store.KEYS.LAST_SYNC) || '';
+    var pending = pendingSubmissions();
+    var pend = pending ? ' · ' + pending + ' submission' + (pending === 1 ? '' : 's') + ' pending' : '';
     if (navigator.onLine) {
-      $('wsSyncChip').innerHTML = 'ONLINE · synced just now';
+      $('wsSyncChip').innerHTML = 'ONLINE · synced just now' + pend;
     } else {
-      $('wsSyncChip').innerHTML = 'OFFLINE · last sync ' + esc(last ? fmtDateTime(last) : '—');
+      $('wsSyncChip').innerHTML = 'OFFLINE · last sync ' + esc(last ? fmtDateTime(last) : '—') + pend;
     }
   }
   window.addEventListener('online', renderSync);
@@ -163,7 +173,8 @@
     }
     var corr = Store.get('CORRECTIONS').filter(function (c) { return c.status === 'SUBMITTED'; }).length;
     if (corr) out.push({ icon: '📝', msg: corr + ' data correction(s) submitted for review', go: access.can('inst.corrections.submit') ? 'records' : 'overview' });
-    Store.get('NOTIFICATIONS').slice(0, 6).forEach(function (n) {
+    Store.get('NOTIFICATIONS').forEach(function (n) {
+      if (n.applicationId && n.applicationId !== session.applicationId) return;
       out.push({ icon: '🔔', msg: n.message, at: n.at });
     });
     return out;

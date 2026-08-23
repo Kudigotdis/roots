@@ -233,3 +233,15 @@ const glossaryTerms = [
   { term:"Vabereki", lang:"Shona", lit:"Parents / in-laws (maternal)", meaning:"Maternal in-laws; Vatete negotiates with them to clear payments before burial", src:"Research" },
   { term:"Ukama", lang:"Shona", lit:"Relationship tier", meaning:"Relationship classification (Vakwasha, Vazukuru, Vagari etc.) used in Bhuku reChemo", src:"Research" },
 ];
+
+/* ============================================================
+   6. WINDOW EXPORTS
+   Top-level const declarations are global lexical bindings,
+   NOT window properties — pages that read these via
+   window.totemRegistry etc. would see undefined. Mirror them.
+   ============================================================ */
+window.all16Languages = all16Languages;
+window.totemRegistry = totemRegistry;
+window.timeGreetings = timeGreetings;
+window.proverbs = proverbs;
+window.glossaryTerms = glossaryTerms;

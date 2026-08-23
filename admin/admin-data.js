@@ -377,6 +377,9 @@
     else list.push({ key: key, applicationId: applicationId, adminName: adminName, active: active, reason: reason || '', at: new Date().toISOString() });
     writeJson(KEYS.SUSPENSIONS, list);
     logAdminAction(active ? 'SUSPEND_USER' : 'RESTORE_USER', 'InstitutionUser', key, { reason: reason || '', after: { active: active } });
+    notifyInstitution(applicationId, 'admin', active
+      ? 'Workspace account ' + adminName + ' was SUSPENDED by the Roots Administrator.' + (reason ? ' Reason: ' + reason : '')
+      : 'Workspace account ' + adminName + ' was restored by the Roots Administrator.');
   }
 
   /* ---------- application review actions (Setup 3 §65-66) ---------- */
@@ -518,6 +521,8 @@
       institutionId: inst.institutionId,
       after: { product: sub.product, status: 'ACTIVE' }
     });
+    notifyInstitution(appId, 'application', 'Your application was APPROVED. Plan ' + sub.product + ' is active — dataset access granted' + (grant.personLevelAllowed ? ' including person-level data.' : '.'));
+    notifyInstitution(appId, 'subscription', 'Subscription ACTIVE · ' + sub.product + ' (' + sub.userLimit + ' users) · renews ' + sub.renewal + '.');
     return { institution: inst, grant: grant, subscription: sub };
   }
 
@@ -527,14 +532,35 @@
       logAdminAction('REJECT_INSTITUTION', 'InstitutionApplication', appId, {
         before: 'UNDER REVIEW', after: 'REJECTED', reason: reason
       });
+      notifyInstitution(appId, 'application', 'Your application was REJECTED. Reason: ' + (reason || 'not specified'));
     }
     return app;
   }
 
   function requestApplicationInfo(appId, message, fields) {
     var app = setApplicationStatus(appId, 'NEEDS_INFORMATION', { infoRequest: { message: message, fields: fields, at: new Date().toISOString() } });
-    if (app) logAdminAction('REQUEST_INFORMATION', 'InstitutionApplication', appId, { after: { fields: fields } });
+    if (app) {
+      logAdminAction('REQUEST_INFORMATION', 'InstitutionApplication', appId, { after: { fields: fields } });
+      notifyInstitution(appId, 'application', 'More information requested on your application: ' + (message || 'see review notes.'));
+    }
     return app;
+  }
+
+  /* ---------- institution-facing notices (Setup 4 §46) ----------
+     Writes into the workspace notification feed; entries carry
+     applicationId so only that institution sees them. */
+  function notifyInstitution(applicationId, type, message) {
+    var key = 'roots_inst_notifications';
+    var list = readJson(key, []);
+    list.unshift({
+      id: 'N-' + Date.now().toString(36).toUpperCase(),
+      applicationId: applicationId,
+      type: type || 'admin',
+      message: message,
+      at: new Date().toISOString(),
+      read: false
+    });
+    writeJson(key, list.slice(0, 300));
   }
 
   function pickProductForType(typeCode, modules) {
@@ -597,6 +623,7 @@
     approveApplication: approveApplication,
     rejectApplication: rejectApplication,
     requestApplicationInfo: requestApplicationInfo,
+    notifyInstitution: notifyInstitution,
     makeInstitutionFromApplication: makeInstitutionFromApplication
   };
 })();

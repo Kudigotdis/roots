@@ -162,10 +162,22 @@
         }
 
         if (tab === 'subscription') {
+          var sub = Store.readJson('roots_admin_subscriptions', []).filter(function (s) {
+            return s.institutionId === access.institutionId;
+          })[0] || null;
+          var rosterN = Store.get('ORG_USERS').length || 1;
+          var used = sub ? (sub.usersUsed || rosterN) : rosterN;
+          var limit = sub ? sub.userLimit : null;
+          var overLimit = limit != null && used >= limit;
           body.innerHTML = '<div class="ws-panel"><h4>Subscription & plan</h4><div class="kv">' +
             '<div><span>Plan</span><b>' + esc(access.planName) + '</b></div>' +
             '<div><span>Status</span><b>' + esc(access.subscriptionStatus) + '</b></div>' +
             '<div><span>Included modules</span><b>' + esc(access.modules.join(', ') || 'CORE') + '</b></div>' +
+            '<div><span>Users</span><b>' + used + (limit != null ? ' / ' + limit : '') +
+            (limit != null ? ' <span class="chip ' + (overLimit ? 'bad' : 'ok') + '">' + (overLimit ? 'AT LIMIT' : 'OK') + '</span>' : '') +
+            '</b></div>' +
+            '<div><span>Renewal date</span><b>' + esc(sub && sub.renewal ? sub.renewal : (access.grantExpiry ? String(access.grantExpiry).slice(0, 10) : '—')) +
+            (sub ? ' <span class="chip">' + esc(sub.interval || '') + '</span>' : '') + '</b></div>' +
             '<div><span>Billing</span><b>Handled by the Roots Administrator — no card details are stored in-app</b></div></div>' +
             '<div style="margin-top:12px;"><button class="ws-btn" id="subManage">MANAGE SUBSCRIPTION</button></div>' +
             '<p class="hint">Upgrades and renewals are arranged with the Roots Administrator via WhatsApp. This panel is read-only by design.</p></div>';

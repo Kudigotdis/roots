@@ -130,7 +130,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
     'admin/admin-login.html', 'admin/admin-login.js', 'admin/admin.html', 'admin/admin.js']
     .forEach((f) => check('file exists: ' + f, fs.existsSync(path.join(ROOT, f))));
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v8', /CACHE\s*=\s*'roots-v8'/.test(sw));
+  check('sw cache bumped to roots-v9', /CACHE\s*=\s*'roots-v9'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));
@@ -266,12 +266,27 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
     roots_institutional_session: {
       applicationId: APP_ID, institutionName: ORG, typeCode: 'GOVERNMENT',
       adminName: ADMIN_NAME, role: 'ADMINISTRATOR', signInAt: new Date().toISOString()
-    }
+    },
+    /* §46: notices are written by the Roots Administrator console into
+       shared browser storage. jsdom windows have isolated localStorage,
+       so seed the exact entries notifyInstitution() writes — including
+       another institution's notice, which must be filtered out. */
+    roots_inst_notifications: [
+      { id: 'N-ADMIN2', applicationId: 'ROOTS-INST-OTHER', type: 'application', message: 'Other institution notice — must not appear', at: new Date().toISOString(), read: false },
+      { id: 'N-ADMIN1', applicationId: APP_ID, type: 'application', message: 'Your application was APPROVED. Plan Core Institutional is active.', at: new Date().toISOString(), read: false }
+    ]
   };
   const wsp = await loadPage('/institutional/institutional-workspace.html', wsSeed);
   const ww = wsp.window, wd = ww.document;
   await until(() => wd.querySelectorAll('#wsView .stat-card').length > 0, 15000, 'workspace overview');
   check('provisional banner hidden after approval', wd.getElementById('wsProvisional').style.display === 'none');
+  // §46 cross-console notice: own approval visible, other institutions' filtered out
+  try {
+    await until(() => (ww.RootsInstShell.alerts() || []).some((a) => /APPROVED/.test(a.msg || '')), 4000, 'approval notice in bell');
+    check('admin approval notice reached institution bell (§46)', true);
+  } catch (e) { check('admin approval notice reached institution bell (§46)', false, e.message); }
+  check('other institutions\' notices filtered out (§46)',
+    !(ww.RootsInstShell.alerts() || []).some((a) => /must not appear/.test(a.msg || '')));
   // Drive a real export through the new Export Centre
   ww.location.hash = '#/exports';
   await until(() => wd.getElementById('exRun'), 6000, 'export centre');
