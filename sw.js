@@ -1,12 +1,21 @@
-var CACHE = 'roots-v4';
+var CACHE = 'roots-v5';
 var URLS = [
   './',
   './index.html',
   './timeline.html',
   './tree.html',
   './library.html',
+  './onboarding.html',
   './style.css',
+  './onboarding.css',
   './data.js',
+  './dataset_v2.js',
+  './dataset.js',
+  './zw_locations.js',
+  './schools_db.js',
+  './registration-data.js',
+  './validation.js',
+  './onboarding.js',
   './lookups.js',
   './customary.js',
   './shell.js',

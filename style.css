@@ -53,6 +53,9 @@ body{overflow:hidden;}
   border:1.5px solid var(--card-border);}
 .welcome-footer{position:absolute;bottom:1.5rem;left:0;right:0;text-align:center;
   font-size:0.65rem;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;}
+.gate-backlink{margin-top:1.4rem;background:none;border:none;color:var(--text-sec);
+  font-size:0.85rem;cursor:pointer;padding:0.4rem 1rem;}
+.gate-backlink:active{opacity:0.6;}
 
 /* ===== TOP BAR ===== */
 .app-topbar{height:50px;min-height:50px;display:flex;align-items:center;
@@ -91,6 +94,8 @@ body{overflow:hidden;}
   color:var(--text);font-size:0.9rem;font-weight:600;cursor:pointer;transition:background .15s;}
 .profile-groups-btn:hover{background:rgba(255,255,255,0.12);}
 .profile-groups-btn img{width:20px;height:20px;}
+.profile-groups-btn.subtle{margin-top:-6px;padding:9px 18px;font-weight:500;
+  color:var(--text-sec);background:transparent;border-style:dashed;}
 
 /* ===== TIMELINE VIEW ===== */
 #timeline-view{padding:8px 0 20px;background:var(--bg);}

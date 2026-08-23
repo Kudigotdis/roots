@@ -80,6 +80,10 @@
       '<div class="setting-sub" style="margin-bottom:8px;">Paste a ROOTS_SYNC payload received via WhatsApp</div>' +
       '<textarea id="syncPayload" placeholder="Paste ROOTS_SYNC:base64 payload here\u2026" style="width:100%;height:60px;padding:8px;border-radius:8px;border:1px solid var(--divider);background:var(--bg);color:var(--text);font-size:0.78rem;resize:none;box-sizing:border-box;"></textarea>' +
       '<button class="btn-sm" id="syncImportBtn" style="background:var(--lime);color:var(--text);font-weight:700;width:100%;margin-top:6px;">Import Sync Data</button></div>' +
+    '<div style="border-top:1px solid var(--divider);margin-top:14px;padding-top:10px;">' +
+      '<div class="setting-label" style="margin-bottom:6px;">\uD83D\uDC64 Account</div>' +
+      '<div class="setting-sub" id="accountModeInfo" style="margin-bottom:8px;"></div>' +
+      '<button class="btn-sm" id="switchAccountBtn" style="width:100%;">\u21C4 Switch Account</button></div>' +
     '<button class="btn-done" id="settingsDone">Done</button>';
 
   function ensureMarkup() {
@@ -255,6 +259,21 @@
 
     $('settingsBtn') && $('settingsBtn').addEventListener('click', openSettings);
     $('settingsDone').addEventListener('click', closeSettings);
+    $('switchAccountBtn') && $('switchAccountBtn').addEventListener('click', function () {
+      try {
+        ['roots_session', 'roots_user', 'roots_auth', 'roots_role'].forEach(function (k) { localStorage.removeItem(k); });
+      } catch (e) {}
+      location.href = 'index.html';
+    });
+    var modeInfo = $('accountModeInfo');
+    if (modeInfo) {
+      try {
+        var sess = JSON.parse(localStorage.getItem('roots_session') || 'null');
+        modeInfo.textContent = sess && sess.mode === 'family'
+          ? 'Signed in as Kudzanai Chitate — full family tree'
+          : 'Personal profile — build your own tree';
+      } catch (e) { modeInfo.textContent = ''; }
+    }
     overlayEl.addEventListener('click', function (e) {
       if (e.target === overlayEl) closeSettings();
     });

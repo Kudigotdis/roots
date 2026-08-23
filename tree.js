@@ -175,7 +175,7 @@ modalOverlay.addEventListener('click', function(e){
   /* ---------- TCM3 STATE ---------- */
   var tcPeople = {};
   var tcLayout = {};
-  var tcCurrentEgo = 'you';
+  var tcCurrentEgo = savedState.myId || 'you';
   var tcZoomLevel = 1;
   var tcVisible = {};
   var tcChildrenRevealed = {};

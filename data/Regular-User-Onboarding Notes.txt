@@ -1,0 +1,1812 @@
+Absolutely. The **regular-user onboarding** should be designed as the registration foundation for the same person records that later appear in your `tree.html` family-tree/profile system. Your existing tree already has a person identity panel with **name, metadata, Lifestory, Info, Kinship, Family, and Gallery**, so onboarding should create the underlying person record in a way that those views can consume later. 
+
+I would implement this primarily in a new **`onboarding.html` + `onboarding.js`**, with a shared user schema in **`data.js` / `store.js`** rather than putting registration logic into `tree.html`.
+
+Use this as your VS Code/Copilot implementation prompt:
+
+You are implementing the **Regular User onboarding/registration flow** for my existing **Roots** application.
+
+## 1. IMPORTANT EXISTING ROOTS CONTEXT
+
+The app already contains a Family Tree system.
+
+The existing `tree.html` has a person profile panel containing:
+
+* Profile identity
+* Name
+* Metadata
+* Lifestory
+* Info
+* Kinship
+* Family
+* Gallery
+
+The existing tree UI also has search, an ego selector, profile panels, family-tree navigation, and person statistics. Preserve compatibility with this existing architecture. 
+
+The registration system must create a **canonical Roots user/person profile** that can later become or link to a Family Tree person node.
+
+Do NOT duplicate the person's identity unnecessarily between onboarding and the tree.
+
+---
+
+# 2. USER TYPES
+
+Roots will eventually support two major account types:
+
+```text
+REGULAR USER
+INSTITUTIONAL USER
+```
+
+For this implementation, build **REGULAR USER onboarding only**.
+
+Create the architecture so that Institutional User onboarding can later use a separate flow without breaking the regular user schema.
+
+Suggested:
+
+```javascript
+accountType: "regular"
+```
+
+Future:
+
+```javascript
+accountType: "institutional"
+```
+
+Do not build institutional registration yet.
+
+---
+
+# 3. FILE ARCHITECTURE
+
+Prefer this structure:
+
+```text
+onboarding.html
+onboarding.css
+onboarding.js
+registration-data.js
+validation.js
+store.js
+data.js
+```
+
+Do not unnecessarily modify `tree.html`.
+
+The registration flow should eventually create a record that the Family Tree can read.
+
+Recommended responsibility:
+
+### `onboarding.html`
+
+Registration UI only.
+
+### `onboarding.css`
+
+Visual styling.
+
+### `onboarding.js`
+
+Registration flow, state, progress, step navigation, field handling.
+
+### `registration-data.js`
+
+Countries, dialing codes, country metadata, network providers, payment methods, worldwide geographic options.
+
+### `validation.js`
+
+All field validation and registration-gate logic.
+
+### `store.js`
+
+Persistence/auth/account state where the existing project supports it.
+
+### `data.js`
+
+Shared person/user data used by the Family Tree.
+
+---
+
+# 4. ONBOARDING EXPERIENCE
+
+Use a multi-step registration process.
+
+Do NOT create one enormous form.
+
+Recommended sequence:
+
+```text
+1. Identity
+2. Contact & Verification
+3. Location
+4. Education
+5. Social & Interests
+6. Security
+7. Review
+8. Account Created
+```
+
+At the top, show a registration tally:
+
+```text
+REGISTRATION
+━━━━━━━━━━━━━━━━━━━━
+Identity       ✓
+Contact        ✓
+Location       4/4
+Education      3/4
+Interests      5/5
+Security       ✓
+
+READY TO CREATE ACCOUNT
+```
+
+The final Submit button must remain disabled until all required fields pass validation.
+
+---
+
+# 5. REGISTRATION TALLY
+
+The tally must update live.
+
+Example:
+
+```text
+Required fields completed: 18 / 18
+```
+
+and:
+
+```text
+Required checks passed: 100%
+```
+
+Display incomplete requirements clearly.
+
+Example:
+
+```text
+✓ First name
+✓ Surname
+✓ Username
+✓ Date of birth
+✓ Gender
+✗ WhatsApp number
+✓ Nationality
+```
+
+When everything passes:
+
+```text
+✓ ALL REQUIRED INFORMATION COMPLETE
+```
+
+Only then enable:
+
+```text
+Create Roots Account
+```
+
+Do not allow submit simply because individual fields are populated.
+
+All validation must run again on final submission.
+
+---
+
+# 6. IDENTITY
+
+Create these fields.
+
+## Profile Photo
+
+```text
+profilePhoto
+```
+
+Type:
+
+```text
+file
+```
+
+Allow:
+
+* JPG
+* JPEG
+* PNG
+* WEBP
+
+Show preview after selection.
+
+Do not require national-ID/passport photographs.
+
+This is a normal profile photo only.
+
+---
+
+## First Name
+
+```text
+firstName
+```
+
+Required.
+
+Rules:
+
+* minimum 1 character
+* trim whitespace
+* reject obvious invalid characters
+* preserve culturally valid names
+* Unicode allowed
+* do not force English-only characters
+
+Examples that must work:
+
+```text
+Tafadzwa
+Noluthando
+Olebogeng
+Kudzai
+Élodie
+Giovanni
+```
+
+---
+
+## Surname
+
+```text
+surname
+```
+
+Required.
+
+Same Unicode/cultural rules as first name.
+
+---
+
+## Username
+
+```text
+username
+```
+
+Required.
+
+Must be unique.
+
+Allowed:
+
+```text
+letters
+numbers
+underscore
+period
+```
+
+Do not permit spaces.
+
+Show live availability.
+
+Example:
+
+```text
+@kudzanai.chitate
+```
+
+---
+
+# 7. DATE OF BIRTH
+
+Use three selectors:
+
+```text
+Day
+Month
+Year
+```
+
+Do not use a free text field.
+
+Store normalized value as:
+
+```javascript
+dateOfBirth: "1987-04-05"
+```
+
+Display according to user's locale if needed.
+
+Validate:
+
+* valid calendar date
+* not in future
+* realistic age bounds
+* user must meet the application's minimum account age rule if one exists
+
+Do not collect date of death for registration.
+
+Death information belongs to Family Tree/person records.
+
+---
+
+# 8. GENDER
+
+Use toggle buttons:
+
+```text
+Male
+Female
+```
+
+Store:
+
+```javascript
+gender: "male"
+```
+
+or:
+
+```javascript
+gender: "female"
+```
+
+Do not silently expand this field into additional categories because the current specification explicitly requires these two toggle choices.
+
+---
+
+# 9. NATIONALITY
+
+Create a worldwide nationality selector.
+
+It must support approximately 195 countries.
+
+Examples:
+
+```text
+Zimbabwean
+Botswanan
+South African
+British
+American
+Canadian
+Australian
+French
+Italian
+Greek
+Kenyan
+Zambian
+Malawian
+Mozambican
+Namibian
+```
+
+Store both:
+
+```javascript
+nationalityCode: "ZW"
+nationalityName: "Zimbabwean"
+```
+
+and separately:
+
+```javascript
+countryOfResidence: "ZW"
+```
+
+Do NOT assume nationality = current country.
+
+This distinction is important for Roots genealogy.
+
+---
+
+# 10. RACE
+
+Create selectable chips:
+
+```text
+White
+Black
+Mixed
+Asian
+Indian
+Other
+```
+
+When:
+
+```text
+Other
+```
+
+is selected, reveal:
+
+```text
+raceOther
+```
+
+free-text input.
+
+Store:
+
+```javascript
+race: "mixed"
+```
+
+or:
+
+```javascript
+race: "other"
+raceOther: "..."
+```
+
+Do not use race to infer nationality, ethnicity, tribe, ancestry or bloodline.
+
+---
+
+# 11. CONTACT — MOBILE NUMBERS
+
+Mobile numbers are a repeatable array.
+
+At least one is required.
+
+Structure:
+
+```javascript
+mobileNumbers: [
+  {
+    label: "Primary",
+    countryCode: "+263",
+    country: "ZW",
+    number: "77xxxxxxx"
+  }
+]
+```
+
+Each entry contains:
+
+```text
+Label
+Country code
+Telephone number
+```
+
+Allow:
+
+```text
++263 ...
++267 ...
++27 ...
++44 ...
++1 ...
+```
+
+and every other valid international dialing code.
+
+The user must be able to:
+
+```text
++ Add another mobile number
+```
+
+Do not hard-code Zimbabwe-only phone numbers.
+
+---
+
+# 12. WHATSAPP NUMBERS
+
+WhatsApp numbers are also a repeatable array.
+
+At least one is required.
+
+Structure:
+
+```javascript
+whatsappNumbers: [
+  {
+    label: "Primary",
+    countryCode: "+263",
+    country: "ZW",
+    number: "77xxxxxxx",
+    verified: false
+  }
+]
+```
+
+Provide:
+
+```text
++ Add another WhatsApp number
+```
+
+The WhatsApp section must also act as the application's **verification flag**.
+
+For example:
+
+```javascript
+whatsappVerified: true
+```
+
+Do not mark the account verified simply because a number was entered.
+
+The number must pass the actual verification mechanism when verification is implemented.
+
+Recommended UI:
+
+```text
+WhatsApp
+[ +263 ] [ number ]
+[ Send verification code ]
+
+Status:
+○ Not verified
+✓ Verified
+```
+
+At least one WhatsApp number must be present.
+
+---
+
+# 13. EMAIL
+
+Email is OPTIONAL.
+
+```javascript
+email
+```
+
+Important:
+
+Email must NOT become a required registration field.
+
+However, display:
+
+```text
+Email
+Optional — recommended for cloud login and account recovery
+```
+
+If the user provides an email:
+
+* validate syntax
+* normalize lowercase
+* check uniqueness if cloud authentication uses email
+
+If no email is provided:
+
+```text
+email: null
+```
+
+Do not block registration solely because email is missing.
+
+---
+
+# 14. LOCATION
+
+Country is required.
+
+```javascript
+countryOfResidence
+```
+
+Provide a worldwide country selector.
+
+Do not restrict the registration experience to Zimbabwe.
+
+---
+
+# 15. SPECIAL ZIMBABWE SUPPORT
+
+Zimbabwe requires more detailed hierarchical location support.
+
+The current app already has:
+
+```text
+zimbabwe_locations.json
+```
+
+Use it as the source for the Zimbabwe location hierarchy.
+
+Support all 10 provinces:
+
+```text
+Bulawayo
+Harare
+Manicaland
+Mashonaland Central
+Mashonaland East
+Mashonaland West
+Matabeleland North
+Matabeleland South
+Midlands
+Masvingo
+```
+
+The selector hierarchy should be:
+
+```text
+Country
+↓
+Province
+↓
+Town / City / Village
+↓
+Area / Neighbourhood
+```
+
+---
+
+# 16. WORLDWIDE LOCATION ARCHITECTURE
+
+Zimbabwe must be detailed, but other countries must also work.
+
+Do NOT build:
+
+```javascript
+if(country === "Zimbabwe") ...
+```
+
+throughout the entire application.
+
+Use a country-aware geographic model:
+
+```javascript
+locations: {
+  ZW: {
+    regions: [...],
+    places: [...],
+    areas: [...]
+  },
+
+  BW: {
+    regions: [...],
+    places: [...],
+    areas: [...]
+  },
+
+  ZA: {
+    regions: [...],
+    places: [...],
+    areas: [...]
+  }
+}
+```
+
+For countries where a detailed local database does not yet exist, provide a generic:
+
+```text
+State / Province / Region
+City / Town / Village
+Area / Neighborhood
+```
+
+workflow.
+
+---
+
+# 17. ZIMBABWE LOCATIONS
+
+When:
+
+```text
+Country = Zimbabwe
+```
+
+load:
+
+```text
+zimbabwe_locations.json
+```
+
+The system should support the supplied Zimbabwe provinces, towns and areas.
+
+Do not replace the existing Zimbabwe location dataset.
+
+Extend it.
+
+---
+
+# 18. UNKNOWN AREA SUBMISSION
+
+If a user cannot find their area:
+
+Display:
+
+```text
+Can't find your area?
++ Submit a new area
+```
+
+Allow:
+
+```text
+Country
+Province / Region
+Town / City
+Area / Neighbourhood
+Suggested spelling
+```
+
+Save proposed unknown areas to:
+
+```text
+submitted_areas
+```
+
+The backend/storage design should support review before an unknown area becomes part of the official geographic dataset.
+
+Example:
+
+```javascript
+{
+  submittedBy: userId,
+  country: "ZW",
+  province: "Harare",
+  town: "Harare",
+  area: "Example Area",
+  status: "pending",
+  createdAt: timestamp
+}
+```
+
+---
+
+# 19. GPS
+
+GPS is NOT a registration requirement.
+
+GPS is available on the account/profile page.
+
+Do not force location permission during registration.
+
+Store only when the user explicitly permits it.
+
+Example:
+
+```javascript
+gps: {
+  enabled: false,
+  latitude: null,
+  longitude: null
+}
+```
+
+---
+
+# 20. MOBILE NETWORK
+
+Network selection must be country-aware.
+
+Do not show Zimbabwe networks to Botswana users and vice versa.
+
+For Botswana:
+
+```text
+BTC
+Mascom
+Orange
+```
+
+For Zimbabwe:
+
+```text
+Econet
+NetOne
+Telecel
+```
+
+The network list must be driven by country configuration.
+
+Example:
+
+```javascript
+mobileNetworks = {
+  BW: ["BTC", "Mascom", "Orange"],
+  ZW: ["Econet", "NetOne", "Telecel"]
+}
+```
+
+For other countries:
+
+Provide a searchable/selectable network field or a generic:
+
+```text
+Other
+```
+
+Do not fake carrier availability for countries that have not been configured.
+
+---
+
+# 21. DIALING CODE
+
+Dialing codes must be country-driven.
+
+Examples:
+
+```text
+Botswana = +267
+Zimbabwe = +263
+South Africa = +27
+United Kingdom = +44
+United States = +1
+```
+
+When a user selects a country in the phone-number input, automatically populate that country's dialing code.
+
+Allow manual changing of country code because a user may have a phone registered in another country.
+
+Do not hard-code only +263 and +267.
+
+---
+
+# 22. PAYMENTS
+
+Prepare a country-aware payment-method configuration.
+
+Botswana:
+
+```text
+Smega
+MyZaka
+Orange Money
+```
+
+Zimbabwe:
+
+```text
+EcoCash
+OneMoney
+ZIPIT
+```
+
+Structure:
+
+```javascript
+paymentMethods = {
+  BW: [
+    "Smega",
+    "MyZaka",
+    "Orange Money"
+  ],
+
+  ZW: [
+    "EcoCash",
+    "OneMoney",
+    "ZIPIT"
+  ]
+}
+```
+
+Do NOT collect payment information during basic registration.
+
+This is only a configuration foundation for future Roots payments/subscriptions/transactions.
+
+---
+
+# 23. NO KYC
+
+This is an explicit application requirement.
+
+DO NOT add fields for:
+
+```text
+National ID
+Passport number
+Driver's licence
+KYC documents
+Proof of address
+Passport scan
+National ID scan
+Identity-document photos
+```
+
+DO NOT create document uploads for KYC.
+
+The only photo upload at registration is:
+
+```text
+Profile photo
+```
+
+Do not call profile-photo upload "identity verification".
+
+---
+
+# 24. SOCIAL MEDIA
+
+Provide nine optional social-media fields.
+
+Examples:
+
+```text
+Facebook
+X / Twitter
+Instagram
+TikTok
+LinkedIn
+YouTube
+Snapchat
+Threads
+Other
+```
+
+Store as a structured object:
+
+```javascript
+socials: {
+  facebook: "",
+  x: "",
+  instagram: "",
+  tiktok: "",
+  linkedin: "",
+  youtube: "",
+  snapchat: "",
+  threads: "",
+  other: ""
+}
+```
+
+These are optional.
+
+Do not require all nine.
+
+---
+
+# 25. INTERESTS
+
+Interest picker is required.
+
+Minimum:
+
+```text
+5 categories
+```
+
+The user should be able to select more than five.
+
+Example categories:
+
+```text
+Family
+Genealogy
+Music
+Sport
+Business
+Technology
+Education
+Travel
+Food
+Culture
+Arts
+Religion
+Community
+History
+Photography
+Film
+Books
+Gaming
+Fashion
+Health & Fitness
+Entrepreneurship
+Volunteering
+Agriculture
+Science
+Politics
+Finance
+```
+
+Use chips/cards.
+
+Display:
+
+```text
+5 selected
+```
+
+when minimum is reached.
+
+Prevent final submission below 5 selections.
+
+Do not impose an artificial maximum unless the existing app requires one.
+
+---
+
+# 26. PASSWORD
+
+Required.
+
+Fields:
+
+```text
+Password
+Confirm Password
+```
+
+Minimum:
+
+```text
+6 characters
+```
+
+Recommended stronger validation:
+
+```text
+6+ characters
+```
+
+Do not silently require a much stronger password than the specification unless the authentication system mandates it.
+
+Show:
+
+```text
+Password strength
+```
+
+but do not expose password text after submission.
+
+---
+
+# 27. PASSWORD STORAGE
+
+Never store plaintext passwords inside:
+
+```text
+data.js
+localStorage
+family-tree records
+Firestore profile documents
+```
+
+Use the application's authentication provider.
+
+The user profile must contain only a safe authentication identifier, for example:
+
+```javascript
+authUserId
+```
+
+The password itself must be handled by the authentication system.
+
+---
+
+# 28. USER RECORD
+
+Create a canonical regular-user object.
+
+Example:
+
+```javascript
+{
+  id: "user_xxxxx",
+
+  accountType: "regular",
+
+  profilePhoto: null,
+
+  firstName: "Kudzanai",
+  surname: "Chitate",
+  username: "kudzanai",
+  
+  dateOfBirth: "1987-04-05",
+  gender: "male",
+
+  nationalityCode: "ZW",
+  nationalityName: "Zimbabwean",
+
+  race: "black",
+  raceOther: null,
+
+  mobileNumbers: [
+    {
+      label: "Primary",
+      countryCode: "+263",
+      number: "",
+      network: "Econet"
+    }
+  ],
+
+  whatsappNumbers: [
+    {
+      label: "Primary",
+      countryCode: "+263",
+      number: "",
+      verified: false
+    }
+  ],
+
+  whatsappVerified: false,
+
+  email: null,
+
+  countryOfResidence: "ZW",
+  province: "Harare",
+  townCityVillage: "Harare",
+  areaNeighbourhood: "",
+
+  gps: {
+    enabled: false,
+    latitude: null,
+    longitude: null
+  },
+
+  education: {
+    creche: [],
+    primary: [],
+    secondary: [],
+    tertiary: []
+  },
+
+  socials: {},
+
+  interests: [],
+
+  authUserId: null,
+
+  familyTreePersonId: null,
+
+  createdAt: null,
+  updatedAt: null
+}
+```
+
+---
+
+# 29. EDUCATION
+
+Add a structured education section.
+
+This must work internationally.
+
+The user specifically has a Zimbabwe **Schools List**, but the system must not assume all users attended Zimbabwean institutions.
+
+Education must have four categories:
+
+```text
+Creche
+Primary
+Secondary
+Tertiary
+```
+
+Each category must support one or more institutions.
+
+Example structure:
+
+```javascript
+education: {
+  creche: [],
+  primary: [],
+  secondary: [],
+  tertiary: []
+}
+```
+
+---
+
+# 30. CRECHE
+
+Fields:
+
+```text
+Institution name
+Country
+Province / State / Region
+Town / City
+Start year
+End year
+```
+
+Institution name should support:
+
+```text
+existing school lookup
+manual entry
+```
+
+---
+
+# 31. PRIMARY
+
+Fields:
+
+```text
+Primary school
+Country
+Province / State / Region
+Town / City
+Start year
+End year
+```
+
+Use the existing Schools List when the country is Zimbabwe.
+
+---
+
+# 32. SECONDARY
+
+Fields:
+
+```text
+Secondary school
+Country
+Province / State / Region
+Town / City
+Start year
+End year
+```
+
+Again, use the existing Zimbabwe Schools List where applicable.
+
+---
+
+# 33. TERTIARY
+
+Fields:
+
+```text
+Institution
+Institution type
+Country
+Region
+City
+Start year
+End year
+Qualification
+Field of study
+```
+
+Institution type options should include:
+
+```text
+University
+College
+Polytechnic
+Technical Institute
+Vocational Institute
+Teacher Training
+Medical School
+Other
+```
+
+---
+
+# 34. SCHOOL SELECTION SYSTEM
+
+The existing Zimbabwe Schools List should become:
+
+```javascript
+schoolsDatabase
+```
+
+with country awareness.
+
+Example:
+
+```javascript
+{
+  id: "school_xxx",
+  country: "ZW",
+  type: "secondary",
+  name: "Example High School",
+  province: "Harare",
+  city: "Harare"
+}
+```
+
+For non-Zimbabwe users, provide:
+
+```text
+Search institution
+Enter institution manually
+```
+
+If a school does not exist:
+
+```text
+Can't find your school?
++ Add institution
+```
+
+Store proposed institutions separately for review.
+
+Do not silently add user-entered schools to the official master list.
+
+---
+
+# 35. EDUCATION ADD MULTIPLE
+
+Every education category must support:
+
+```text
++ Add another institution
+```
+
+This is important because a person may attend:
+
+```text
+two creches
+multiple primary schools
+multiple secondary schools
+multiple tertiary institutions
+```
+
+Do not limit each category to one record.
+
+---
+
+# 36. REGISTRATION VALIDATION
+
+Create one central:
+
+```javascript
+validateRegistration(formState)
+```
+
+function.
+
+It should return:
+
+```javascript
+{
+  valid: true,
+  errors: [],
+  completed: 18,
+  required: 18,
+  percentage: 100
+}
+```
+
+Each required field must have an explicit validation rule.
+
+---
+
+# 37. REQUIRED GATE
+
+Based on the current specification, the registration gate should require:
+
+```text
+First name
+Surname
+Username
+Date of birth
+Gender
+Nationality
+Race
+At least one mobile number
+At least one WhatsApp number
+Country
+Location information
+Password
+Password confirmation
+At least 5 interests
+```
+
+Profile photo should be supported as part of registration but should NOT prevent registration if the product specification later chooses to make it optional.
+
+Email is explicitly optional.
+
+Education is optional unless later promoted to required.
+
+Social media is optional.
+
+GPS is optional.
+
+The validation architecture must make required/optional status configurable instead of scattering hard-coded conditions throughout the UI.
+
+---
+
+# 38. FINAL REVIEW PAGE
+
+Before account creation, display a summary.
+
+Example:
+
+```text
+YOUR ROOTS PROFILE
+
+Kudzanai Paul Chitate
+Zimbabwean
+Zimbabwe
+Harare
+
+Mobile:
++263 ...
+
+WhatsApp:
++263 ...
+✓ Verified
+
+Email:
+Not provided
+
+Education:
+Primary — ...
+Secondary — ...
+Tertiary — ...
+
+Interests:
+Family
+Genealogy
+Technology
+Music
+Business
+```
+
+Then:
+
+```text
+Edit
+```
+
+buttons for each section.
+
+---
+
+# 39. ACCOUNT CREATION
+
+When the user submits:
+
+1. Run complete validation.
+2. Verify WhatsApp if required by the authentication system.
+3. Create authentication identity.
+4. Create the regular user profile.
+5. Create/link a Roots person record.
+6. Store the `familyTreePersonId`.
+7. Redirect to the user's Roots profile/home screen.
+
+Do not automatically add the person to the Chitate family tree unless they are actually connected to an existing family tree.
+
+A regular user account is not automatically a blood relative.
+
+---
+
+# 40. FAMILY TREE LINK
+
+The registration system must prepare for:
+
+```javascript
+familyTreePersonId
+```
+
+Initially:
+
+```javascript
+familyTreePersonId: null
+```
+
+Later it can be populated when:
+
+* the user creates a family tree
+* the user joins a family
+* an administrator links them
+* a verified family relationship is established
+
+Do not infer family relationship from surname.
+
+For example:
+
+```text
+Chitate surname ≠ automatically Chitate bloodline
+```
+
+---
+
+# 41. PROFILE COMPATIBILITY WITH TREE.HTML
+
+The data generated during registration must map naturally into the existing tree profile.
+
+Existing tree profile concepts include:
+
+```text
+Name
+Metadata
+Info
+Kinship
+Family
+Gallery
+```
+
+Therefore the registration record should provide the identity foundation for those sections.
+
+Registration should provide:
+
+```text
+Name
+Date of birth
+Gender
+Nationality
+Race
+Location
+Contact
+Education
+Interests
+Social links
+Profile photo
+```
+
+The Family Tree can later add:
+
+```text
+Lifestory
+Parents
+Children
+Spouses
+Partners
+Siblings
+Kinship
+Family relationships
+Death information
+Gallery
+```
+
+Do not mix authentication credentials into the family-tree person object.
+
+---
+
+# 42. PRIVACY DESIGN
+
+Separate:
+
+### Public/profile information
+
+Possible:
+
+```text
+first name
+surname
+username
+profile photo
+country
+city
+education
+interests
+```
+
+### Private account information
+
+```text
+mobile numbers
+WhatsApp numbers
+email
+GPS coordinates
+authentication ID
+```
+
+Do not expose mobile/WhatsApp numbers through the public family tree by default.
+
+---
+
+# 43. REGISTRATION UI REQUIREMENTS
+
+The form must be:
+
+* mobile friendly
+* desktop friendly
+* accessible
+* keyboard navigable
+* touch friendly
+* responsive
+
+Use progressive disclosure.
+
+Do not overwhelm the user with every field simultaneously.
+
+---
+
+# 44. COUNTRY CHANGE BEHAVIOUR
+
+When country changes:
+
+Update:
+
+```text
+dialing code
+available networks
+payment-method configuration
+geographic hierarchy
+```
+
+Example:
+
+```text
+Country = Botswana
+
+Dial code = +267
+
+Networks:
+BTC
+Mascom
+Orange
+```
+
+When:
+
+```text
+Country = Zimbabwe
+```
+
+show:
+
+```text
+Dial code = +263
+
+Networks:
+Econet
+NetOne
+Telecel
+```
+
+The existing selected values must be reset safely when the country changes.
+
+---
+
+# 45. DATA NORMALIZATION
+
+Normalize all stored data.
+
+Names:
+
+```javascript
+trim()
+```
+
+Email:
+
+```javascript
+lowercase
+```
+
+Username:
+
+```javascript
+lowercase
+```
+
+Phone numbers:
+
+Store:
+
+```text
+countryCode
+localNumber
+internationalNumber
+```
+
+Example:
+
+```javascript
+{
+  countryCode: "+263",
+  localNumber: "771234567",
+  internationalNumber: "+263771234567"
+}
+```
+
+Do not store a mixture of formatting styles.
+
+---
+
+# 46. IMPORTANT: DO NOT ADD KYC
+
+Before finishing, search the codebase for any existing KYC assumptions.
+
+Do NOT create or require:
+
+```text
+National ID
+Passport
+KYC documents
+identity verification documents
+```
+
+The only verification required by the current specification is the WhatsApp verification mechanism.
+
+---
+
+# 47. VALIDATION TEST CASES
+
+Create testable scenarios.
+
+### Zimbabwe user
+
+```text
+Country: Zimbabwe
+Province: Harare
+City: Harare
+Network: Econet
+Dial code: +263
+```
+
+### Botswana user
+
+```text
+Country: Botswana
+Network: BTC / Mascom / Orange
+Dial code: +267
+```
+
+### UK user
+
+```text
+Country: United Kingdom
+Dial code: +44
+```
+
+The system must not display Zimbabwe-only location structures for UK users.
+
+---
+
+# 48. EDGE CASES
+
+Test:
+
+* multiple mobile numbers
+* multiple WhatsApp numbers
+* different countries per phone number
+* no email
+* five interests exactly
+* six+ interests
+* missing area
+* newly submitted area
+* multiple schools
+* school outside Zimbabwe
+* Unicode names
+* mixed nationality/residence
+* user who moved countries
+* user with no GPS permission
+* country changes halfway through registration
+
+---
+
+# 49. FINAL IMPLEMENTATION RULES
+
+Do NOT rewrite the Family Tree implementation.
+
+Do NOT place all registration code inside `tree.html`.
+
+Do NOT place passwords inside profile/person data.
+
+Do NOT add KYC fields.
+
+Do NOT make Zimbabwe the only supported country.
+
+Do NOT assume nationality equals residence.
+
+Do NOT assume surname equals bloodline.
+
+Do NOT make email mandatory.
+
+Do NOT make GPS mandatory.
+
+Do NOT make social-media fields mandatory.
+
+Do NOT make education mandatory unless explicitly configured as such.
+
+Do NOT hard-code Botswana or Zimbabwe settings throughout the UI.
+
+Use configuration objects for:
+
+```javascript
+countries
+dialingCodes
+nationalities
+networks
+payments
+locations
+schools
+```
+
+The result should be a clean, extensible Regular User onboarding architecture that can later support Institutional Users without needing to rewrite the entire registration system.
+
+### Recommended implementation order
+
+For your current Roots project, I would make the files work in this order:
+
+**`onboarding.html` → `onboarding.js` → `registration-data.js` → `validation.js` → `store.js` → `data.js` → existing `tree.js`**
+
+The important architectural point is that **registration creates the person identity, while the Family Tree adds genealogy**. Your existing `tree.html` already separates the person's identity/profile from kinship and family relationships, which is exactly the separation we want to preserve. 
+
+I would make the next piece either **the exact `registration-data.js` country/phone/network/location schema** or **the complete `onboarding.html` UI**. Which should come first?

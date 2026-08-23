@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Roots — Create Profile</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="onboarding.css">
+</head>
+<body data-page="onboarding">
+<div id="app">
+  <div class="screen active">
+
+    <!-- TOP BAR -->
+    <div class="ob-topbar">
+      <span class="ob-back" id="obBack">‹</span>
+      <div class="ob-progress"><div class="ob-bar" id="obBar"></div></div>
+      <span class="ob-stepnum" id="obStepNum">1/8</span>
+    </div>
+
+    <div class="ob-countchip" id="obCountChip">Required: 0/14</div>
+
+    <!-- ================= STEPS ================= -->
+    <div class="ob-body">
+
+      <!-- STEP 1 · IDENTITY -->
+      <section class="ob-step active" data-step="1">
+        <h2 class="ob-h">Identity</h2>
+        <p class="ob-p">This becomes your Roots person record.</p>
+
+        <label class="ob-photo" for="obPhoto">
+          <img id="obPhotoPreview" src="" alt="">
+          <span id="obPhotoHint">📷<br>Add photo<br><small>JPG · PNG · WEBP</small></span>
+        </label>
+        <input type="file" id="obPhoto" accept=".jpg,.jpeg,.png,.webp,image/*" style="display:none;">
+
+        <div class="ob-field">
+          <label>First name *</label>
+          <input type="text" id="obFirstName" placeholder="e.g. Tafadzwa" autocomplete="given-name">
+        </div>
+        <div class="ob-field">
+          <label>Surname *</label>
+          <input type="text" id="obSurname" placeholder="e.g. Chitate" autocomplete="family-name">
+        </div>
+        <div class="ob-field">
+          <label>Username *</label>
+          <input type="text" id="obUsername" placeholder="@kudzanai.chitate" autocapitalize="none">
+          <div class="ob-status" id="obUsernameStatus"></div>
+        </div>
+
+        <div class="ob-field">
+          <label>Date of birth *</label>
+          <div class="ob-dob">
+            <select id="obDd"><option value="">Day</option></select>
+            <select id="obMm"><option value="">Month</option></select>
+            <select id="obYy"><option value="">Year</option></select>
+          </div>
+        </div>
+
+        <div class="ob-field">
+          <label>Gender *</label>
+          <div class="ob-toggles">
+            <button type="button" class="ob-toggle" data-g="male">Male</button>
+            <button type="button" class="ob-toggle" data-g="female">Female</button>
+          </div>
+        </div>
+
+        <div class="ob-field">
+          <label>Nationality *</label>
+          <select id="obNationality"><option value="">Select nationality…</option></select>
+        </div>
+
+        <div class="ob-field">
+          <label>Race *</label>
+          <div class="ob-chips" id="obRaceChips"></div>
+          <input type="text" id="obRaceOther" placeholder="Please specify" style="display:none;">
+        </div>
+      </section>
+
+      <!-- STEP 2 · CONTACT & VERIFICATION -->
+      <section class="ob-step" data-step="2">
+        <h2 class="ob-h">Contact &amp; Verification</h2>
+        <p class="ob-p">At least one mobile and one WhatsApp number.</p>
+        <div id="obMobileList"></div>
+        <button type="button" class="ob-addbtn" id="obAddMobile">＋ Add another mobile number</button>
+
+        <div class="ob-subhead">WhatsApp</div>
+        <div id="obWhatsList"></div>
+        <button type="button" class="ob-addbtn" id="obAddWhats">＋ Add another WhatsApp number</button>
+
+        <div class="ob-field" style="margin-top:18px;">
+          <label>Email <span class="ob-opt">(optional — recommended for cloud login &amp; recovery)</span></label>
+          <input type="email" id="obEmail" placeholder="name@example.com" autocapitalize="none">
+        </div>
+      </section>
+
+      <!-- STEP 3 · LOCATION -->
+      <section class="ob-step" data-step="3">
+        <h2 class="ob-h">Location</h2>
+        <p class="ob-p">Where you live now — not necessarily your origin.</p>
+        <div class="ob-field">
+          <label>Country of residence *</label>
+          <select id="obCountry"><option value="">Select country…</option></select>
+        </div>
+
+        <div id="obZwLoc" style="display:none;">
+          <div class="ob-field">
+            <label>Province *</label>
+            <select id="obProvince"><option value="">Select province…</option></select>
+          </div>
+          <div class="ob-field">
+            <label>Town / City / Village *</label>
+            <input type="text" id="obTown" list="obTownList" placeholder="Type to search…" autocapitalize="off">
+            <datalist id="obTownList"></datalist>
+          </div>
+          <div class="ob-field">
+            <label>Area / Neighbourhood</label>
+            <input type="text" id="obArea" list="obAreaList" placeholder="Suburb, village or area" autocapitalize="off">
+            <datalist id="obAreaList"></datalist>
+          </div>
+        </div>
+
+        <div id="obGenLoc" style="display:none;">
+          <div class="ob-field">
+            <label>State / Province / Region *</label>
+            <input type="text" id="obRegionGeneric">
+          </div>
+          <div class="ob-field">
+            <label>City / Town / Village *</label>
+            <input type="text" id="obCityGeneric">
+          </div>
+          <div class="ob-field">
+            <label>Area / Neighbourhood</label>
+            <input type="text" id="obAreaGeneric">
+          </div>
+        </div>
+
+        <button type="button" class="ob-linkbtn" id="obSubmitArea">Can't find your area? ＋ Submit a new area</button>
+      </section>
+
+      <!-- STEP 4 · EDUCATION -->
+      <section class="ob-step" data-step="4">
+        <h2 class="ob-h">Education</h2>
+        <p class="ob-p">Optional — Zimbabwe school lookup included.</p>
+        <div id="obEduWrap"></div>
+      </section>
+
+      <!-- STEP 5 · SOCIAL & INTERESTS -->
+      <section class="ob-step" data-step="5">
+        <h2 class="ob-h">Social &amp; Interests</h2>
+        <p class="ob-p">All social links optional. Pick at least 5 interests.</p>
+        <div class="ob-socials" id="obSocials"></div>
+        <div class="ob-subhead">Interests * <span class="ob-opt">(minimum 5)</span></div>
+        <div class="ob-chips" id="obInterestChips"></div>
+        <div class="ob-status" id="obInterestCount">0 selected</div>
+      </section>
+
+      <!-- STEP 6 · SECURITY -->
+      <section class="ob-step" data-step="6">
+        <h2 class="ob-h">Security</h2>
+        <p class="ob-p">Minimum 6 characters. Stored hashed — never plaintext.</p>
+        <div class="ob-field">
+          <label>Password *</label>
+          <input type="password" id="obPassword" autocomplete="new-password">
+          <div class="ob-strength"><div class="ob-strength-bar" id="obStrengthBar"></div></div>
+          <div class="ob-status" id="obStrengthLabel"></div>
+        </div>
+        <div class="ob-field">
+          <label>Confirm password *</label>
+          <input type="password" id="obPasswordConfirm" autocomplete="new-password">
+        </div>
+      </section>
+
+      <!-- STEP 7 · REVIEW -->
+      <section class="ob-step" data-step="7">
+        <h2 class="ob-h">Review</h2>
+        <div class="ob-review" id="obReview"></div>
+        <div class="ob-tallybox" id="obReviewTally"></div>
+        <button type="button" class="ob-create" id="obCreate" disabled>Create Roots Account</button>
+      </section>
+
+      <!-- STEP 8 · CREATED -->
+      <section class="ob-step" data-step="8">
+        <div class="ob-done">
+          <div class="ob-done-icon">🌳</div>
+          <h2 class="ob-h">Account Created</h2>
+          <p class="ob-p" id="obDoneMsg">Welcome to Roots.</p>
+          <button type="button" class="ob-create" id="obEnterApp">Enter Roots →</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER NAV -->
+    <div class="ob-footer">
+      <button type="button" class="ob-navbtn ghost" id="obPrev">← Back</button>
+      <button type="button" class="ob-navbtn" id="obNext">Continue →</button>
+    </div>
+
+  </div>
+  <div id="toast"></div>
+</div>
+
+<script src="registration-data.js"></script>
+<script src="zw_locations.js"></script>
+<script src="schools_db.js"></script>
+<script src="validation.js"></script>
+<script src="onboarding.js"></script>
+</body>
+</html>

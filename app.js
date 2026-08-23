@@ -106,7 +106,7 @@
 
   $('btnRegular').addEventListener('click', function(){
     try { localStorage.setItem('roots_role', 'regular'); } catch(e) {}
-    showScreen('regular');
+    showScreen('account');
   });
   $('btnInstitutional').addEventListener('click', function(){
     try { localStorage.setItem('roots_role', 'institutional'); } catch(e) {}
@@ -114,6 +114,29 @@
   });
   $('topbarBack').addEventListener('click', function(){ showScreen('welcome'); });
   $('instBack').addEventListener('click', function(){ showScreen('welcome'); });
+
+  /* ---------- ACCOUNT GATE ---------- */
+  $('btnLoginFamily').addEventListener('click', function(){
+    var focus = window.RootsDataset ? RootsDataset.focus() : null;
+    window.RootsSession.set({
+      accountType: 'regular',
+      mode: 'family',
+      personId: (focus && focus.id) || 'R001'
+    });
+    location.reload();
+  });
+  $('btnCreateProfile').addEventListener('click', function(){
+    location.href = 'onboarding.html';
+  });
+  $('accountBack').addEventListener('click', function(){ showScreen('welcome'); });
+
+  var switchAccountBtn = $('switchAccountBtn');
+  if (switchAccountBtn) switchAccountBtn.addEventListener('click', function(){
+    try {
+      ['roots_session', 'roots_user', 'roots_auth', 'roots_role'].forEach(function(k){ localStorage.removeItem(k); });
+    } catch(e) {}
+    location.href = 'index.html';
+  });
 
   /* ---------- TAB SWITCHING (regular user) ---------- */
   var navItems = document.querySelectorAll('.nav-item');
@@ -769,7 +792,9 @@
     var role = null;
     try { role = localStorage.getItem('roots_role'); } catch(e) {}
     if (role === 'regular') {
-      showScreen('regular');
+      // Session decides entry: no account chosen yet -> account gate
+      var sess = window.RootsSession ? RootsSession.get() : null;
+      showScreen(sess && sess.personId ? 'regular' : 'account');
     } else if (role === 'institutional') {
       showScreen('institutional');
     } else {

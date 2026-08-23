@@ -7,10 +7,11 @@ Plain HTML/CSS/JS — no frameworks, no build step beyond `npm run copy:www`.
 
 | File | Owner | Scope |
 |---|---|---|
-| `index.html` | Shell owner | Welcome gate, Profile view, Groups view, settings hub |
+| `index.html` | Shell owner | Welcome gate, account gate, Profile view, Groups view, settings hub |
 | `timeline.html` | Timeline dev | Feed, stories, posts |
 | `tree.html` | Tree dev | TCM family tree engine, ego picker, profile panel overlays |
 | `library.html` | Library dev | Cultural library sections |
+| `onboarding.html` | Onboarding dev | 8-step Regular-User registration wizard (`onboarding.css/js`) |
 
 Each page may have its own JS file (`timeline.js`, `tree.js`, …). A dev touches
 **only their own page and their own JS file**.
@@ -20,11 +21,30 @@ Each page may have its own JS file (`timeline.js`, `tree.js`, …). A dev touche
 - `style.css` — design tokens, `.app-topbar`, `.bottom-nav`, shared components
 - `shell.js` — top bar / bottom nav behavior, active-tab sync, hash routing,
   back button, cross-page toast
-- `settings.js` — Tree Display Settings + EcoCash premium panel (included by
-  `index.html` AND `tree.html`)
-- `data.js` — people/posts data model
+- `settings.js` — Tree Display Settings + EcoCash premium panel + account info /
+  Switch Account (included by `index.html` AND `tree.html`)
+- `data.js` — person data model + spec-upgrade layer (`RootsData.upgradeAll()`).
+  No longer seeds demo people.
+- `dataset_v2.js` (generated) + `dataset.js` — import the 533-person master
+  dataset into `PEOPLE/byId` per account mode; runs on every page after `store.js`
+- `registration-data.js`, `validation.js` — onboarding config & central validator
+- `zw_locations.js`, `schools_db.js` (generated) — ZW locations + 8,156 schools
 - `lookups.js`, `customary.js` — cultural reference data (totems, proverbs,
   roora, glossary)
+
+Regenerate wrappers after editing source JSON/XLSX exports:
+`npm run gen:data` · verify: `npm run test:data && node tools/verify-pages.js`
+
+## Accounts & sessions
+
+- Tap **Regular User → choose**: **Login as Kudzanai Chitate**
+  (session `mode:'family'`, ego = focus person R001, full 533-person dataset)
+  or **Create Profile** (→ `onboarding.html`; session `mode:'personal'`,
+  empty tree with only your own person node).
+- Session keys: `roots_session` {accountType, mode, personId}, canonical user
+  record in `roots_user` (includes `familyTreePersonId` + `personNode`),
+  hashed credentials only in `roots_auth`. Password never stored plaintext.
+- Switch Account lives in the Profile view and the settings panel.
 
 ## How pages connect
 

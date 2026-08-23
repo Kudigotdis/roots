@@ -21,3 +21,5 @@ Desktop.ini
 # Backups / temp
 *.bak
 *.tmp
+
+data/.~lock.*
