@@ -116,14 +116,21 @@
       renderMyProfile();
       renderGroups();
       renderTimeline();
+      handleIndexHash();
     }
     if (id === 'institutional') {
       renderInstitutional();
     }
   }
 
-  $('btnRegular').addEventListener('click', function(){ showScreen('regular'); });
-  $('btnInstitutional').addEventListener('click', function(){ showScreen('institutional'); });
+  $('btnRegular').addEventListener('click', function(){
+    try { localStorage.setItem('roots_role', 'regular'); } catch(e) {}
+    showScreen('regular');
+  });
+  $('btnInstitutional').addEventListener('click', function(){
+    try { localStorage.setItem('roots_role', 'institutional'); } catch(e) {}
+    showScreen('institutional');
+  });
   $('topbarBack').addEventListener('click', function(){ showScreen('welcome'); });
   $('instBack').addEventListener('click', function(){ showScreen('welcome'); });
 
@@ -156,8 +163,23 @@
   }
 
   navItems.forEach(function(n){
-    n.addEventListener('click', function(){ switchView(n.dataset.view); });
+    n.addEventListener('click', function(){
+      if (n.getAttribute('data-href')) return; // external page — shell.js navigates
+      switchView(n.dataset.view);
+    });
   });
+
+  /* ---------- HASH ROUTING (index.html#profile / #settings) ---------- */
+  function handleIndexHash(){
+    var h = (location.hash || '').replace('#', '');
+    if (!h) return;
+    try { history.replaceState(null, '', location.pathname + location.search); } catch(e) {}
+    if (h === 'profile') {
+      switchView('profile');
+    } else if (h === 'settings') {
+      openSettings();
+    }
+  }
 
   var goGroupsBtn = $('goGroupsBtn');
   if (goGroupsBtn) goGroupsBtn.addEventListener('click', function(){ switchView('groups'); });
@@ -3662,6 +3684,16 @@
   /* ============================================================
      INIT
      ============================================================ */
-  showScreen('welcome');
+  (function boot(){
+    var role = null;
+    try { role = localStorage.getItem('roots_role'); } catch(e) {}
+    if (role === 'regular') {
+      showScreen('regular');
+    } else if (role === 'institutional') {
+      showScreen('institutional');
+    } else {
+      showScreen('welcome');
+    }
+  })();
 
 })();
