@@ -32,4 +32,13 @@
     read: read,
     patch: patch
   };
+
+  /* Shared person factory — fixes original ReferenceError in
+     quick-add parent and sync import (data.js P() semantics). */
+  window.createPerson = function (o) {
+    if (!o || !o.id) return null;
+    PEOPLE.push(o);
+    byId[o.id] = o;
+    return o.id;
+  };
 })();
