@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#003366">
+<title>Roots — Institutional Registration</title>
+<link rel="stylesheet" href="institutional.css">
+</head>
+<body class="institutional-root">
+
+<div class="inst-brandbar">
+  <h1>ROOTS</h1>
+  <div class="inst-brand-sub">Institutional Registration</div>
+</div>
+
+<div id="institutionalOnboardingApp">
+
+  <header id="institutionalOnboardingHeader">
+    <div class="inst-ob-progress-row">
+      <div class="inst-ob-track"><div class="inst-ob-bar" id="institutionalProgressBar"></div></div>
+      <span class="inst-ob-stepnum" id="institutionalStepNumber">Step 1 of 9</span>
+    </div>
+    <div class="inst-ob-heading">
+      <span class="lbl" id="institutionalProgressLabel">Institution Type</span>
+      <div class="title" id="institutionalStepTitle">What type of institution are you registering?</div>
+      <div class="desc" id="institutionalStepDescription"></div>
+    </div>
+  </header>
+
+  <div class="inst-onboard-shell">
+
+    <aside class="inst-rail" aria-hidden="true">
+      <ol id="instRailList"></ol>
+    </aside>
+
+    <main id="institutionalOnboardingMain">
+
+      <!-- STEP 1 · INSTITUTION TYPE -->
+      <section class="institutional-step active" id="institutionalStep1">
+        <p class="inst-step-error" id="stepError1" role="alert" aria-live="polite"></p>
+        <div class="inst-type-grid" id="institutionTypeCards"></div>
+      </section>
+
+      <!-- STEP 2 · ORGANISATION -->
+      <section class="institutional-step" id="institutionalStep2">
+        <p class="inst-step-error" id="stepError2" role="alert" aria-live="polite"></p>
+        <div class="inst-selected-type" id="orgTypeBadge"></div>
+
+        <div class="inst-field">
+          <label for="organisationName">Organisation Name *</label>
+          <input type="text" id="organisationName">
+        </div>
+        <div class="inst-field">
+          <label for="organisationShortName">Short Name <span class="opt">(optional)</span></label>
+          <input type="text" id="organisationShortName">
+        </div>
+        <div class="inst-field">
+          <label for="organisationDepartment">Department / Division <span class="opt">(optional)</span></label>
+          <input type="text" id="organisationDepartment">
+        </div>
+        <div class="inst-field">
+          <label for="organisationWhatsapp">Organisation WhatsApp *</label>
+          <div class="inst-phone-row">
+            <select id="organisationWhatsappCountry" class="cc-select" aria-label="Country dialing code"></select>
+            <input type="tel" id="organisationWhatsapp" class="num-input" inputmode="tel">
+          </div>
+        </div>
+        <div class="inst-field">
+          <label for="organisationEmail">Organisation Email <span class="opt">(optional)</span></label>
+          <input type="email" id="organisationEmail">
+        </div>
+        <div class="inst-field">
+          <label for="organisationWebsite">Website <span class="opt">(optional)</span></label>
+          <input type="url" id="organisationWebsite" placeholder="https://…">
+        </div>
+
+        <div id="orgConditionalWrap"></div>
+      </section>
+
+      <!-- STEP 3 · LOCATION & GEOGRAPHIC SCOPE -->
+      <section class="institutional-step" id="institutionalStep3">
+        <p class="inst-step-error" id="stepError3" role="alert" aria-live="polite"></p>
+
+        <h3 class="inst-panel-title">Organisation location</h3>
+        <div class="inst-field">
+          <label for="organisationCountry">Country *</label>
+          <select id="organisationCountry"><option value="">Select country…</option></select>
+        </div>
+        <div id="locationFields"></div>
+
+        <hr class="inst-login-divider">
+
+        <h3 class="inst-panel-title">Data scope</h3>
+        <p class="helper" style="font-size:12px;color:#5f6b7c;margin-top:-6px;margin-bottom:10px;">
+          Where will your Roots work cover? This may differ from where your organisation is located.</p>
+        <div class="inst-chips" id="scopeChips" role="group" aria-label="Geographic scope"></div>
+        <div id="scopeFollowup" style="margin-top:12px;"></div>
+      </section>
+
+      <!-- STEP 4 · PURPOSE -->
+      <section class="institutional-step" id="institutionalStep4">
+        <p class="inst-step-error" id="stepError4" role="alert" aria-live="polite"></p>
+        <div class="inst-chips" id="purposeCards"></div>
+        <div class="inst-field" style="margin-top:16px;">
+          <label for="institutionPurposeDescription">Brief description *</label>
+          <textarea id="institutionPurposeDescription" maxlength="500"
+            placeholder="Describe how your organisation will use Roots…"></textarea>
+          <div class="helper" style="display:flex;justify-content:space-between;">
+            <span>Minimum 30 characters.</span>
+            <span id="purposeCharCount">0 / 500</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 5 · DATA ACCESS -->
+      <section class="institutional-step" id="institutionalStep5">
+        <p class="inst-step-error" id="stepError5" role="alert" aria-live="polite"></p>
+        <div id="dataAccessGroups"></div>
+        <div class="inst-message inst-message-warning" id="personWarning" style="display:none;">
+          ⚠️ <span id="personWarningText"></span>
+        </div>
+      </section>
+
+      <!-- STEP 6 · MODULES -->
+      <section class="institutional-step" id="institutionalStep6">
+        <p class="inst-step-error" id="stepError6" role="alert" aria-live="polite"></p>
+        <div class="inst-modules" id="moduleCards"></div>
+        <div class="inst-message inst-message-info" style="margin-top:14px;" id="subscriptionNote"></div>
+      </section>
+
+      <!-- STEP 7 · PRIMARY ADMINISTRATOR -->
+      <section class="institutional-step" id="institutionalStep7">
+        <p class="inst-step-error" id="stepError7" role="alert" aria-live="polite"></p>
+
+        <div class="inst-field">
+          <label for="primaryAdminName">Full Name *</label>
+          <input type="text" id="primaryAdminName">
+        </div>
+        <div class="inst-field">
+          <label for="primaryAdminWhatsapp">WhatsApp Number *</label>
+          <div class="inst-phone-row">
+            <select id="primaryAdminWhatsappCountry" class="cc-select" aria-label="Country dialing code"></select>
+            <input type="tel" id="primaryAdminWhatsapp" class="num-input" inputmode="tel">
+          </div>
+          <div class="helper" id="signinNote"></div>
+        </div>
+        <div class="inst-field">
+          <label for="primaryAdminPassword">Password *</label>
+          <input type="password" id="primaryAdminPassword" autocomplete="new-password">
+          <div class="helper">Minimum 6 characters. Stored hashed — never plaintext.</div>
+        </div>
+        <div class="inst-field">
+          <label for="primaryAdminPasswordConfirm">Confirm Password *</label>
+          <input type="password" id="primaryAdminPasswordConfirm" autocomplete="new-password">
+        </div>
+        <div class="inst-field">
+          <label for="primaryAdminJobTitle">Job Title <span class="opt">(optional)</span></label>
+          <input type="text" id="primaryAdminJobTitle">
+        </div>
+        <div class="inst-field">
+          <label for="primaryAdminDepartment">Department <span class="opt">(optional)</span></label>
+          <input type="text" id="primaryAdminDepartment">
+        </div>
+        <div class="inst-field">
+          <label for="primaryAdminEmail">Email <span class="opt">(optional)</span></label>
+          <input type="email" id="primaryAdminEmail">
+        </div>
+      </section>
+
+      <!-- STEP 8 · STAFF INVITATIONS -->
+      <section class="institutional-step" id="institutionalStep8">
+        <p class="inst-step-error" id="stepError8" role="alert" aria-live="polite"></p>
+        <div id="staffList"></div>
+        <button type="button" class="inst-addbtn" id="addStaffBtn">＋ Add staff member</button>
+      </section>
+
+      <!-- STEP 9 · REVIEW -->
+      <section class="institutional-step" id="institutionalStep9">
+        <p class="inst-step-error" id="stepError9" role="alert" aria-live="polite"></p>
+        <div id="reviewSections"></div>
+        <div class="inst-message inst-message-info" id="submitNotice" style="margin-top:14px;"></div>
+        <button type="button" class="inst-btn inst-btn-primary" id="institutionalSubmit">SUBMIT INSTITUTIONAL APPLICATION</button>
+      </section>
+
+      <!-- SUBMITTED STATE -->
+      <section class="institutional-step" id="institutionalSubmitted">
+        <div class="inst-done">
+          <div class="inst-done-icon">🏛️</div>
+          <h2>APPLICATION SUBMITTED</h2>
+          <p style="color:#5f6b7c;font-size:14px;">Your institutional application is now under review.</p>
+          <div class="inst-panel" style="max-width:360px;margin:18px auto;text-align:left;">
+            <div class="inst-review-kv"><span class="k">Application ID</span><span class="v" id="instAppId">—</span></div>
+            <div class="inst-review-kv"><span class="k">Organisation</span><span class="v" id="instDoneOrg">—</span></div>
+            <div class="inst-review-kv"><span class="k">Type</span><span class="v" id="instDoneType">—</span></div>
+            <div class="inst-review-kv"><span class="k">Status</span><span class="v"><span class="inst-badge inst-badge-underreview">UNDER REVIEW</span></span></div>
+          </div>
+          <button type="button" class="inst-btn inst-btn-primary" id="institutionalReturnLogin" style="max-width:360px;">RETURN TO INSTITUTIONAL LOGIN</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer id="institutionalOnboardingControls">
+    <button type="button" class="inst-btn inst-btn-ghost" id="institutionalBack">← Back</button>
+    <button type="button" class="inst-btn inst-btn-primary" id="institutionalContinue">Continue →</button>
+  </footer>
+</div>
+
+<!-- UNSAVED CHANGES MODAL -->
+<div class="inst-modal-overlay" id="instLeaveModal" role="dialog" aria-modal="true" aria-labelledby="instLeaveTitle">
+  <div class="inst-modal">
+    <h3 id="instLeaveTitle">Leave institutional registration?</h3>
+    <p>Your progress has not been submitted.</p>
+    <div class="inst-modal-actions">
+      <button type="button" class="inst-btn inst-btn-primary" id="instLeaveStay">Stay</button>
+      <button type="button" class="inst-btn inst-btn-ghost" id="instLeaveSaveDraft">Save Draft</button>
+      <button type="button" class="inst-btn-link" id="instLeaveGo">Leave without saving</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="../registration-data.js"></script>
+<script src="../zw_locations.js"></script>
+<script src="institutional-config.js"></script>
+<script src="institutional-onboarding.js"></script>
+</body>
+</html>

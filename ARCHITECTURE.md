@@ -12,9 +12,16 @@ Plain HTML/CSS/JS — no frameworks, no build step beyond `npm run copy:www`.
 | `tree.html` | Tree dev | TCM family tree engine, ego picker, profile panel overlays |
 | `library.html` | Library dev | Cultural library sections |
 | `onboarding.html` | Onboarding dev | 8-step Regular-User registration wizard (`onboarding.css/js`) |
+| `institutional/institutional-login.html` | Institutional dev | Login gate, demo auth + lockout, application status checker |
+| `institutional/institutional-onboarding.html` | Institutional dev | 9-step institutional registration wizard (`institutional-config.js/css/js`) |
+| `institutional/institutional-workspace.html` | Institutional dev | Session-guarded research dashboard (profiles, totems, auditor, dispute, export) |
 
 Each page may have its own JS file (`timeline.js`, `tree.js`, …). A dev touches
 **only their own page and their own JS file**.
+
+`index.html`'s **Institutional User** button routes to
+`institutional/institutional-login.html`; the legacy in-page institutional
+dashboard was removed from `index.html`/`app.js`.
 
 ## Shared files (shell owner only — do not edit without approval)
 

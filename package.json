@@ -6,7 +6,7 @@
   "scripts": {
     "gen:data": "node tools/generate-dataset-js.js",
     "test:data": "node tools/test-dataset-load.js",
-    "copy:www": "powershell -Command \"if(!(Test-Path 'www')){New-Item -ItemType Directory 'www' | Out-Null}; Copy-Item 'index.html','timeline.html','tree.html','library.html','onboarding.html','style.css','onboarding.css','shell.js','store.js','settings.js','app.js','timeline.js','tree.js','library.js','data.js','dataset_v2.js','dataset.js','zw_locations.js','schools_db.js','registration-data.js','validation.js','onboarding.js','lookups.js','customary.js','sw.js','manifest.json' -Destination 'www' -Force; if(Test-Path 'assets'){Copy-Item 'assets' -Destination 'www' -Recurse -Force}\"",
+    "copy:www": "powershell -Command \"if(!(Test-Path 'www')){New-Item -ItemType Directory 'www' | Out-Null}; Copy-Item 'index.html','timeline.html','tree.html','library.html','onboarding.html','style.css','onboarding.css','shell.js','store.js','settings.js','app.js','timeline.js','tree.js','library.js','data.js','dataset_v2.js','dataset.js','zw_locations.js','schools_db.js','registration-data.js','validation.js','onboarding.js','lookups.js','customary.js','sw.js','manifest.json' -Destination 'www' -Force; if(Test-Path 'assets'){Copy-Item 'assets' -Destination 'www' -Recurse -Force}; if(Test-Path 'institutional'){Copy-Item 'institutional' -Destination 'www' -Recurse -Force}\"",
     "cap:sync": "npm run copy:www && npx cap sync",
     "cap:open:android": "npx cap open android",
     "cap:build": "npm run cap:sync && npx cap copy android"

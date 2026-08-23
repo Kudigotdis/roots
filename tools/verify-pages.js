@@ -10,7 +10,10 @@ const pages = {
   'timeline.html': ['timeline.js', 'shell.js', 'store.js'],
   'tree.html': ['tree.js', 'shell.js', 'store.js', 'settings.js'],
   'library.html': ['library.js', 'shell.js', 'store.js'],
-  'onboarding.html': ['onboarding.js']
+  'onboarding.html': ['onboarding.js'],
+  'institutional/institutional-login.html': ['institutional/institutional-config.js', 'institutional/institutional-login.js', 'registration-data.js'],
+  'institutional/institutional-onboarding.html': ['institutional/institutional-config.js', 'institutional/institutional-onboarding.js', 'registration-data.js', 'zw_locations.js'],
+  'institutional/institutional-workspace.html': ['institutional/institutional-config.js', 'institutional/institutional-workspace.js']
 };
 
 let failures = 0;
@@ -50,7 +53,7 @@ for (const page of [...Object.keys(pages)]) {
   for (const m of html.matchAll(/(?:src|href)="([^":#]+)"/g)) {
     const ref = m[1];
     if (/^(https?:)?\/\//.test(ref) || ref.startsWith('data:')) continue;
-    if (!fs.existsSync(path.join(root, ref))) { console.log(`FAIL ${page}: missing asset ${ref}`); failures++; }
+    if (!fs.existsSync(path.join(root, path.dirname(page), ref))) { console.log(`FAIL ${page}: missing asset ${ref}`); failures++; }
   }
 }
 console.log(failures ? `\n${failures} PROBLEM(S)` : '\nALL CHECKS PASSED');

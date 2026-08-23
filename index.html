@@ -100,39 +100,9 @@
     </div>
   </div>
 
-  <!-- ============ INSTITUTIONAL USER ============ -->
-  <div id="institutional-app" class="screen">
-    <div class="inst-topbar">
-      <div class="inst-eyebrow">Research Portal</div>
-      <div class="inst-title">🏛️ Institutional Dashboard</div>
-    </div>
-    <div class="inst-body" id="instBody">
-      <div class="inst-stats" id="instStats"></div>
-      <div class="inst-view-toggles">
-        <button class="inst-view-toggle active" data-view="profiles">👤 Profiles</button>
-        <button class="inst-view-toggle" data-view="totems">📜 Totem Directory</button>
-        <button class="inst-view-toggle" data-view="auditor">🔍 Lineage Auditor</button>
-        <button class="inst-view-toggle" data-view="dispute">⚖️ Dispute Queue</button>
-      </div>
-      <div class="inst-search">
-        <span class="inst-search-icon">🔍</span>
-        <input type="text" id="instSearch" placeholder="Search name, totem, chidawo…">
-      </div>
-      <div class="inst-filter-row" id="instFilters"></div>
-      <div id="instTotemList"></div>
-      <div id="instAuditor" style="display:none;"></div>
-      <div id="instDispute" style="display:none;"></div>
-      <div class="inst-export-row" id="instExportRow">
-        <select id="instExportFormat" style="background:var(--bg);color:var(--text);border:1px solid var(--divider);border-radius:6px;padding:4px 8px;font-size:0.78rem;">
-          <option value="json">JSON</option>
-          <option value="csv">CSV</option>
-          <option value="ead3">ISAD(G) / EAD3 XML</option>
-        </select>
-        <button class="btn-export" id="instExport">📤 Export</button>
-      </div>
-      <button class="inst-back" id="instBack">← Back to Home</button>
-    </div>
-  </div>
+  <!-- ============ INSTITUTIONAL USER ============
+       Moved to institutional/ (login gate + workspace).
+       The welcome-gate button routes to the institutional login. -->
 
   <!-- Tree profile panel, TCM overlays, ego picker, selection modal,
        settings, death & marriage panels now live in tree.html /

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#003366">
+<title>Roots — Institutional Access</title>
+<link rel="stylesheet" href="institutional.css">
+</head>
+<body class="institutional-root">
+
+<header class="inst-brandbar">
+  <h1>ROOTS</h1>
+  <div class="inst-brand-sub">Institutional Access</div>
+  <div class="inst-brand-tagline">Professional · Research &amp; Cultural Data Workspace</div>
+</header>
+
+<div id="institutionalLoginScreen" class="inst-page">
+
+  <div id="institutionalLoginError" class="inst-message inst-message-error" role="alert" aria-live="polite" style="display:none;"></div>
+  <div id="institutionalLoginStatus" class="inst-message inst-message-info" aria-live="polite" style="display:none;"></div>
+
+  <div class="inst-panel">
+    <form id="institutionalLoginForm" novalidate>
+
+      <div class="inst-field">
+        <label for="institutionalLoginName">Name</label>
+        <input type="text" id="institutionalLoginName" autocomplete="name">
+      </div>
+
+      <div class="inst-field">
+        <label for="institutionalLoginWhatsapp">WhatsApp Number</label>
+        <div class="inst-phone-row">
+          <select id="institutionalLoginWhatsappCountry" class="cc-select" aria-label="Country dialing code"></select>
+          <input type="tel" id="institutionalLoginWhatsapp" class="num-input" inputmode="tel" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="inst-field">
+        <label for="institutionalLoginPassword">Password</label>
+        <input type="password" id="institutionalLoginPassword" autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="inst-btn inst-btn-primary" id="institutionalLoginSubmit">LOG IN</button>
+    </form>
+
+    <div style="text-align:center;margin-top:12px;">
+      <button type="button" class="inst-btn-link" id="institutionalForgotPassword">Forgot password?</button>
+    </div>
+
+    <hr class="inst-login-divider">
+
+    <div style="text-align:center;">
+      <div style="font-size:13px;color:#5f6b7c;margin-bottom:10px;">New institution?</div>
+      <button type="button" class="inst-btn inst-btn-ghost" id="institutionalRegisterBtn">REGISTER INSTITUTION</button>
+    </div>
+  </div>
+
+  <div class="inst-panel" id="instApplicationStatusPanel" style="display:none;">
+    <h3 class="inst-panel-title">Application status</h3>
+    <ul class="inst-status-list" id="instApplicationStatusList"></ul>
+  </div>
+
+  <div style="text-align:center;">
+    <button type="button" class="inst-btn-link" id="instStatusToggle">Check application status</button>
+  </div>
+
+  <button type="button" class="inst-btn inst-btn-ghost" id="institutionalBackBtn" style="margin-top:16px;">Return to Roots</button>
+</div>
+
+<footer class="inst-login-footer">
+  Institutional access<br>Organisation accounts
+</footer>
+
+<script src="../registration-data.js"></script>
+<script src="institutional-config.js"></script>
+<script src="institutional-login.js"></script>
+</body>
+</html>
