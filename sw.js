@@ -1,12 +1,21 @@
-var CACHE = 'roots-v3';
+var CACHE = 'roots-v4';
 var URLS = [
   './',
   './index.html',
+  './timeline.html',
+  './tree.html',
+  './library.html',
   './style.css',
   './data.js',
   './lookups.js',
   './customary.js',
+  './shell.js',
+  './store.js',
+  './settings.js',
   './app.js',
+  './timeline.js',
+  './tree.js',
+  './library.js',
   './manifest.json',
   './assets/icons/clock.svg',
   './assets/icons/tree.svg',

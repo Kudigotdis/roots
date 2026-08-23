@@ -81,6 +81,7 @@ var fileInput = document.createElement('input');
 fileInput.type = 'file';
 fileInput.accept = 'image/*';
 fileInput.style.display = 'none';
+fileInput.id = 'hiddenFileInput';
 document.body.appendChild(fileInput);
 function triggerImageUpload(cb){
   fileInput.onchange = function(e){
@@ -2126,5 +2127,9 @@ modalOverlay.addEventListener('click', function(e){
     return cards;
   };
 
-})();
+  /* ---------- SELF-BOOT + SHARED HOOKS ---------- */
+  window.__rootsTreeRefresh = function(){ persistState(); renderTree(); };
+  window.__rootsPdfExport = function(){ if (typeof exportPDF === 'function') exportPDF(); };
 
+  renderTree();
+})();
