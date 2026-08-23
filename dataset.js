@@ -64,7 +64,14 @@
         bloodlineDetail: p.bloodlineDetail || '',
         branch: p.branch || '',
         status: p.status || '',
-        notes: p.sourceNote || ''
+        notes: p.sourceNote || '',
+        /* spec-model fields enriched at source (tools/enrich-dataset.js);
+           upgradeAll() preserves them via || defaults */
+        admin: p.admin,
+        kinship: p.kinship,
+        oral: p.oral,
+        ethnicity: p.ethnicity,
+        lifecycleState: p.lifecycleState || ''
       });
     });
 

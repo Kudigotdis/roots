@@ -163,19 +163,20 @@
 
   /* ---------- notifications (§46, §52) — notices only, no chat ---------- */
   function computeAlerts() {
+    var muted = Store.get('ORG_NOTIF_SETTINGS')[0] || {}; /* §66 per-workspace mute prefs */
     var out = [];
     var disputes = (window.PEOPLE || []).filter(function (p) { return p.sync && p.sync._disputed; }).length;
-    if (disputes) out.push({ icon: '⚖️', msg: disputes + ' record(s) require review', go: 'disputes' });
+    if (disputes && muted.disputes !== false) out.push({ icon: '⚖️', msg: disputes + ' record(s) require review', go: 'disputes' });
     if (access.grantExpiry) {
       var days = Math.ceil((new Date(access.grantExpiry) - Date.now()) / 864e5);
-      if (days > 0 && days <= 30) out.push({ icon: '⏳', msg: 'Dataset access expires in ' + days + ' day(s)', go: 'access' });
-      if (days <= 0) out.push({ icon: '⛔', msg: 'Dataset access has expired', go: 'access' });
+      if (days > 0 && days <= 30 && muted.access !== false) out.push({ icon: '⏳', msg: 'Dataset access expires in ' + days + ' day(s)', go: 'access' });
+      if (days <= 0 && muted.access !== false) out.push({ icon: '⛔', msg: 'Dataset access has expired', go: 'access' });
     }
     var corr = Store.get('CORRECTIONS').filter(function (c) { return c.status === 'SUBMITTED'; }).length;
-    if (corr) out.push({ icon: '📝', msg: corr + ' data correction(s) submitted for review', go: access.can('inst.corrections.submit') ? 'records' : 'overview' });
+    if (corr && muted.corrections !== false) out.push({ icon: '📝', msg: corr + ' data correction(s) submitted for review', go: access.can('inst.corrections.submit') ? 'records' : 'overview' });
     Store.get('NOTIFICATIONS').forEach(function (n) {
       if (n.applicationId && n.applicationId !== session.applicationId) return;
-      out.push({ icon: '🔔', msg: n.message, at: n.at });
+      if (muted.notices !== false) out.push({ icon: '🔔', msg: n.message, at: n.at });
     });
     return out;
   }

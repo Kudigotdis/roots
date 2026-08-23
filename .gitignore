@@ -22,4 +22,7 @@ Desktop.ini
 *.bak
 *.tmp
 
+# Internal development notes (not for distribution)
+Institutional User Development Notes/
+
 data/.~lock.*

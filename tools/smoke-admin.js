@@ -130,7 +130,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
     'admin/admin-login.html', 'admin/admin-login.js', 'admin/admin.html', 'admin/admin.js']
     .forEach((f) => check('file exists: ' + f, fs.existsSync(path.join(ROOT, f))));
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v9', /CACHE\s*=\s*'roots-v9'/.test(sw));
+  check('sw cache bumped to roots-v10', /CACHE\s*=\s*'roots-v10'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));

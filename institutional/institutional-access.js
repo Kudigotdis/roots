@@ -172,6 +172,8 @@
       roleId: role,
       permissions: permissions,
       datasets: datasets,
+      personLevelAllowed: personLevelAllowed,
+      anonymizationRequired: anonymizationRequired,
       geographicScope: (app && app.geographicScope) || {},
       allowedExports: allowedExports,
       modules: modules,

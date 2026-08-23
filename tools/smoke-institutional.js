@@ -97,7 +97,7 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
 
   /* TEST 2 — sw.js precache list exists */
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v9', /CACHE\s*=\s*'roots-v9'/.test(sw));
+  check('sw cache bumped to roots-v10', /CACHE\s*=\s*'roots-v10'/.test(sw));
   const urls = [...sw.matchAll(/'(\.\/[^']+)'/g)].map((m) => m[1].slice(2)).filter(Boolean);
   const missingSw = urls.filter((u) => u !== '' && !fs.existsSync(path.join(ROOT, u)));
   check('sw.js URLS all exist (' + urls.length + ' entries)', missingSw.length === 0, missingSw.join(', '));
@@ -292,6 +292,16 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   await until(() => d4.getElementById('wsView').textContent.includes('Customary Law Register'), 5000, 'lifecycle view');
   check('lifecycle register renders state cards', d4.querySelectorAll('#wsView .ws-card').length >= 4);
 
+  // Enriched demo data reaches the registries (tools/enrich-dataset.js)
+  const frozenCard = d4.querySelector('#wsView [data-state="DECEASED_FROZEN"]');
+  if (frozenCard) {
+    frozenCard.click();
+    await until(() => d4.querySelectorAll('#lcStateList .ws-row').length > 0, 4000, 'lifecycle drill-down');
+    check('lifecycle drill-down lists enriched deceased records (§65)', true);
+  } else {
+    check('lifecycle drill-down lists enriched deceased records (§65)', false, 'no DECEASED_FROZEN card');
+  }
+
   // Exogamy checker runs against two scoped people
   const mcA = d4.getElementById('mcA'), mcB = d4.getElementById('mcB');
   if (mcA.options.length > 2 && mcB.options.length > 2) {
@@ -317,6 +327,40 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   } else {
     check('lineage table shows all §62 columns', false, 'no search results to open table from');
   }
+
+  // Village books registry populated from enriched geography
+  g4.location.hash = '#/villages';
+  await until(() => d4.getElementById('wsView').textContent.includes('Village Books Registry'), 5000, 'villages (gov scope)');
+  check('village books populated from enriched geography', d4.querySelectorAll('#wsView .ws-table tbody tr').length >= 3,
+    String(d4.querySelectorAll('#wsView .ws-table tbody tr').length) + ' rows');
+
+  /* ---------- §66 settings tabs: Notifications / Exports / Privacy ---------- */
+  g4.location.hash = '#/organisation';
+  await until(() => d4.querySelector('#orTabs button[data-t="notifications"]'), 5000, 'organisation view');
+  d4.querySelector('#orTabs button[data-t="notifications"]').click();
+  await until(() => d4.querySelectorAll('#orBody [data-cat]').length === 4, 4000, 'notification prefs rows');
+  const bellBefore = parseInt(d4.getElementById('wsBellCount').textContent, 10) || 0;
+  d4.querySelector('#orBody [data-cat="corrections"]').click(); // mute corrections
+  await until(() => /MUTED/.test(d4.querySelector('#orBody [data-cat="corrections"]').textContent), 4000, 'mute toggle');
+  g4.RootsInstShell.updateBell();
+  const bellAfter = parseInt(d4.getElementById('wsBellCount').textContent, 10) || 0;
+  check('§66 notification mute removes category from bell', bellBefore >= 1 && bellAfter === bellBefore - 1,
+    'before=' + bellBefore + ' after=' + bellAfter);
+  d4.querySelector('#orBody [data-cat="corrections"]').click(); // restore
+  await until(() => /ON ✓/.test(d4.querySelector('#orBody [data-cat="corrections"]').textContent), 4000, 'unmute restore');
+
+  d4.querySelector('#orTabs button[data-t="exports"]').click();
+  await until(() => !!d4.getElementById('oeFormat'), 4000, 'exports settings tab');
+  d4.getElementById('oeFormat').value = d4.getElementById('oeFormat').options[0].value;
+  d4.getElementById('oeSave').click();
+  const defFmt = JSON.parse(g4.localStorage.getItem('roots_inst_store_ORG_EXPORT_DEFAULTS') ||
+    g4.localStorage.getItem('ORG_EXPORT_DEFAULTS') || '[]');
+  check('§66 export default saved', Array.isArray(defFmt) && defFmt.length === 1 && defFmt[0].format);
+  d4.querySelector('#orTabs button[data-t="privacy"]').click();
+  await until(() => d4.getElementById('orBody').textContent.includes('Data privacy posture'), 4000, 'privacy tab');
+  check('§66 privacy mirrors grant posture',
+    d4.getElementById('orBody').textContent.includes('APPROVED') && d4.getElementById('orBody').textContent.includes('REQUIRED'),
+    'person-level approved + anonymisation required expected');
   g4.close();
 
   /* ---------- §48/§69 role-determines-navigation ---------- */

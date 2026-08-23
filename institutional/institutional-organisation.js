@@ -48,7 +48,7 @@
         var html = '<div class="ws-page-head"><div><h2>Organisation</h2>' +
           '<p class="sub">' + esc(access.institutionName) + ' · workspace administration</p></div></div>' +
           '<div class="ws-tabs" id="orTabs">' +
-          [['profile', 'Profile'], ['users', 'Users'], ['roles', 'Roles'], ['subscription', 'Subscription'], ['audit', 'Audit']].map(function (t) {
+          [['profile', 'Profile'], ['users', 'Users'], ['roles', 'Roles'], ['notifications', 'Notifications'], ['exports', 'Exports'], ['privacy', 'Privacy'], ['subscription', 'Subscription'], ['audit', 'Audit']].map(function (t) {
             return '<button data-t="' + t[0] + '" class="' + (t[0] === tab ? 'active' : '') + '">' + t[1] + '</button>';
           }).join('') + '</div><div id="orBody"></div>';
         host.innerHTML = html;
@@ -159,6 +159,72 @@
             }).join('');
             return '<div class="ws-table-wrap"><table class="ws-table"><thead>' + head + '</thead><tbody>' + rows + '</tbody></table></div>';
           }
+        }
+
+        if (tab === 'notifications') { /* §66 */
+          var st = Store.get('ORG_NOTIF_SETTINGS')[0] || {};
+          var cats = [
+            ['disputes', 'Record review alerts', '⚖️', 'A flagged record needs institutional review.'],
+            ['access', 'Dataset access & expiry', '⏳', 'Approaching expiry or revocation of approvals.'],
+            ['corrections', 'Correction status', '📝', 'Submitted corrections moving through review.'],
+            ['notices', 'Roots Administrator notices', '🔔', 'Grant decisions, suspensions, platform messages.']
+          ];
+          body.innerHTML = '<div class="ws-panel"><h4>Notification preferences</h4>' +
+            cats.map(function (c) {
+              var on = st[c[0]] !== false;
+              return '<div class="ws-row static"><b>' + c[2] + '</b><span style="flex:1;padding-right:8px;">' + esc(c[1]) +
+                '<br><i class="hint">' + esc(c[3]) + '</i></span>' +
+                '<button class="ws-btn ghost sm" data-cat="' + c[0] + '">' + (on ? 'ON ✓' : 'MUTED') + '</button></div>';
+            }).join('') +
+            '<p class="hint">Per-workspace setting (all staff share one bell). Muted categories are hidden from the bell but still appear in Audit.</p></div>';
+          body.querySelectorAll('[data-cat]').forEach(function (b) {
+            b.addEventListener('click', function () {
+              var cur = Store.get('ORG_NOTIF_SETTINGS')[0] || {};
+              cur[b.dataset.cat] = cur[b.dataset.cat] === false;
+              cur.at = new Date().toISOString();
+              Store.set('ORG_NOTIF_SETTINGS', [cur]);
+              Store.logOrgAudit('UPDATE_NOTIFICATION_SETTINGS', 'OrgSettings', b.dataset.cat + '=' + (cur[b.dataset.cat] ? 'ON' : 'MUTED'), {});
+              draw('notifications');
+              if (window.RootsInstShell) window.RootsInstShell.updateBell();
+            });
+          });
+        }
+
+        if (tab === 'exports') { /* §66 */
+          var defCfg = Store.get('ORG_EXPORT_DEFAULTS')[0] || {};
+          var recents = Store.get('RECENT_EXPORTS');
+          body.innerHTML = '<div class="ws-panel"><h4>Export defaults</h4>' +
+            '<div class="ws-filters"><div><label class="lbl">Default format</label>' +
+            '<select id="oeFormat">' + access.allowedExports.map(function (f) {
+              return '<option' + (f === defCfg.format ? ' selected' : '') + '>' + esc(f) + '</option>';
+            }).join('') + '</select></div>' +
+            '<button class="ws-btn" id="oeSave">SAVE DEFAULT</button></div>' +
+            '<div class="kv" style="margin-top:12px;">' +
+            '<div><span>Approved formats</span><b>' + esc(access.allowedExports.join(', ')) + '</b></div>' +
+            '<div><span>Anonymisation posture</span><b>' + (access.anonymizationRequired ? 'REQUIRED by your approval' : 'Optional') + '</b></div>' +
+            '<div><span>Exports run so far</span><b>' + recents.length + '</b></div></div>' +
+            '<div style="margin-top:10px;"><button class="ws-btn ghost sm" id="oeGo">OPEN EXPORT CENTRE →</button></div>' +
+            '<p class="hint">The Export Centre pre-selects this format. Every export stays logged for the Roots Administrator (§42).</p></div>';
+          document.getElementById('oeSave').addEventListener('click', function () {
+            var f = document.getElementById('oeFormat').value;
+            Store.set('ORG_EXPORT_DEFAULTS', [{ format: f, at: new Date().toISOString() }]);
+            Store.logOrgAudit('UPDATE_EXPORT_DEFAULTS', 'OrgSettings', f, {});
+            ctx.toast('Default export format: ' + f);
+          });
+          document.getElementById('oeGo').addEventListener('click', function () { ctx.go('exports'); });
+        }
+
+        if (tab === 'privacy') { /* §66 — read-only posture mirror */
+          var corrAll = Store.get('CORRECTIONS');
+          var corrOpen = corrAll.filter(function (c) { return c.status === 'SUBMITTED'; }).length;
+          body.innerHTML = '<div class="ws-panel"><h4>Data privacy posture</h4><div class="kv">' +
+            '<div><span>Person-level data</span><b>' + (access.personLevelAllowed ? 'APPROVED' : 'NOT APPROVED — aggregate only') + '</b></div>' +
+            '<div><span>Anonymisation</span><b>' + (access.anonymizationRequired ? 'REQUIRED on all exports' : 'Optional') + '</b></div>' +
+            '<div><span>Geographic scope</span><b>' + esc(access.scopeLabel) + '</b></div>' +
+            '<div><span>Approved datasets</span><b>' + esc((access.datasets || []).join(', ') || '—') + '</b></div>' +
+            '<div><span>National ID visibility</span><b>' + (access.personLevelAllowed ? 'Masked (last 4 digits)' : 'RESTRICTED') + '</b></div>' +
+            '<div><span>Corrections on file</span><b>' + corrAll.length + ' (' + corrOpen + ' awaiting Roots review)</b></div></div>' +
+            '<p class="hint">Set by your Roots Administrator approval — not editable here. Widen scope or request person-level data via Access Requests (§41).</p></div>';
         }
 
         if (tab === 'subscription') {

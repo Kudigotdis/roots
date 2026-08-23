@@ -68,8 +68,7 @@
         '<label class="chk big"><input type="checkbox" id="exAnon"' + (access.anonymizationRequired ? ' checked disabled' : '') + '> Anonymised dataset' +
         (access.anonymizationRequired ? ' <span class="chip warn">required by your approval</span>' : '') + '</label>' +
         '<label class="lbl">Format</label>' +
-        '<select id="exFormat">' + formats.map(function (f) { return '<option>' + esc(f) + '</option>'; }).join('') + '</select>' +
-        '<div style="margin-top:10px;display:flex;gap:8px;">' +
+        '<select id="exFormat">' + formats.map(function (f) { return '<option>' + esc(f) + '</option>'; }).join('') + '</select>' +        '<div style="margin-top:10px;display:flex;gap:8px;">' +
         '<button class="ws-btn ghost" id="exPreview">PREVIEW</button>' +
         '<button class="ws-btn" id="exRun">EXPORT</button></div></div>' +
 
@@ -79,6 +78,15 @@
 
       if (!access.datasetAllowed('PEOPLE')) {
         document.getElementById('exDataset').innerHTML = '<option>No datasets approved</option>';
+      }
+
+      /* §66 default format from Organisation → Exports */
+      var defFmt = (window.RootsInstStore.get('ORG_EXPORT_DEFAULTS')[0] || {}).format;
+      if (defFmt) {
+        var fmtSel = document.getElementById('exFormat');
+        Array.prototype.forEach.call(fmtSel.options, function (o) {
+          if (o.text === defFmt) fmtSel.value = o.value;
+        });
       }
 
       function collect() {
