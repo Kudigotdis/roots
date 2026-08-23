@@ -1369,6 +1369,41 @@ modalOverlay.addEventListener('click', function(e){
       kp.appendChild(tcard);
     }
 
+    /* Phase E3: enriched geography + same-village-book neighbours */
+    var adm = p.admin || {};
+    if (adm.province) {
+      var geoRows = [
+        ['Province', adm.province],
+        ['District', adm.district || '—'],
+        ['Ward', adm.ward || '—'],
+        ['Chiefdom', adm.chief || '—'],
+        ['Village book', adm.villageBookId || '—'],
+      ];
+      geoRows.forEach(function(r){
+        var row = document.createElement('div'); row.className='infoRow';
+        row.innerHTML = '<span class="infoLabel">' + r[0] + '</span><span class="infoVal">' + r[1] + '</span>';
+        ip.appendChild(row);
+      });
+      if (adm.villageBookId) {
+        var neighbours = PEOPLE.filter(function(q){
+          return q.id !== p.id && q.admin && q.admin.villageBookId === adm.villageBookId;
+        }).slice(0, 8);
+        if (neighbours.length) {
+          var nsec = document.createElement('div'); nsec.className='familySection'; nsec.style.marginTop = '10px';
+          nsec.innerHTML = '<h4>Same village book (' + adm.villageBookId + ')</h4><div class="vbChips"></div>';
+          var chips = nsec.querySelector('.vbChips');
+          neighbours.forEach(function(nq){
+            var chip = document.createElement('button');
+            chip.className = 'vbChip';
+            chip.textContent = nq.name.split(' ')[0] + (nq.relation ? ' · ' + nq.relation : '');
+            chip.addEventListener('click', function(){ openProfile(nq.id); });
+            chips.appendChild(chip);
+          });
+          ip.appendChild(nsec);
+        }
+      }
+    }
+
     // Family
     var fp = $('pane-family');
     fp.innerHTML = '';

@@ -70,6 +70,14 @@
 
   restoreState();
 
+  /* Phase E2: backfill legacy preset groups created before auto-population existed */
+  state.groups.forEach(function(g){
+    if (g.preset && g.preset !== 'CUSTOM' && g.preset !== 'THIRD_COUSINS' &&
+        (!g.members || !g.members.length)) {
+      g.members = presetMembers(g.preset).map(function(p){ return p.id; });
+    }
+  });
+
   function isFeatureUnlocked(feature){
     if (state.unlocks[feature]) return true;
     return false;
@@ -181,6 +189,56 @@
   /* ============================================================
      GROUPS VIEW
      ============================================================ */
+
+  /* ---- kinship helpers (Phase E2 preset membership) ---- */
+  function parentIdsOf(id){
+    var p = byId[id];
+    return (p && p.relations && p.relations.parentIds) || [];
+  }
+  function childrenOf(pid){
+    return PEOPLE.filter(function(p){ return parentIdsOf(p.id).indexOf(pid) !== -1; });
+  }
+  function uniq(list){
+    var seen = {}, out = [];
+    list.forEach(function(x){ if (x && x.id && !seen[x.id]) { seen[x.id] = 1; out.push(x); } });
+    return out;
+  }
+  function siblingsOf(id){
+    var sibs = [];
+    parentIdsOf(id).forEach(function(pid){ childrenOf(pid).forEach(function(c){ if (c.id !== id) sibs.push(c); }); });
+    return uniq(sibs);
+  }
+  function firstCousinsOf(id){
+    var out = [];
+    parentIdsOf(id).forEach(function(pid){
+      siblingsOf(pid).forEach(function(aunt){
+        childrenOf(aunt.id).forEach(function(c){ if (c.id !== id) out.push(c); });
+      });
+    });
+    var sibIds = siblingsOf(id).map(function(s){ return s.id; });
+    return uniq(out).filter(function(c){ return sibIds.indexOf(c.id) === -1; });
+  }
+  function secondCousinsOf(id){
+    var out = [];
+    parentIdsOf(id).forEach(function(pid){
+      firstCousinsOf(pid).forEach(function(fc){
+        childrenOf(fc.id).forEach(function(c){ out.push(c); });
+      });
+    });
+    var exclude = {};
+    siblingsOf(id).concat(firstCousinsOf(id)).forEach(function(x){ exclude[x.id] = 1; });
+    exclude[id] = 1;
+    return uniq(out).filter(function(c){ return !exclude[c.id]; });
+  }
+  function presetMembers(type){
+    var me = byId[state.myId];
+    if (!me) return [];
+    if (type === 'SIBLINGS') return siblingsOf(state.myId);
+    if (type === 'FIRST_COUSINS') return firstCousinsOf(state.myId);
+    if (type === 'SECOND_COUSINS') return secondCousinsOf(state.myId);
+    return []; /* CUSTOM / THIRD_COUSINS: filled manually */
+  }
+
   function renderGroups(){
     var list = $('groupsList');
     list.innerHTML = '';
@@ -207,11 +265,66 @@
         persistState();
         showToast('🗑️ Group deleted');
       });
+      /* Phase E2: tap card to manage members */
       div.style.display = 'flex';
       div.style.alignItems = 'center';
+      div.style.cursor = 'pointer';
+      div.addEventListener('click', function(){ openGroupDetail(g); });
       div.appendChild(delBtn);
       list.appendChild(div);
     });
+  }
+
+  /* ---- Phase E2: group detail (members add/remove) ---- */
+  function gdCandidateList(g){
+    var existing = {};
+    g.members.forEach(function(id){ existing[id] = 1; });
+    var pool = g.preset === 'CUSTOM' || !g.preset ? PEOPLE : presetMembers(g.preset);
+    return pool.filter(function(p){ return p.id !== state.myId && !existing[p.id]; }).slice(0, 300);
+  }
+  function openGroupDetail(g){
+    function refresh(){
+      var cand = gdCandidateList(g);
+      $('modalBody').innerHTML =
+        '<div id="gdList">' +
+          (g.members.length
+            ? g.members.map(function(mid){
+              var p = byId[mid];
+              if (!p) return '';
+              return '<div class="gd-member-row"><span class="gd-avatar">' + escapeHtml(initials(p.name)) + '</span>' +
+                '<span style="flex:1;">' + escapeHtml(p.name) + '<br><i style="color:var(--text-dim);font-size:.72rem;">' + escapeHtml(p.relation||'') + '</i></span>' +
+                '<button class="gd-remove" data-mid="' + escapeHtml(mid) + '">Remove</button></div>';
+            }).join('')
+            : '<div class="groups-empty">No members yet.<br>Add relatives below.</div>') +
+        '</div>' +
+        (cand.length
+          ? '<select class="modal-input" id="gdCandidate">' +
+            cand.slice(0, 200).map(function(p){ return '<option value="' + escapeHtml(p.id) + '">' + escapeHtml(p.name + (p.relation?' · '+p.relation:'')) + '</option>'; }).join('') +
+            '</select><button class="modal-btn" id="gdAdd">ADD MEMBER</button>'
+          : '<p style="color:var(--text-dim);font-size:.75rem;text-align:center;">Everyone in this category is already a member.</p>');
+      $('modalBody').querySelectorAll('[data-mid]').forEach(function(b){
+        b.addEventListener('click', function(){
+          var mid = b.dataset.mid;
+          g.members.splice(g.members.indexOf(mid), 1);
+          persistState();
+          showToast('Member removed.');
+          refresh();
+          renderGroups();
+        });
+      });
+      var addBtn = $('gdAdd');
+      if (addBtn) addBtn.addEventListener('click', function(){
+        var sel = $('gdCandidate');
+        if (!sel || !sel.value) return;
+        g.members.push(sel.value);
+        persistState();
+        showToast('Member added.');
+        refresh();
+        renderGroups();
+      });
+    }
+    openModal('👥 ' + g.name, '', null);
+    refresh();
   }
 
   $('newGroupBtn').addEventListener('click', function(){
@@ -230,17 +343,18 @@
     $('modalCreateGroup').addEventListener('click', function(){
       var name = ($('modalGroupName')||{}).value || 'New Group';
       var type = ($('modalGroupType')||{}).value || 'CUSTOM';
+      var members = presetMembers(type).map(function(p){ return p.id; }); /* Phase E2: auto-populate */
       state.groups.push({
         id: 'g' + (state.groupIdCounter++),
         name: name,
         icon: '👥',
-        members: [],
+        members: members,
         preset: type
       });
       closeModal();
       renderGroups();
       persistState();
-      showToast('Group "' + name + '" created!');
+      showToast('Group "' + name + '" created!' + (members.length ? ' ' + members.length + ' relative(s) added.' : ' Add members by tapping it.'));
     });
   });
 
@@ -272,6 +386,17 @@
         ['System', k.culturalSystem||'SHONA'],
       ]},
     ];
+    /* Phase E3: enriched geography */
+    var a = me.admin || {};
+    if (a.province) {
+      sections.push({ title: 'Geography', rows: [
+        ['Province', a.province],
+        ['District', a.district || '—'],
+        ['Ward', a.ward || '—'],
+        ['Chiefdom', a.chief || '—'],
+        ['Village book', a.villageBookId || '—'],
+      ]});
+    }
     sections.forEach(function(s){
       var sec = document.createElement('div');
       sec.className = 'profile-section';
@@ -358,6 +483,10 @@
     var div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
+  }
+  function initials(name){
+    return String(name||'').replace(/\(.*?\)/g,'').trim().split(/\s+/).slice(0,2)
+      .map(function(w){ return w[0]; }).join('').toUpperCase();
   }
   function escapeXml(str){
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');

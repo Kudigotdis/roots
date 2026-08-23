@@ -1,4 +1,4 @@
-var CACHE = 'roots-v10';
+var CACHE = 'roots-v11';
 var URLS = [
   './',
   './index.html',

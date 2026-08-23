@@ -540,4 +540,8 @@ function playPraiseAudio(totemKey){
       renderLibraryTab(b.dataset.libtab);
     });
   });
+
+  /* Initial render — the active tab used to stay empty until first tap */
+  var initialTab = document.querySelector('.lib-tab.active');
+  renderLibraryTab(initialTab ? initialTab.dataset.libtab : 'totems');
 })();
