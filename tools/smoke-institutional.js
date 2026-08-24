@@ -269,34 +269,41 @@ const listening = new Promise((res) => (server.address() ? res() : server.on('li
   check('no page JS errors (workspace)', wsp.pageErrors.length === 0, wsp.pageErrors.join(' | '));
 
   // Saved queries: RUN / EDIT / DUPLICATE / EXPORT CSV / DELETE (gap G2)
+  // Uses a RESEARCH-type session - GOVERNMENT navigation has no Saved entry.
   const appid = JSON.parse(sessRaw).applicationId;
-  w3.localStorage.setItem('SAVED', JSON.stringify([{ id: 'QRY-SMOKE1', name: 'Masvingo records', summary: 'Province = Masvingo', filters: [{ field: 'Province', value: 'Masvingo' }], createdBy: 'Tendai Moyo', at: new Date().toISOString() }]));
-  w3.localStorage.setItem('roots_admin_grants', JSON.stringify([{ grantId: 'GRANT-SMOKE1', applicationId: appid, institutionId: 'INST-SMOKE', status: 'ACTIVE', approvedDatasets: ['PEOPLE'], personLevelAllowed: false, anonymizationRequired: true, expiresAt: '2027-01-01T00:00:00.000Z' }]));
-  w3.location.hash = '#/overview'; await sleep(120);
-  w3.location.hash = '#/saved';
-  await until(() => d3.querySelector('[data-qrun="QRY-SMOKE1"]'), 5000, 'saved view renders');
-  d3.querySelector('[data-qrun="QRY-SMOKE1"]').click();
-  await until(() => d3.getElementById('qres-QRY-SMOKE1') && /match/.test(d3.getElementById('qres-QRY-SMOKE1').textContent), 3000, 'query run output');
-  const runTxt = d3.getElementById('qres-QRY-SMOKE1').textContent;
+  const researchSeed = Object.assign({}, wsSeed, {
+    roots_institutional_session: Object.assign({}, JSON.parse(sessRaw), { typeCode: 'UNIVERSITY_RESEARCH' }),
+    roots_inst_saved_queries: [{ id: 'QRY-SMOKE1', name: 'Masvingo records', summary: 'Province = Masvingo', filters: [{ field: 'Province', value: 'Masvingo' }], createdBy: 'Tendai Moyo', at: new Date().toISOString() }],
+    roots_admin_grants: [{ grantId: 'GRANT-SMOKE1', applicationId: appid, institutionId: 'INST-SMOKE', status: 'ACTIVE', approvedDatasets: ['PEOPLE'], personLevelAllowed: false, anonymizationRequired: true, expiresAt: '2027-01-01T00:00:00.000Z' }]
+  });
+  const wspQ = await loadPage('/institutional/institutional-workspace.html', researchSeed);
+  const wq = wspQ.window, dq = wq.document;
+  await until(() => dq.querySelectorAll('#wsView .stat-card').length > 0, 8000, 'research workspace rendered');
+  wq.location.hash = '#/saved';
+  await until(() => dq.querySelector('[data-qrun="QRY-SMOKE1"]'), 5000, 'saved view renders');
+  dq.querySelector('[data-qrun="QRY-SMOKE1"]').click();
+  await until(() => dq.getElementById('qres-QRY-SMOKE1') && /match/.test(dq.getElementById('qres-QRY-SMOKE1').textContent), 3000, 'query run output');
+  const runTxt = dq.getElementById('qres-QRY-SMOKE1').textContent;
   check('query RUN reports matches (>0)', /^[1-9]/.test(runTxt.trim()), runTxt.slice(0, 50));
-  w3.URL.createObjectURL = () => 'blob:smoke';
-  w3.URL.revokeObjectURL = () => {};
-  d3.querySelector('[data-qexp="QRY-SMOKE1"]').click();
-  await until(() => JSON.parse(w3.localStorage.getItem('roots_inst_org_audit') || '[]').some((e) => e.action === 'EXPORT_QUERY_CSV'), 3000, 'export audit');
+  wq.URL.createObjectURL = () => 'blob:smoke';
+  wq.URL.revokeObjectURL = () => {};
+  dq.querySelector('[data-qexp="QRY-SMOKE1"]').click();
+  await until(() => JSON.parse(wq.localStorage.getItem('roots_inst_org_audit') || '[]').some((e) => e.action === 'EXPORT_QUERY_CSV'), 3000, 'export audit');
   check('query EXPORT CSV audited', true);
-  d3.querySelector('[data-qedit="QRY-SMOKE1"]').click();
-  type(d3.getElementById('qeName'), 'Masvingo renamed');
-  d3.getElementById('qeSave').click();
-  await until(() => (JSON.parse(w3.localStorage.getItem('SAVED') || '[]')[0] || {}).name === 'Masvingo renamed', 3000, 'edit saved');
+  dq.querySelector('[data-qedit="QRY-SMOKE1"]').click();
+  type(dq.getElementById('qeName'), 'Masvingo renamed');
+  dq.getElementById('qeSave').click();
+  await until(() => (JSON.parse(wq.localStorage.getItem('roots_inst_saved_queries') || '[]')[0] || {}).name === 'Masvingo renamed', 3000, 'edit saved');
   check('EDIT persists rename + rebuilt summary', true);
-  d3.querySelector('[data-qdup="QRY-SMOKE1"]').click();
-  await until(() => JSON.parse(w3.localStorage.getItem('SAVED')).length === 2, 3000, 'duplicate created');
-  check('DUPLICATE appends copy', JSON.parse(w3.localStorage.getItem('SAVED'))[1].name === 'Masvingo renamed (copy)');
-  w3.confirm = () => true;
-  d3.querySelector('[data-qdel]').click();
-  await until(() => JSON.parse(w3.localStorage.getItem('SAVED')).length === 1, 3000, 'delete done');
+  dq.querySelector('[data-qdup="QRY-SMOKE1"]').click();
+  await until(() => JSON.parse(wq.localStorage.getItem('roots_inst_saved_queries')).length === 2, 3000, 'duplicate created');
+  check('DUPLICATE appends copy', JSON.parse(wq.localStorage.getItem('roots_inst_saved_queries'))[1].name === 'Masvingo renamed (copy)');
+  wq.confirm = () => true;
+  dq.querySelector('[data-qdel]').click();
+  await until(() => JSON.parse(wq.localStorage.getItem('roots_inst_saved_queries')).length === 1, 3000, 'delete done');
   check('DELETE removes query after confirm', true);
-  check('no page JS errors (saved queries)', wsp.pageErrors.length === 0, wsp.pageErrors.join(' | '));
+  check('no page JS errors (saved queries)', wspQ.pageErrors.length === 0, wspQ.pageErrors.join(' | '));
+  wq.close();
 
   // Sign out clears session
   d3.getElementById('wsSignOut').click();

@@ -117,7 +117,9 @@
   /* ---------- header identity (§4) ---------- */
   /* ---------- first-login welcome summary (Setup 4, gap G1) ---------- */
   (function welcomeGate() {
-    var seen = Store.get('WELCOME_SEEN') || {};
+    var seen = Store.get('WELCOME_SEEN');
+    /* normalise: Store.get defaults to [] and old runs may have stored an array */
+    if (!seen || typeof seen !== 'object' || Array.isArray(seen)) seen = {};
     var orgKey = session.institutionId || session.applicationId || session.institutionName;
     if (seen[orgKey]) return;
     function wrow(k, vHtml) {

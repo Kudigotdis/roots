@@ -128,7 +128,7 @@ const stored = (w) => JSON.parse(w.localStorage.getItem('roots_app_state'));
 
   /* TEST 1 — sw cache */
   const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-  check('sw cache bumped to roots-v11', /CACHE\s*=\s*'roots-v11'/.test(sw));
+  check('sw cache bumped to roots-v12', /CACHE\s*=\s*'roots-v12'/.test(sw));
 
   /* TEST 2 — index: geography section + group backfill */
   const ip = await loadPage('/index.html', sessionSeed());
